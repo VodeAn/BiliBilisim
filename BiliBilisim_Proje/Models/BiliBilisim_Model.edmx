@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="bilibilisim_projeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kuladi" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="kategori">
+          <Key>
+            <PropertyRef Name="kate_no" />
+          </Key>
+          <Property Name="kate_no" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kate_adi" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="u_kate_id" Type="int" />
+        </EntityType>
+        <EntityType Name="sehirler">
+          <Key>
+            <PropertyRef Name="plaka" />
+          </Key>
+          <Property Name="plaka" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="il" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="siparisler">
+          <Key>
+            <PropertyRef Name="kayit_no" />
+          </Key>
+          <Property Name="kayit_no" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sip_no" Type="int" Nullable="false" />
+          <Property Name="uye_id" Type="int" Nullable="false" />
+          <Property Name="adet" Type="int" Nullable="false" />
+          <Property Name="a_tarih" Type="date" Nullable="false" />
+          <Property Name="urun_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="urunler">
+          <Key>
+            <PropertyRef Name="urun_id" />
+          </Key>
+          <Property Name="urun_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="urun_adi" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="marka" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="model" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="kate_no" Type="int" Nullable="false" />
+          <Property Name="fiyati" Type="numeric" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="stok" Type="int" Nullable="false" />
+          <Property Name="fotolar" Type="nvarchar" MaxLength="255" />
+          <Property Name="satis_adet" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ust_kategori">
+          <Key>
+            <PropertyRef Name="u_kate_id" />
+          </Key>
+          <Property Name="u_kate_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="u_kate_adi" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="uyeler">
+          <Key>
+            <PropertyRef Name="uye_id" />
+          </Key>
+          <Property Name="uye_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kuladi" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ad_soyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dog_tar" Type="date" Nullable="false" />
+          <Property Name="cinsiyet" Type="bit" Nullable="false" />
+          <Property Name="vip" Type="bit" Nullable="false" />
+          <Property Name="adres" Type="text" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="plaka" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_urunler_kategori">
+          <End Role="kategori" Type="Self.kategori" Multiplicity="1" />
+          <End Role="urunler" Type="Self.urunler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kategori">
+              <PropertyRef Name="kate_no" />
+            </Principal>
+            <Dependent Role="urunler">
+              <PropertyRef Name="kate_no" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="kategori_u_kate_id_fkey">
+          <End Role="ust_kategori" Type="Self.ust_kategori" Multiplicity="0..1" />
+          <End Role="kategori" Type="Self.kategori" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ust_kategori">
+              <PropertyRef Name="u_kate_id" />
+            </Principal>
+            <Dependent Role="kategori">
+              <PropertyRef Name="u_kate_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="siparisler_urun_id_fkey">
+          <End Role="urunler" Type="Self.urunler" Multiplicity="1" />
+          <End Role="siparisler" Type="Self.siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="urunler">
+              <PropertyRef Name="urun_id" />
+            </Principal>
+            <Dependent Role="siparisler">
+              <PropertyRef Name="urun_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="siparisler_uye_id_fkey">
+          <End Role="uyeler" Type="Self.uyeler" Multiplicity="1" />
+          <End Role="siparisler" Type="Self.siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="uyeler">
+              <PropertyRef Name="uye_id" />
+            </Principal>
+            <Dependent Role="siparisler">
+              <PropertyRef Name="uye_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="uyeler_plaka_fkey">
+          <End Role="sehirler" Type="Self.sehirler" Multiplicity="1" />
+          <End Role="uyeler" Type="Self.uyeler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sehirler">
+              <PropertyRef Name="plaka" />
+            </Principal>
+            <Dependent Role="uyeler">
+              <PropertyRef Name="plaka" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bilibilisim_projeModelStoreContainer">
+          <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="kategori" EntityType="Self.kategori" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sehirler" EntityType="Self.sehirler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="siparisler" EntityType="Self.siparisler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="urunler" EntityType="Self.urunler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ust_kategori" EntityType="Self.ust_kategori" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="uyeler" EntityType="Self.uyeler" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_urunler_kategori" Association="Self.FK_urunler_kategori">
+            <End Role="kategori" EntitySet="kategori" />
+            <End Role="urunler" EntitySet="urunler" />
+          </AssociationSet>
+          <AssociationSet Name="kategori_u_kate_id_fkey" Association="Self.kategori_u_kate_id_fkey">
+            <End Role="ust_kategori" EntitySet="ust_kategori" />
+            <End Role="kategori" EntitySet="kategori" />
+          </AssociationSet>
+          <AssociationSet Name="siparisler_urun_id_fkey" Association="Self.siparisler_urun_id_fkey">
+            <End Role="urunler" EntitySet="urunler" />
+            <End Role="siparisler" EntitySet="siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="siparisler_uye_id_fkey" Association="Self.siparisler_uye_id_fkey">
+            <End Role="uyeler" EntitySet="uyeler" />
+            <End Role="siparisler" EntitySet="siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="uyeler_plaka_fkey" Association="Self.uyeler_plaka_fkey">
+            <End Role="sehirler" EntitySet="sehirler" />
+            <End Role="uyeler" EntitySet="uyeler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bilibilisim_projeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kuladi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="kategori">
+          <Key>
+            <PropertyRef Name="kate_no" />
+          </Key>
+          <Property Name="kate_no" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kate_adi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="u_kate_id" Type="Int32" />
+          <NavigationProperty Name="urunler" Relationship="Self.FK_urunler_kategori" FromRole="kategori" ToRole="urunler" />
+          <NavigationProperty Name="ust_kategori" Relationship="Self.kategori_u_kate_id_fkey" FromRole="kategori" ToRole="ust_kategori" />
+        </EntityType>
+        <EntityType Name="sehirler">
+          <Key>
+            <PropertyRef Name="plaka" />
+          </Key>
+          <Property Name="plaka" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="il" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="uyeler" Relationship="Self.uyeler_plaka_fkey" FromRole="sehirler" ToRole="uyeler" />
+        </EntityType>
+        <EntityType Name="siparisler">
+          <Key>
+            <PropertyRef Name="kayit_no" />
+          </Key>
+          <Property Name="kayit_no" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sip_no" Type="Int32" Nullable="false" />
+          <Property Name="uye_id" Type="Int32" Nullable="false" />
+          <Property Name="adet" Type="Int32" Nullable="false" />
+          <Property Name="a_tarih" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="urun_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="urunler" Relationship="Self.siparisler_urun_id_fkey" FromRole="siparisler" ToRole="urunler" />
+          <NavigationProperty Name="uyeler" Relationship="Self.siparisler_uye_id_fkey" FromRole="siparisler" ToRole="uyeler" />
+        </EntityType>
+        <EntityType Name="urunler">
+          <Key>
+            <PropertyRef Name="urun_id" />
+          </Key>
+          <Property Name="urun_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="urun_adi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="marka" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="kate_no" Type="Int32" Nullable="false" />
+          <Property Name="fiyati" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="stok" Type="Int32" Nullable="false" />
+          <Property Name="fotolar" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="satis_adet" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="kategori" Relationship="Self.FK_urunler_kategori" FromRole="urunler" ToRole="kategori" />
+          <NavigationProperty Name="siparisler" Relationship="Self.siparisler_urun_id_fkey" FromRole="urunler" ToRole="siparisler" />
+        </EntityType>
+        <EntityType Name="ust_kategori">
+          <Key>
+            <PropertyRef Name="u_kate_id" />
+          </Key>
+          <Property Name="u_kate_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="u_kate_adi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="kategori" Relationship="Self.kategori_u_kate_id_fkey" FromRole="ust_kategori" ToRole="kategori" />
+        </EntityType>
+        <EntityType Name="uyeler">
+          <Key>
+            <PropertyRef Name="uye_id" />
+          </Key>
+          <Property Name="uye_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kuladi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ad_soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="dog_tar" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="cinsiyet" Type="Boolean" Nullable="false" />
+          <Property Name="vip" Type="Boolean" Nullable="false" />
+          <Property Name="adres" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="plaka" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="sehirler" Relationship="Self.uyeler_plaka_fkey" FromRole="uyeler" ToRole="sehirler" />
+          <NavigationProperty Name="siparisler" Relationship="Self.siparisler_uye_id_fkey" FromRole="uyeler" ToRole="siparisler" />
+        </EntityType>
+        <Association Name="FK_urunler_kategori">
+          <End Role="kategori" Type="Self.kategori" Multiplicity="1" />
+          <End Role="urunler" Type="Self.urunler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kategori">
+              <PropertyRef Name="kate_no" />
+            </Principal>
+            <Dependent Role="urunler">
+              <PropertyRef Name="kate_no" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="kategori_u_kate_id_fkey">
+          <End Role="ust_kategori" Type="Self.ust_kategori" Multiplicity="0..1" />
+          <End Role="kategori" Type="Self.kategori" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ust_kategori">
+              <PropertyRef Name="u_kate_id" />
+            </Principal>
+            <Dependent Role="kategori">
+              <PropertyRef Name="u_kate_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="uyeler_plaka_fkey">
+          <End Role="sehirler" Type="Self.sehirler" Multiplicity="1" />
+          <End Role="uyeler" Type="Self.uyeler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sehirler">
+              <PropertyRef Name="plaka" />
+            </Principal>
+            <Dependent Role="uyeler">
+              <PropertyRef Name="plaka" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="siparisler_urun_id_fkey">
+          <End Role="urunler" Type="Self.urunler" Multiplicity="1" />
+          <End Role="siparisler" Type="Self.siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="urunler">
+              <PropertyRef Name="urun_id" />
+            </Principal>
+            <Dependent Role="siparisler">
+              <PropertyRef Name="urun_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="siparisler_uye_id_fkey">
+          <End Role="uyeler" Type="Self.uyeler" Multiplicity="1" />
+          <End Role="siparisler" Type="Self.siparisler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="uyeler">
+              <PropertyRef Name="uye_id" />
+            </Principal>
+            <Dependent Role="siparisler">
+              <PropertyRef Name="uye_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bili_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admin" EntityType="Self.admin" />
+          <EntitySet Name="kategori" EntityType="Self.kategori" />
+          <EntitySet Name="sehirler" EntityType="Self.sehirler" />
+          <EntitySet Name="siparisler" EntityType="Self.siparisler" />
+          <EntitySet Name="urunler" EntityType="Self.urunler" />
+          <EntitySet Name="ust_kategori" EntityType="Self.ust_kategori" />
+          <EntitySet Name="uyeler" EntityType="Self.uyeler" />
+          <AssociationSet Name="FK_urunler_kategori" Association="Self.FK_urunler_kategori">
+            <End Role="kategori" EntitySet="kategori" />
+            <End Role="urunler" EntitySet="urunler" />
+          </AssociationSet>
+          <AssociationSet Name="kategori_u_kate_id_fkey" Association="Self.kategori_u_kate_id_fkey">
+            <End Role="ust_kategori" EntitySet="ust_kategori" />
+            <End Role="kategori" EntitySet="kategori" />
+          </AssociationSet>
+          <AssociationSet Name="uyeler_plaka_fkey" Association="Self.uyeler_plaka_fkey">
+            <End Role="sehirler" EntitySet="sehirler" />
+            <End Role="uyeler" EntitySet="uyeler" />
+          </AssociationSet>
+          <AssociationSet Name="siparisler_urun_id_fkey" Association="Self.siparisler_urun_id_fkey">
+            <End Role="urunler" EntitySet="urunler" />
+            <End Role="siparisler" EntitySet="siparisler" />
+          </AssociationSet>
+          <AssociationSet Name="siparisler_uye_id_fkey" Association="Self.siparisler_uye_id_fkey">
+            <End Role="uyeler" EntitySet="uyeler" />
+            <End Role="siparisler" EntitySet="siparisler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bilibilisim_projeModelStoreContainer" CdmEntityContainer="bili_Entities">
+          <EntitySetMapping Name="admin">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.admin">
+              <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="admin_id" ColumnName="admin_id" />
+                <ScalarProperty Name="kuladi" ColumnName="kuladi" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kategori">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.kategori">
+              <MappingFragment StoreEntitySet="kategori">
+                <ScalarProperty Name="kate_no" ColumnName="kate_no" />
+                <ScalarProperty Name="kate_adi" ColumnName="kate_adi" />
+                <ScalarProperty Name="u_kate_id" ColumnName="u_kate_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sehirler">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.sehirler">
+              <MappingFragment StoreEntitySet="sehirler">
+                <ScalarProperty Name="plaka" ColumnName="plaka" />
+                <ScalarProperty Name="il" ColumnName="il" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="siparisler">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.siparisler">
+              <MappingFragment StoreEntitySet="siparisler">
+                <ScalarProperty Name="kayit_no" ColumnName="kayit_no" />
+                <ScalarProperty Name="sip_no" ColumnName="sip_no" />
+                <ScalarProperty Name="uye_id" ColumnName="uye_id" />
+                <ScalarProperty Name="adet" ColumnName="adet" />
+                <ScalarProperty Name="a_tarih" ColumnName="a_tarih" />
+                <ScalarProperty Name="urun_id" ColumnName="urun_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="urunler">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.urunler">
+              <MappingFragment StoreEntitySet="urunler">
+                <ScalarProperty Name="urun_id" ColumnName="urun_id" />
+                <ScalarProperty Name="urun_adi" ColumnName="urun_adi" />
+                <ScalarProperty Name="marka" ColumnName="marka" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="kate_no" ColumnName="kate_no" />
+                <ScalarProperty Name="fiyati" ColumnName="fiyati" />
+                <ScalarProperty Name="stok" ColumnName="stok" />
+                <ScalarProperty Name="fotolar" ColumnName="fotolar" />
+                <ScalarProperty Name="satis_adet" ColumnName="satis_adet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ust_kategori">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.ust_kategori">
+              <MappingFragment StoreEntitySet="ust_kategori">
+                <ScalarProperty Name="u_kate_id" ColumnName="u_kate_id" />
+                <ScalarProperty Name="u_kate_adi" ColumnName="u_kate_adi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="uyeler">
+            <EntityTypeMapping TypeName="bilibilisim_projeModel.uyeler">
+              <MappingFragment StoreEntitySet="uyeler">
+                <ScalarProperty Name="uye_id" ColumnName="uye_id" />
+                <ScalarProperty Name="kuladi" ColumnName="kuladi" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+                <ScalarProperty Name="ad_soyad" ColumnName="ad_soyad" />
+                <ScalarProperty Name="dog_tar" ColumnName="dog_tar" />
+                <ScalarProperty Name="cinsiyet" ColumnName="cinsiyet" />
+                <ScalarProperty Name="vip" ColumnName="vip" />
+                <ScalarProperty Name="adres" ColumnName="adres" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="plaka" ColumnName="plaka" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
