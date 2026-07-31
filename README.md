@@ -26,4 +26,3 @@ The project runs locally on an MSSQL database, and the database script is includ
 
 * Other Username: mahmut
 * Password: 12345678
-* deneme123
