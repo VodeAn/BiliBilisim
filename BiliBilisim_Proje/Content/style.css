@@ -1764,9 +1764,20 @@ textarea:focus {
 	font-weight: 500;
 	padding: 8px 0;
 }
-.hb-menu nav > ul > li:hover > a, 
+.hb-menu nav > ul > li:hover > a,
 .hb-menu nav > ul > li:hover > a::after {
-		color: #ffffff;
+	color: #ffffff;
+}
+.hb-menu nav > ul > li > b > a {
+	color: #242424;
+	text-transform: uppercase;
+	font-size: 14px;
+	line-height: 35px;
+	font-weight: 500;
+	padding: 8px 0;
+}
+.hb-menu nav > ul > li:hover > b > a {
+	color: #ffffff;
 }
 .hb-menu nav > ul > li > a::after {
 	content: "\f107";
@@ -1903,10 +1914,6 @@ textarea:focus {
 	position: static !important;
 }
 .megamenu-static-holder .hb-megamenu, .megamenu-holder .hb-megamenu {
-	background-image: url(images/menu/li-bg-menu.jpg);
-	background-size: cover;
-	background-position: top;
-	background-repeat: no-repeat;
 	top: auto;
 	left: 0;
 	z-index: 99;
