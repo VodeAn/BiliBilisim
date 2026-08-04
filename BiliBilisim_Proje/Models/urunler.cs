@@ -29,7 +29,7 @@ namespace BiliBilisim_Proje.Models
         public int stok { get; set; }
         public string fotolar { get; set; }
         public short satis_adet { get; set; }
-    
+        public string urun_aciklama { get; set; }
         public virtual kategori kategori { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<siparisler> siparisler { get; set; }
