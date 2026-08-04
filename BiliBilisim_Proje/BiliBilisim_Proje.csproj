@@ -150,6 +150,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BiliBilisim_Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Favoriler.cs" />
     <Compile Include="Models\kategori.cs">
       <DependentUpon>BiliBilisim_Model.tt</DependentUpon>
     </Compile>
@@ -387,6 +388,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Kaydol_Giris.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
