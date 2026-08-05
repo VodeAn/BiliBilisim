@@ -18,7 +18,7 @@ Proje MSSQL veritabanında localde çalışmaktadır ve veritabanı scripti proj
 * Şifre: 987654321
 
 
-This project is the final project for the Bursa Chamber of Commerce and Industry Education Foundation (BUTGEM) Software Expertise Course. An E-Commerce website with database integration was developed using the MVC pattern and Entity Framework.
+This project is the final project for the BUTGEM Software Expertise Course. An E-Commerce website with database integration was developed using the MVC pattern and Entity Framework.
 
 The project runs locally on an MSSQL database, and the database script is included among the project files. For convenience, admin, VIP, and non-VIP user credentials are provided below:
 
