@@ -1,4 +1,6 @@
 ﻿<!doctype html>
+@using BiliBilisim_Proje.Models;
+
 <html class="no-js" lang="tr">
 
 <!-- index-231:32-->
@@ -43,7 +45,9 @@
     <!-- Modernizr js -->
     <script src="~/Scripts/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
+
 <body>
+
     <!--[if lt IE 8]>
         <p class="browserupgrade"><strong>Eski</strong> bir tarayıcı kullanıyorsunuz. Deneyiminizi iyileştirmek için lütfen <a href="http://browsehappy.com/">tarayıcınızı güncelleyin</a>.</p>
     <![endif]-->
@@ -73,9 +77,26 @@
                                         <div class="ht-setting-trigger"><span>Ayarlar</span></div>
                                         <div class="setting ht-setting">
                                             <ul class="ht-setting-list">
-                                                @if (Session["uye"] != null) { <li><a href="login-register.html">Hesabım</a></li> }
+
+                                                @if (Session["uye"] != null)
+                                                {
+                                                    <li><a href="@Url.Action("Uye_Hesap","Home",new {id = ((uyeler)Session["uye"]).uye_id })">Hesabım</a></li>
+
+
+                                                }
                                                 <li><a href="checkout.html">Ödeme</a></li>
-                                                 @if (Session["uye"] == null) {<li><a href="login-register.html">Giriş Yap</a></li> }
+                                                @if (Session["uye"] != null)
+                                                {
+
+                                                    <li><a href="@Url.Action("Logout")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
+
+                                                }
+
+                                                @if (Session["uye"] == null)
+                                                {
+                                                    <li><a href="@Url.Action("Kaydol_Giris")">Üye Ol/Giriş Yap</a></li>
+
+                                                }
                                             </ul>
                                         </div>
                                     </li>
@@ -108,6 +129,17 @@
                                         </div>
                                     </li>
                                     <!-- Language Area End Here -->
+                                    <li>
+                                        @if (Session["uye"] != null)
+                                        {
+                                            <font>
+                                                @if (((uyeler)Session["uye"]).vip)
+                                                {<font> VIP </font>} Üye: @(((uyeler)Session["uye"]).kuladi)
+                                            </font>
+
+                                        }
+
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -573,7 +605,7 @@
                             <div class="copyright text-center pt-25">
                                 <span>
                                     <pre>2026 Bilibilişim e-ticaret platformu. Tüm hakları saklıdır.</pre>
-                                                    © Created by Vindalfr & VodeAn
+                                    © Created by Vindalfr & VodeAn
                                 </span>
                             </div>
                             <!-- Copyright Area End Here -->
@@ -628,6 +660,7 @@
     <script src="~/Scripts/js/scrollUp.min.js"></script>
     <!-- Main/Activator js -->
     <script src="~/Scripts/js/main.js"></script>
+    
 </body>
 
 <!-- index-231:38-->

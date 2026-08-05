@@ -11,7 +11,8 @@ namespace BiliBilisim_Proje.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class uyeler
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,14 +22,23 @@ namespace BiliBilisim_Proje.Models
         }
     
         public int uye_id { get; set; }
+        [Required(ErrorMessage = "Kullanýcý Adý Giriþi Zorunludur")]
         public string kuladi { get; set; }
+        [Required(ErrorMessage = "Þifre Giriþi Zorunludur")]
+        [MinLength(8, ErrorMessage = "Þifre En Az 8 Karakter Olmalýdýr")]
         public string sifre { get; set; }
+        [Required(ErrorMessage = "Ad Soyad Giriþi Zorunludur")] 
         public string ad_soyad { get; set; }
+        [Required(ErrorMessage = "Doðum Tarihi Giriþi Zorunludur")]
         public System.DateTime dog_tar { get; set; }
+        [Required(ErrorMessage = "Cinsiyet Giriþi Zorunludur")]
         public bool cinsiyet { get; set; }
         public bool vip { get; set; }
+        [Required(ErrorMessage = "Adres Giriþi Zorunludur")]
         public string adres { get; set; }
+        [Required(ErrorMessage = "Email Giriþi Zorunludur")] [EmailAddress]
         public string email { get; set; }
+        [Required(ErrorMessage = "Ýl Seçimi Zorunludur")]
         public int plaka { get; set; }
     
         public virtual sehirler sehirler { get; set; }

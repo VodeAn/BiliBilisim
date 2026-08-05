@@ -11,11 +11,15 @@ namespace BiliBilisim_Proje.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class admin
     {
         public int admin_id { get; set; }
+
+        [Required(ErrorMessage = "Kullanýcý Adý Zorunludur")]
         public string kuladi { get; set; }
+        [Required(ErrorMessage = "Þifre Zorunludur")]
         public string sifre { get; set; }
     }
 }
