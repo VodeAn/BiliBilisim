@@ -116,16 +116,7 @@ namespace BiliBilisim_Proje.Controllers
             Session.RemoveAll();
             return RedirectToAction("Index", "Home");
         }
-        public async Task<ActionResult> Uye_Hesap(int? id)
-        {
-
-            if (id == null) return HttpNotFound();
-            var uye = await dbo.uyeler.FindAsync(id);
-            if(uye == null) return HttpNotFound();
-            ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il");
-            return View(uye);
-
-        }
+     
 
     }
 }
