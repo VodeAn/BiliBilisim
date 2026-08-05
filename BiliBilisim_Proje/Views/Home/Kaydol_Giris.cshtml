@@ -9,61 +9,114 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6 mb-30">
                 <!-- Login Form s-->
-                <form action="#">
+                <form action="@Url.Action("Giris","Home",null)" method="post">
                     <div class="login-form">
-                        <h4 class="login-title">Login</h4>
+                        <h4 class="login-title">Giriş Yap</h4>
                         <div class="row">
                             <div class="col-md-12 col-12 mb-20">
-                                <label>Email Address*</label>
-                                <input class="mb-0" type="email" placeholder="Email Address">
+                                <label>Kullanıcı Adı</label>
+                                <input class="mb-0" name="kuladilar" type="text" placeholder="Kullanıcı Adı">
+                                @Html.ValidationMessage("kuladilar", "", new { @class = "text-danger" })
                             </div>
                             <div class="col-12 mb-20">
-                                <label>Password</label>
-                                <input class="mb-0" type="password" placeholder="Password">
+                                <label>Şifre</label>
+                                <input class="mb-0" name="sifreler" type="password" placeholder="Şifre">
+                                @Html.ValidationMessage("sifreler", "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-8">
                                 <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
-                                    <input type="checkbox" id="remember_me">
-                                    <label for="remember_me">Remember me</label>
+                                    <input type="checkbox" name="hatirla">
+                                    <label for="hatirla">Beni Hatırla</label>
                                 </div>
                             </div>
                             <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
-                                <a href="#"> Forgotten pasward?</a>
+                                <a href="#"> Şifremi Unuttum</a>
                             </div>
+                            <div class="col-12">@Html.ValidationMessage("GirisHata", "", new { @class = "text-danger d-block mb-3" })</div>
+
                             <div class="col-md-12">
-                                <button class="register-button mt-0">Login</button>
+                                <button class="register-button mt-0" >Giriş Yap</button>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                <form action="#">
+                <form action="@Url.Action("Kaydol","Home",null)" method="post">
                     <div class="login-form">
-                        <h4 class="login-title">Register</h4>
+                        <h4 class="login-title">Kayıt Ol</h4>
+                        <div class="col-12">@Html.ValidationMessage("KayitHata", "", new { @class = "text-danger d-block mb-3" })</div>
                         <div class="row">
-                            <div class="col-md-6 col-12 mb-20">
-                                <label>First Name</label>
-                                <input class="mb-0" type="text" placeholder="First Name">
+                            <div class=" col-12 mb-20">
+                                <label>Kullanıcı Adı</label>
+                                <input class="mb-0" name="kuladi" type="text" placeholder="Kullanıcı Adı">
+                                @Html.ValidationMessage("kuladi", "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6 col-12 mb-20">
-                                <label>Last Name</label>
-                                <input class="mb-0" type="text" placeholder="Last Name">
+                            <br />
+                            <div class=" col-12 mb-20">
+                                <label>Ad Soyad</label>
+                                <input class="mb-0" name="ad_soyad" type="text" placeholder="Ad Soyad">
+                                @Html.ValidationMessage("ad_soyad", "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-12 mb-20">
+                                <label>Email</label>
+                                <input class="mb-0" name="email" type="email" placeholder="Email">
+                                @Html.ValidationMessage("email", "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="col-12 mb-20">
+                                <label>Doğum Tarihi</label>
+                                <input class="mb-0" name="dog_tar" type="date" placeholder="Doğum Tarihi">
+                                @Html.ValidationMessage("dog_tar", "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-12 mb-20">
+                                <label class="d-block">Cinsiyet</label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <label class="d-inline-flex align-items-center gap-1 cursor-pointer">
+                                        @Html.RadioButton("cinsiyet", false, false)
+                                        <span>Erkek</span>
+                                    </label>
+                                    <label class="d-inline-flex align-items-center gap-1 cursor-pointer">
+                                        @Html.RadioButton("cinsiyet", true, false)
+                                        <span>Kadın</span>
+                                    </label>
+                                </div>
+                                @Html.ValidationMessage("cinsiyet", "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-12 mb-20">
-                                <label>Email Address*</label>
-                                <input class="mb-0" type="email" placeholder="Email Address">
+                                <label>Şehir</label>
+                                @Html.DropDownList("plaka", null, "Seçiniz", new { @class = "form-control" })
+                                @Html.ValidationMessage("plaka", "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6 mb-20">
-                                <label>Password</label>
-                                <input class="mb-0" type="password" placeholder="Password">
+                            <div class="col-md-12 mb-20">
+                                <label>Adres</label>
+                                @Html.TextArea("adres", null, 5, 30, new { @class = "form-control mb-0" })
+                                @Html.ValidationMessage("adres", "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-6 mb-20">
-                                <label>Confirm Password</label>
-                                <input class="mb-0" type="password" placeholder="Confirm Password">
+                            <div class="col-12 mb-20">
+                                <label>Şifre</label>
+                                <input class="mb-0" name="sifre" type="password" placeholder="Şifre">
+                                @Html.ValidationMessage("sifre", "", new { @class = "text-danger" })
                             </div>
+
+                            <div class="col-12 mb-20">
+                                <label>Şifreyi Doğrula</label>
+                                <input class="mb-0" name="confirm" type="password" placeholder="Şifreyi Doğrula">
+                                @Html.ValidationMessage("confirm", "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-12 mb-20">
+                                <div class="d-flex align-items-center gap-3">
+                                    <label class="d-inline-flex align-items-center gap-1 cursor-pointer">
+                                        @Html.CheckBox("vip", false)
+                                        <span>VIP Olmak İstiyorum</span>
+                                    </label>
+                                </div>
+                                @Html.ValidationMessage("cinsiyet", "", new { @class = "text-danger" })
+                            </div>
+
                             <div class="col-12">
-                                <button class="register-button mt-0">Register</button>
+                                <button class="register-button mt-0">Kayıt Ol</button>
                             </div>
                         </div>
                     </div>
@@ -72,4 +125,5 @@
         </div>
     </div>
 </div>
+
 <!-- Login Content Area End Here -->

@@ -7,11 +7,11 @@ Proje MSSQL veritabanında localde çalışmaktadır ve veritabanı scripti proj
 * Admin Kullanıcı Adı: Butgem
 * Admin Şifresi: 123456
 
-* VIP Kullanıcı Adı: fadime231
-* VIP Şifre: 987654321
+* VIP Kullanıcı Adı: mahmut
+* VIP Şifre: 12345678
 
-* Diğer Kullanıcı Adı: mahmut
-* Şifre: 12345678
+* Diğer Kullanıcı Adı: fadime231
+* Şifre: 987654321
 
 
 This project is the final project for the Bursa Chamber of Commerce and Industry Education Foundation (BUTGEM) Software Expertise Course. An E-Commerce website with database integration was developed using the MVC pattern and Entity Framework.
@@ -21,8 +21,8 @@ The project runs locally on an MSSQL database, and the database script is includ
 * Admin Username: Butgem
 * Admin Password: 123456
 
-* VIP Username: fadime231
-* VIP Password: 987654321
+* VIP Username: mahmut
+* VIP Password: 12345678
 
-* Other Username: mahmut
-* Password: 12345678
+* Other Username: fadime231
+* Password: 987654321
