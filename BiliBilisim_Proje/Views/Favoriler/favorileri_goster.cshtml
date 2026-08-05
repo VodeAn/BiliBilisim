@@ -1,0 +1,49 @@
+﻿@model BiliBilisim_Proje.Models.Favoriler
+@{
+    ViewBag.Title = "favorileri_goster";
+}
+
+<!--Wishlist Area Strat-->
+<div class="wishlist-area pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form action="#">
+                    <div class="table-content table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="li-product-remove">Favorilerden Kaldır</th>
+                                    <th class="li-product-thumbnail">Resim</th>
+                                    <th class="cart-product-name">Ürün Markası</th>
+                                    <th class="cart-product-name">Ürün Modeli</th>
+                                    <th class="li-product-price">Fiyat</th>
+                                    <th class="li-product-stock-status">Stok Adedi</th>
+                                    <th class="li-product-add-cart">Sepete Ekle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Favorilerim)
+                                {
+
+                                    <tr>
+                                        <td class="li-product-remove"><a href="@Url.Action("favorilerden_kaldir", "Favoriler", new { id = item.urun_id })"><i class="fa fa-times"></i></a></td>
+                                        <td class="li-product-thumbnail"><a href="images/wishlist-thumb/1.jpg"><img src="~/Content/fotolar/@item.fotolar" alt=""></a></td>
+                                        <td class="li-product-name"><a href="#">@item.marka </a></td>
+                                        <td class="li-product-name"><a href="#">@item.model </a></td>
+
+                                         <td class="li-product-price"><span class="amount">₺@item.fiyati</span></td>
+                                        <td class="li-product-stock-status"><span class="in-stock">@item.stok</span></td>
+                                        <td class="li-product-add-cart"><a href="@Url.Action("sepete_ekle","sepet")">Sepete Ekle</a></td>
+                                    </tr>
+
+                                }
+                                </tbody>
+                            </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Wishlist Area End-->
