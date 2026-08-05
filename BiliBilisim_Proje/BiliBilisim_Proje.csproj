@@ -128,6 +128,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\FavorilerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\uyelersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -432,6 +433,7 @@
     <Content Include="Views\Home\Kaydol_Giris.cshtml" />
     <Content Include="Views\Home\Uye_Hesap.cshtml" />
     <Content Include="Views\uyelers\Edit.cshtml" />
+    <Content Include="Views\Favoriler\favorileri_goster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
