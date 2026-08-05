@@ -5,6 +5,8 @@
 
 <!-- index-231:32-->
 <head>
+    <link href="~/Content/datepicker.css" rel="stylesheet" />
+    
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Bilibilişim</title>
@@ -80,7 +82,7 @@
 
                                                 @if (Session["uye"] != null)
                                                 {
-                                                    <li><a href="@Url.Action("Uye_Hesap","Home",new {id = ((uyeler)Session["uye"]).uye_id })">Hesabım</a></li>
+                                                    <li><a href="@Url.Action("Edit","Uyelers",new {id = ((uyeler)Session["uye"]).uye_id })">Hesabım</a></li>
 
 
                                                 }
@@ -660,7 +662,20 @@
     <script src="~/Scripts/js/scrollUp.min.js"></script>
     <!-- Main/Activator js -->
     <script src="~/Scripts/js/main.js"></script>
-    
+    <!--DatePicker Scripts-->
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.tr.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#dog_tar').datepicker({
+                language: 'tr',
+                format: 'dd.mm.yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
+
 </body>
 
 <!-- index-231:38-->
