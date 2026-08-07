@@ -76,7 +76,20 @@
                                 <ul class="ht-menu">
                                     <!-- Begin Setting Area -->
                                     <li>
-                                        <div class="ht-setting-trigger"><span>Ayarlar</span></div>
+                                        @{ 
+                                            string kul;
+                                            if (Session["uye"] != null) 
+                                            {
+                                                kul = "/Content/images/kullanici-admin/kullanici2.png";
+                                            }
+
+                                            else
+                                            {
+                                                kul = "/Content/images/kullanici-admin/kullanici.png";
+                                            }
+                                        }
+
+                                        <div class="ht-setting-trigger"><span><img height="25px" width="20px" src="@kul"></span></div>
                                         <div class="setting ht-setting">
                                             <ul class="ht-setting-list">
 
@@ -96,7 +109,7 @@
 
                                                 @if (Session["uye"] == null)
                                                 {
-                                                    <li><a href="@Url.Action("Kaydol_Giris")">Üye Ol/Giriş Yap</a></li>
+                                                    <li><a href="@Url.Action("Kaydol_Giris","home")">Üye Ol/Giriş Yap</a></li>
 
                                                 }
                                             </ul>

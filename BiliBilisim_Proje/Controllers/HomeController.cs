@@ -14,6 +14,7 @@ namespace BiliBilisim_Proje.Controllers
         bili_Entities dbo = new bili_Entities();
         public ActionResult Index()
         {
+
             return View();
         }
 
