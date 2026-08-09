@@ -1,0 +1,147 @@
+﻿@model IPagedList<BiliBilisim_Proje.Models.urunler>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<div style="display: flex; flex-direction: column; min-height: 75vh;height:850px">
+    <!-- shop-top-bar start -->
+    <div class="shop-top-bar mt-30">
+        <div class="shop-bar-inner">
+            <div class="product-view-mode">
+                <!-- shop-item-filter-list start -->
+                <ul class="nav shop-item-filter-list" role="tablist">
+                    <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="grid-view" href="#grid-view"><i class="fa fa-th"></i></a></li>
+                </ul>
+                <!-- shop-item-filter-list end -->
+            </div>
+        </div>
+        <!-- product-select-box start -->
+        <div class="product-select-box">
+            <div class="product-short">
+                <p>Sıralama:</p>
+                @using (Html.BeginForm())
+                {
+                    @Html.DropDownList("filtre", null, "Seçiniz", new { @class = "nice-select", onchange = "this.form.submit()" })
+                }
+            </div>
+        </div>
+        <!-- product-select-box end -->
+    </div>
+    <!-- shop-top-bar end -->
+    <table class="table">
+        @{ var liste = Model.Take(4);}
+        <tr>
+            @foreach (var item in liste)
+            {
+
+                <td align="center">
+                    <img src="~/Content/fotolar/@item.fotolar" height="80" width="80" /><br />
+                    @Html.DisplayFor(modelItem => item.urun_adi)<br />
+                    Fiyatı: @Html.DisplayFor(modelItem => item.fiyati)₺<br />
+                    @*@Html.ActionLink("SEPETE EKLE", "sepete_ekle", "sepet", new {id=item.urunid}, new { @class = "btn btn-danger" })*@
+                    <button class="btn btn-danger" onclick="openModal(@item.urun_id)">SEPETE EKLE</button>
+                </td>
+
+            }
+        </tr>
+        @{ liste = Model.Skip(4).Take(4);}
+        <tr>
+            @foreach (var item in liste)
+            {
+
+                <td align="center">
+                    <img src="~/Content/fotolar/@item.fotolar" height="80" width="80" /><br />
+                    @Html.DisplayFor(modelItem => item.urun_adi)<br />
+                    Fiyatı: @Html.DisplayFor(modelItem => item.fiyati)₺<br />
+                    @*@Html.ActionLink("SEPETE EKLE", "sepete_ekle", "sepet", new {id=item.urunid}, new { @class = "btn btn-danger" })*@
+                    <button class="btn btn-danger" onclick="openModal(@item.urun_id)">SEPETE EKLE</button>
+                </td>
+
+            }
+        </tr>
+        @{ liste = Model.Skip(8).Take(4);}
+        <tr>
+            @foreach (var item in liste)
+            {
+
+                <td align="center">
+                    <img src="~/Content/fotolar/@item.fotolar" height="80" width="80" /><br />
+                    @Html.DisplayFor(modelItem => item.urun_adi)<br />
+                    Fiyatı: @Html.DisplayFor(modelItem => item.fiyati)₺<br />
+                    @*@Html.ActionLink("SEPETE EKLE", "sepete_ekle", "sepet", new {id=item.urunid}, new { @class = "btn btn-danger" })*@
+                    <button class="btn btn-danger" onclick="openModal(@item.urun_id)">SEPETE EKLE</button>
+                </td>
+
+            }
+        </tr>
+    </table>
+
+    <div style="margin-top:auto" class="d-flex justify-content-center">
+        @Html.PagedListPager(Model, sayfa => Url.Action("index", new { sayfa, filtre = Session["filtre"] }), new PagedListRenderOptions
+        {
+            Display = PagedListDisplayMode.IfNeeded,
+            UlElementClasses = new[] { "pagination pagination-sm" },
+            LiElementClasses = new[] { "page-item" }
+        })
+    </div>
+</div>
+
+<style>
+    /* --- SAYFALAMA AKTİF SAYFA KESİN ÇÖZÜM --- */
+
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        gap: 6px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+        /* Normal Butonlar (Pasif) */
+        .pagination li a,
+        .pagination li span {
+            display: block;
+            padding: 8px 14px;
+            color: #000000;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            /* Üzerine Gelince (Hover) */
+            .pagination li a:hover {
+                color: #000000;
+                background-color: #ffc107;
+                border-color: #ffc107;
+            }
+
+        /* AKTİF SAYFA (Hangi sayfadaysan burası çalışır) */
+        .pagination > .active > span,
+        .pagination > .active > a,
+        .pagination li.active span,
+        .pagination li.active a {
+            background-color: #ffc107 !important; /* Canlı Sarı */
+            color: #000000 !important; /* Siyah Metin */
+            border-color: #ffc107 !important; /* Sarı Kenarlık */
+            font-weight: bold !important;
+            box-shadow: 0 2px 6px rgba(255, 193, 7, 0.4);
+            pointer-events: none;
+            Tıklanamaz yapar
+        }
+
+        /* Pasif Oklar */
+        .pagination li.disabled span {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            opacity: 0.6;
+        }
+</style>

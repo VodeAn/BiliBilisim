@@ -1,0 +1,83 @@
+﻿@model BiliBilisim_Proje.Models.urunler
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>urunler</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.urun_adi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.urun_adi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.marka)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.marka)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fiyati)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fiyati)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stok)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stok)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fotolar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fotolar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.satis_adet)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.satis_adet)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.kategori.kate_adi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.kategori.kate_adi)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.urun_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
