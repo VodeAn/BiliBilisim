@@ -33,6 +33,13 @@ namespace BiliBilisim_Proje.Controllers
             favorileri_getir().favori_sil(silinecek);
             return RedirectToAction("favorileri_goster", "favoriler");
         }
+        public ActionResult favorilere_ekle(int? id)
+        {
+            if (id == null) return HttpNotFound();
+            var eklenecek = dbo.urunler.FirstOrDefault(x => x.urun_id == id);
+            favorileri_getir().favori_ekle(eklenecek);
+            return RedirectToAction("favorileri_goster","favoriler");
+        }
 
     }
 }
