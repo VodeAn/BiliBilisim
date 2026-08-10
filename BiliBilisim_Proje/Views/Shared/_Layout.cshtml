@@ -192,7 +192,8 @@
                                         <a href="@Url.Action("favorileri_goster", "Favoriler")">
                                             @if (Session["favoriler"] == null)
                                             {<span class="cart-item-count wishlist-item-count">0</span>}
-                                            else{<span class="cart-item-count wishlist-item-count">@(((Favoriler)Session["favoriler"]).Favorilerim.Count)</span>}
+                                            else
+                                            {<span class="cart-item-count wishlist-item-count">@(((Favoriler)Session["favoriler"]).Favorilerim.Count)</span>}
                                             <i class="fa fa-heart-o"></i>
                                         </a>
                                     </li>
@@ -677,7 +678,7 @@
             });
         });
     </script>
-
+    @RenderSection("Scripts", required: false)
 </body>
 
 <!-- index-231:38-->

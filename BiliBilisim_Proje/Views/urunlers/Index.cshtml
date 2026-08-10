@@ -66,25 +66,33 @@
                                                     <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                                 </div>
                                             </div>
-                                            <div class="add-actions">
-                                                <ul class="add-actions-link">
-                                                    <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
-                                                    <li>
-                                                        @{
-                                                            var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
-                                                            bool favorideMi = favoriModel != null
-                                                                              && favoriModel.Favorilerim != null
-                                                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
-                                                        }
+                                            @{
+                                                var uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
+                                                if (uye != null && uye.vip)
+                                                {
 
-                                                        <a class="links-details"
-                                                           href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
-                                                           onclick="favoriEkle(event, this)">
-                                                            <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+
+                                                    <div class="add-actions">
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="@Url.Action("sepete_ekle","sepet",new {id = item.urun_id })">Sepete Ekle</a></li>
+                                                            <li>
+                                                                @{
+                                                                    var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
+                                                                    bool favorideMi = favoriModel != null
+                                                                                      && favoriModel.Favorilerim != null
+                                                                                      && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+                                                                }
+
+                                                                <a class="links-details"
+                                                                   href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                                   onclick="favoriEkle(event, this)">
+                                                                    <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                }
+                                            }
                                         </div>
                                     </div>
                                     <!-- single-product-wrap end -->
@@ -97,7 +105,7 @@
                                     <!-- single-product-wrap start -->
                                     <div class="single-product-wrap">
                                         <div class="product-image">
-                                            <a href="@Url.Action("details",new {id=item.urun_id})">
+                                            <a href="@Url.Action("details", new { id = item.urun_id })">
                                                 <img src="~/Content/fotolar/@item.fotolar" alt="">
                                             </a>
                                             <span class="sticker">New</span>
@@ -115,47 +123,54 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h4><a class="product_name" href="@Url.Action("details",new {id=item.urun_id})">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                                <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
                                                 <div class="price-box">
                                                     <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                                 </div>
                                             </div>
-                                            <div class="add-actions">
-                                                <ul class="add-actions-link">
-                                                    <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
-                                                    <li>
-                                                        @{
-                                                            var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
-                                                            bool favorideMi = favoriModel != null
-                                                                              && favoriModel.Favorilerim != null
-                                                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
-                                                        }
+                                            @{
+                                                var uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
+                                                if (uye != null && uye.vip)
+                                                {
+                                                    <div class="add-actions">
+                                                        <ul class="add-actions-link">
+                                                            <li class="add-cart active"><a href="@Url.Action("sepete_ekle", "sepet",new {id = item.urun_id })">Sepete Ekle</a></li>
+                                                            <li>
+                                                                @{
+                                                                    var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
+                                                                    bool favorideMi = favoriModel != null
+                                                                                      && favoriModel.Favorilerim != null
+                                                                                      && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+                                                                }
 
-                                                        <a class="links-details"
-                                                           href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
-                                                           onclick="favoriEkle(event, this)">
-                                                            <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                                <a class="links-details"
+                                                                   href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                                   onclick="favoriEkle(event, this)">
+                                                                    <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                }
+                                            }
+
                                         </div>
                                     </div>
                                     <!-- single-product-wrap end -->
                                 </div>
-                                                            }
+                            }
 
                         </div>
                     </div>
                 </div>
-                    <div style="margin-top:100px;float:right" class="d-flex justify-content-center">
-                        @Html.PagedListPager(Model, sayfa => Url.Action("index", new { sayfa, filtre = Session["filtre"] }), new PagedListRenderOptions
-                        {
-                            Display = PagedListDisplayMode.IfNeeded,
-                            UlElementClasses = new[] { "pagination pagination-sm" },
-                            LiElementClasses = new[] { "page-item" }
-                        })
-                    </div>
+                <div style="margin-top:100px;float:right" class="d-flex justify-content-center">
+                    @Html.PagedListPager(Model, sayfa => Url.Action("index", new { sayfa, filtre = Session["filtre"] }), new PagedListRenderOptions
+                    {
+                        Display = PagedListDisplayMode.IfNeeded,
+                        UlElementClasses = new[] { "pagination pagination-sm" },
+                        LiElementClasses = new[] { "page-item" }
+                    })
+                </div>
             </div>
         </div>
         <!-- shop-products-wrapper end -->
