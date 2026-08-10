@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using BiliBilisim_Proje.Models;
@@ -79,30 +80,35 @@ namespace BiliBilisim_Proje.Controllers
         }
 
         // POST: uyelers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka")] uyeler uyeler,string confirm)
         {
+            if (uyeler.sifre != confirm)
+            {
+                ModelState.AddModelError("confirm", "Şifreler birbiriyle uyuşmuyor!");
+            }
             if (ModelState.IsValid)
             {
-                if (uyeler.sifre == confirm)
+                
+                db.Entry(uyeler).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                if (uyeler.vip == true)
                 {
-                    db.Entry(uyeler).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    Session["uye"] = uyeler;
-                    return RedirectToAction("Index", "Home");
+                    
+                    await BayilikMailGonderAsync(uyeler.email, uyeler.ad_soyad, uyeler.adres);
+                    
+
                 }
+                uyeler.vip = false;
+                Session["uye"] = uyeler;
+                return RedirectToAction("Index", "Home");
+                
                 
             }
-            else
-            {
-                ModelState.AddModelError("KayitHata", "Şifreler birbiriyle uyuşmuyor!");
-
-            }
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
-            return RedirectToAction("Index","Home");
+            return View(uyeler);
         }
 
         // GET: uyelers/Delete/5
@@ -129,6 +135,51 @@ namespace BiliBilisim_Proje.Controllers
             db.uyeler.Remove(uyeler);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        private async Task BayilikMailGonderAsync(string kullaniciEmail, string adSoyad, string adres)
+        {
+            try
+            {
+
+                string gondericiMail = "botmail@gmail.com";
+                string sifre = "botmailsifre";
+                string aliciMail = "yonetim@sirketiniz.com"; // Mailin kime gideceği 
+
+                // 2. Mail İçeriği
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress(gondericiMail, "Bilişim Proje Sistemi");
+                mail.To.Add(aliciMail);
+
+                
+
+                mail.Subject = "Yeni Bayilik Talebi Alındı!";
+                mail.IsBodyHtml = true;
+                mail.Body = $@"
+            <div style='font-family:Arial; padding:20px; border:1px solid #ddd;'>
+                <h2 style='color:#2c3e50;'>Yeni Bayilik Başvurusu</h2>
+                <p>Sistem üzerinden bir kullanıcı bayilik talebinde bulunuldu. Detaylar aşağıdadır:</p>
+                <hr/>
+                <p><strong>Ad Soyad:</strong> {adSoyad}</p>
+                <p><strong>Email Adresi:</strong> {kullaniciEmail}</p>
+                <p><strong>Adres:</strong> {adres}</p>
+                <br/>
+                <p><small>Bu mail sistem tarafından otomatik olarak gönderilmiştir.</small></p>
+            </div>";
+
+                // 3. SMTP Sunucu Ayarları (Örnek: Gmail)
+                // Eğer Yandex kullanıyorsanız: smtp.yandex.com.tr (Port: 465 veya 587)
+                // Eğer Outlook/Hotmail ise: smtp.office365.com (Port: 587)
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                smtp.Credentials = new NetworkCredential(gondericiMail, sifre);
+                smtp.EnableSsl = true;
+
+                // 4. Maili Gönder
+                await smtp.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         }
 
         protected override void Dispose(bool disposing)
