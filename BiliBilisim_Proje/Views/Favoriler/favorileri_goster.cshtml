@@ -34,7 +34,7 @@
 
                                          <td class="li-product-price"><span class="amount">₺@item.fiyati</span></td>
                                         <td class="li-product-stock-status"><span class="in-stock">@item.stok</span></td>
-                                        <td class="li-product-add-cart"><a href="@Url.Action("sepete_ekle","sepet")">Sepete Ekle</a></td>
+                                        <td class="li-product-add-cart"><a href="@Url.Action("sepete_ekle","sepet",new {id=item.urun_id })">Sepete Ekle</a></td>
                                     </tr>
 
                                 }
