@@ -1,9 +1,358 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IPagedList<BiliBilisim_Proje.Models.urunler>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row">
+    <div class="col-10">
+        <div class="slider-area">
+            <div class="slider-active owl-carousel">
 
-<div class="jumbotron" style="background-color:wheat;height:1000px">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+                <!-- Slide 1 -->
+                <div class="single-slide align-center-left animation-style-01 bg-1">
+                    <div class="slider-progress"></div>
+                    <div class="slider-content">
+                        <h5><span>Bu Hafta!!!!</span></h5>
+                        <h2>Android Telefonlar</h2>
+                        <h3><span>45.000₺'den </span>Başlayan fiyatlar</h3>
+                        <div class="default-btn slide-btn">
+                            <a class="links" href="@Url.Action("index","urunler")">Shopping Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="single-slide align-center-left animation-style-02 bg-2">
+                    <div class="slider-progress"></div>
+                    <div class="slider-content">
+                        <h5><span>Bu Hafta!!!!</span></h5>
+                        <h2>Ofis Bilgisayarları</h2>
+                        <h3><span>45.000₺'den </span>Başlayan fiyatlar</h3>
+                        <div class="default-btn slide-btn">
+                            <a class="links" href="@Url.Action("index","urunler")">Shopping Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="single-slide align-center-left animation-style-01 bg-4">
+                    <div class="slider-progress"></div>
+                    <div class="slider-content">
+                        <h5><span>Bu Hafta!!!!</span></h5>
+                        <h2>Profesyonel Kameralar</h2>
+                        <h3><span>45.000₺'den </span>Başlayan fiyatlar</h3>
+                        <div class="default-btn slide-btn">
+                            <a class="links" href="@Url.Action("index","urunler")">Shopping Now</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+<div class="col-lg-10 order-1 order-lg-2">
+    <div class="single-banner shop-page-banner">
+        <a href="#">
+            <img src="images/bg-banner/2.jpg" alt="Li's Static Banner">
+        </a>
+    </div>
+    <!-- shop-products-wrapper start -->
+    <div class="shop-products-wrapper">
+        <div class="tab-content">
+            <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
+                <div class="product-area shop-product-area">
+                    <div class="row">
+                        @{
+                            // Favori session nesnesini her kartta tekrar çekmek yerine bir kez yukarıda tanımlıyoruz
+                            var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
+                        }
+
+                        @* 1. Blok: 18'den sonraki 3 ürün *@
+                        @{ var liste = Model.Skip(18).Take(3); }
+                        @foreach (var item in liste)
+                        {
+                            bool favorideMi = favoriModel?.Favorilerim != null
+                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+
+                            <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap">
+                                    <div class="product-image">
+                                        <a href="@Url.Action("details", new { id = item.urun_id })">
+                                            <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
+                                        </a>
+                                        <span class="sticker">New</span>
+                                    </div>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <div class="product-review">
+                                                <div class="rating-box">
+                                                    <ul class="rating">
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                            <div class="price-box">
+                                                <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
+                                            </div>
+                                        </div>
+                                        <div class="add-actions">
+                                            <ul class="add-actions-link">
+                                                <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
+                                                <li>
+                                                    <a class="links-details"
+                                                       href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                       onclick="favoriEkle(event, this)">
+                                                        <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- single-product-wrap end -->
+                            </div>
+                        }
+
+                        @* 2. Blok: 21'den sonraki 3 ürün *@
+                        @{ liste = Model.Skip(21).Take(3); }
+                        @foreach (var item in liste)
+                        {
+                            bool favorideMi = favoriModel?.Favorilerim != null
+                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+
+                            <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap">
+                                    <div class="product-image">
+                                        <a href="@Url.Action("details", new { id = item.urun_id })">
+                                            <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
+                                        </a>
+                                        <span class="sticker">New</span>
+                                    </div>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <div class="product-review">
+                                                <div class="rating-box">
+                                                    <ul class="rating">
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                            <div class="price-box">
+                                                <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
+                                            </div>
+                                        </div>
+                                        <div class="add-actions">
+                                            <ul class="add-actions-link">
+                                                <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
+                                                <li>
+                                                    <a class="links-details"
+                                                       href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                       onclick="favoriEkle(event, this)">
+                                                        <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- single-product-wrap end -->
+                            </div>
+                        }
+
+                        @* 3. Blok: 24'ten sonraki 3 ürün *@
+                        @{ liste = Model.Skip(24).Take(3); }
+                        @foreach (var item in liste)
+                        {
+                            bool favorideMi = favoriModel?.Favorilerim != null
+                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+
+                            <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap">
+                                    <div class="product-image">
+                                        <a href="@Url.Action("details", new { id = item.urun_id })">
+                                            <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
+                                        </a>
+                                        <span class="sticker">New</span>
+                                    </div>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <div class="product-review">
+                                                <div class="rating-box">
+                                                    <ul class="rating">
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li><i class="fa fa-star-o"></i></li>
+                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                            <div class="price-box">
+                                                <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
+                                            </div>
+                                        </div>
+                                        <div class="add-actions">
+                                            <ul class="add-actions-link">
+                                                <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
+                                                <li>
+                                                    <a class="links-details"
+                                                       href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                       onclick="favoriEkle(event, this)">
+                                                        <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- single-product-wrap end -->
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- shop-products-wrapper end -->
+</div>
+
+<script>
+    function favoriEkle(e, element) {
+        e.preventDefault();
+
+        var targetUrl = $(element).attr('href');
+
+        $.ajax({
+            url: targetUrl,
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    // İşlem tamamlandıktan sonra sayfayı yenile
+                    location.reload();
+                }
+            },
+            error: function () {
+                alert('İşlem sırasında bir hata oluştu.');
+            }
+        });
+    }
+</script>
+
+
+<style>
+    /* 1. Kartı dikey flex yapıp tam boya zorluyoruz */
+    .single-product-wrap {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* 2. Resim alanına SABİT YÜKSEKLİK verip içindekileri ortalıyoruz */
+    .product-image {
+        height: 280px; /* Tüm resim kutuları kesinlikle 280px olacak */
+        width: 100%;
+        display: flex;
+        align-items: center; /* Dikeyde ortalar */
+        justify-content: center; /* Yatayda ortalar */
+        position: relative;
+        overflow: hidden;
+    }
+
+        .product-image a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 3. Resimlerin 280px dışına taşmasını engelliyor ve oranını koruyoruz */
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+    /* 4. Alt bilgileri (başlık, fiyat, butonlar) kartın en altına hizalıyoruz */
+    .product_desc {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+    /* --- SAYFALAMA AKTİF SAYFA KESİN ÇÖZÜM --- */
+
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        gap: 6px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+        /* Normal Butonlar (Pasif) */
+        .pagination li a,
+        .pagination li span {
+            display: block;
+            padding: 8px 14px;
+            color: #000000;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            /* Üzerine Gelince (Hover) */
+            .pagination li a:hover {
+                color: #000000;
+                background-color: #ffc107;
+                border-color: #ffc107;
+            }
+
+        /* AKTİF SAYFA (Hangi sayfadaysan burası çalışır) */
+        .pagination > .active > span,
+        .pagination > .active > a,
+        .pagination li.active span,
+        .pagination li.active a {
+            background-color: #ffc107 !important; /* Canlı Sarı */
+            color: #000000 !important; /* Siyah Metin */
+            border-color: #ffc107 !important; /* Sarı Kenarlık */
+            font-weight: bold !important;
+            box-shadow: 0 2px 6px rgba(255, 193, 7, 0.4);
+            pointer-events: none;
+            Tıklanamaz yapar
+        }
+
+        /* Pasif Oklar */
+        .pagination li.disabled span {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            opacity: 0.6;
+        }
+</style>
