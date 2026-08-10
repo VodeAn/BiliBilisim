@@ -403,7 +403,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Kaydol_Giris.cshtml" />
-    <Content Include="Views\Home\Uye_Hesap.cshtml" />
     <Content Include="Views\uyelers\Edit.cshtml" />
     <Content Include="Views\Favoriler\favorileri_goster.cshtml" />
     <Content Include="Views\urunlers\Details.cshtml" />

@@ -13,7 +13,7 @@ namespace BiliBilisim_Proje.Models
 
         public void sepet_ekle(urunler sepete_eklenecek,int adet)
         {
-            var sepette_bulunan = sepetim.FirstOrDefault(x => x.urun.urunid == sepete_eklenecek.urunid);
+            var sepette_bulunan = sepetim.FirstOrDefault(x => x.urun.urun_id == sepete_eklenecek.urun_id);
             if (sepette_bulunan == null)
             {
                 sepetim.Add(new Sepetlik() { urun = sepete_eklenecek, adet = 1 });
@@ -23,7 +23,7 @@ namespace BiliBilisim_Proje.Models
         }
         public void sepetten_sil(urunler sepetten_silinecek)
         {
-            sepetim.RemoveAll(x => x.urun.urunid == sepetten_silinecek.urunid);
+            sepetim.RemoveAll(x => x.urun.urun_id == sepetten_silinecek.urun_id);
         }
         public void sepetten_temizle()
         {
@@ -31,7 +31,7 @@ namespace BiliBilisim_Proje.Models
         }
         public double sepeti_topla()
         {
-            return sepetim.Sum(x => x.adet * x.urun.fiyat);
+            return Convert.ToDouble(sepetim.Sum(x => x.adet * x.urun.fiyati));
         }
     }
 }
