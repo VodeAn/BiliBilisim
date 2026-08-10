@@ -133,10 +133,12 @@
                                     <li>
                                         @if (Session["uye"] != null)
                                         {
-                                            <font>
-                                                @if (((uyeler)Session["uye"]).vip)
-                                                {<font> VIP </font>} Üye: @(((uyeler)Session["uye"]).kuladi)
-                                            </font>
+                                        
+                                            if (((uyeler)Session["uye"]).vip)
+                                            {<font> Mağaza Üyesi: @(((uyeler)Session["uye"]).kuladi) </font>}  
+                                            else
+                                            {<font> Üye: @(((uyeler)Session["uye"]).kuladi) </font>}
+                                        
 
                                         }
 
