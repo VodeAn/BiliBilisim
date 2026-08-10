@@ -137,6 +137,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FavorilerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\sepetController.cs" />
     <Compile Include="Controllers\urunlersController.cs" />
     <Compile Include="Controllers\uyelersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,6 +168,8 @@
     <Compile Include="Models\sehirler.cs">
       <DependentUpon>BiliBilisim_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Sepet.cs" />
+    <Compile Include="Models\Sepetlik.cs" />
     <Compile Include="Models\siparisler.cs">
       <DependentUpon>BiliBilisim_Model.tt</DependentUpon>
     </Compile>
