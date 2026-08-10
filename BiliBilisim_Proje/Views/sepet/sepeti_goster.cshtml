@@ -27,7 +27,7 @@
 
 
                                     <tr>
-                                        <td class="li-product-remove"><a href="@Url.Action("sepetten_sil","Urunlers",new {id = item.urun.urun_id })"><i class="fa fa-times"></i></a></td>
+                                        <td class="li-product-remove"><a href="@Url.Action("sepetten_sil","sepet",new {id = item.urun.urun_id })"><i class="fa fa-times"></i></a></td>
                                         <td class="li-product-thumbnail"><img src="~/Content/fotolar/@item.urun.fotolar" alt=""></td>
                                         <td class="li-product-name"><a href="@Url.Action("Details","Urunlers",new {id = item.urun.urun_id })">@(item.urun.marka + " " + @item.urun.model)</a></td>
                                         <td class="li-product-price"><span class="amount">₺@item.urun.fiyati</span></td>
@@ -61,8 +61,7 @@
         </div>
     </div>
 </div>
-
-@section Scripts{
+    @section Scripts{
 
     <script>
         $(document).ready(function () {

@@ -166,8 +166,7 @@
                         <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                             <!-- Begin Header Middle Searchbox Area -->
                             <form action="#" class="hm-searchbox">
-                                <input type="text" placeholder="Aramak istediğiniz kelimeyi girin ...">
-                                <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
+                                <input type="text" style="text-decoration:solid; color:black;"  value="Ürünlerle ilgili işlem yapmak için bayi üyesi olmanız gerekmektedir." readonly>
                             </form>
                             <!-- Header Middle Searchbox Area End Here -->
                             <!-- Begin Header Middle Right Area -->
@@ -189,41 +188,50 @@
                                         <div class="hm-minicart-trigger">
                                             <span class="item-icon"></span>
                                             <span class="item-text">
-                                                ₺160
-                                                <span class="cart-item-count">2</span>
+                                                Sepetim
+                                                @{
+                                                    if (Session["sepet"] == null)
+                                                    {<span class="cart-item-count">0</span> }
+                                                    else
+                                                    { <span class="cart-item-count">@(((Sepet)Session["sepet"]).Sepetim.Count)</span>}
+                                                }
                                             </span>
                                         </div>
                                         <span></span>
                                         <div class="minicart">
+                                            @{double toplam = 0; }
+                                           
+
+
                                             <ul class="minicart-product-list">
-                                                <li>
-                                                    <a href="single-product.html" class="minicart-product-image">
-                                                        <img src="~/Content/images/product/small-size/3.jpg" alt="sepet ürünleri">
-                                                    </a>
-                                                    <div class="minicart-product-details">
-                                                        <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                        <span>₺80 x 1</span>
-                                                    </div>
-                                                    <button class="close">
-                                                        <i class="fa fa-close"></i>
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <a href="single-product.html" class="minicart-product-image">
-                                                        <img src="~/Content/images/product/small-size/4.jpg" alt="sepet ürünleri">
-                                                    </a>
-                                                    <div class="minicart-product-details">
-                                                        <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                        <span>₺80 x 1</span>
-                                                    </div>
-                                                    <button class="close">
-                                                        <i class="fa fa-close"></i>
-                                                    </button>
-                                                </li>
+                                                @if (Session["sepet"] != null)
+                                                {
+                                                    foreach (var item in ((Sepet)Session["sepet"]).Sepetim)
+                                                    {
+                                                        <li>
+
+                                                            <img src="~/Content/fotolar/@item.urun.fotolar" alt="sepet ürünleri" class="minicart-product-image">
+
+                                                            <div class="minicart-product-details">
+                                                                <h6><a href="@Url.Action("Details","urunlers")">@(item.urun.marka + " " + @item.urun.model)</a></h6>
+                                                                <span>₺@(item.urun.fiyati * item.adet)</span>
+                                                            </div>
+                                                            <button class="close">
+                                                                <a href="@Url.Action("sepetten_sil","sepet",new {id=item.urun.urun_id })">
+                                                                    <i class="fa fa-close">
+                                                                    </i>
+                                                                </a>
+                                                            </button>
+                                                        </li>
+                                                        toplam += (double)(item.urun.fiyati * item.adet);
+                                                    }
+                                                }
+
                                             </ul>
-                                            <p class="minicart-total">ARA TOPLAM: <span>₺160</span></p>
+                                            
+                                            <p class="minicart-total">ARA TOPLAM: <span>₺@toplam</span></p>
                                             <div class="minicart-button">
-                                                <a href="checkout.html" class="li-button li-button-dark li-button-fullwidth li-button-sm">
+                                                <a href="@Url.Action("sepeti_goster","sepet")" class="li-button li-button-dark li-button-fullwidth li-button-sm">
                                                     <span>Sepeti Görüntüle</span>
                                                 </a>
                                                 <a href="checkout.html" class="li-button li-button-fullwidth li-button-sm">
