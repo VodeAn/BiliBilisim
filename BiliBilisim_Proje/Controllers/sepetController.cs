@@ -30,7 +30,7 @@ namespace BiliBilisim_Proje.Controllers
             if (id == null) return HttpNotFound();
             if (adet < 0) return HttpNotFound();
             var _adet = adet ?? 0;
-            var sepete_eklenecek = db.urunler.FirstOrDefault(x => x.urunid == id);
+            var sepete_eklenecek = db.urunler.FirstOrDefault(x => x.urun_id == id);
             sepeti_getir().sepet_ekle(sepete_eklenecek, _adet);
             return RedirectToAction("sepeti_goster");
         }

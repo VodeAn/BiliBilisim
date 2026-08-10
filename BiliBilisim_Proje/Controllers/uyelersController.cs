@@ -91,13 +91,18 @@ namespace BiliBilisim_Proje.Controllers
                 {
                     db.Entry(uyeler).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    Session["uye"] = uyeler;
+                    return RedirectToAction("Index", "Home");
                 }
-                else ModelState.AddModelError("KayitHata", "Şifreler birbiriyle uyuşmuyor!");
+                
+            }
+            else
+            {
+                ModelState.AddModelError("KayitHata", "Şifreler birbiriyle uyuşmuyor!");
 
             }
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
-            return View(uyeler);
+            return RedirectToAction("Index","Home");
         }
 
         // GET: uyelers/Delete/5
