@@ -6,13 +6,6 @@
 }
 <div class="row">
     <div class="col-lg-9 order-1 order-lg-2">
-        <!-- Begin Li's Banner Area -->
-        <!--<div class="single-banner shop-page-banner">
-            <a href="#">
-                <img src="images/bg-banner/2.jpg" alt="Li's Static Banner">
-            </a>
-        </div>-->
-        <!-- Li's Banner Area End Here -->
         <!-- shop-top-bar start -->
         <div class="shop-top-bar mt-30">
             <div class="shop-bar-inner">
@@ -76,7 +69,20 @@
                                             <div class="add-actions">
                                                 <ul class="add-actions-link">
                                                     <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
-                                                    <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                                    <li>
+                                                        @{
+                                                            var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
+                                                            bool favorideMi = favoriModel != null
+                                                                              && favoriModel.Favorilerim != null
+                                                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+                                                        }
+
+                                                        <a class="links-details"
+                                                           href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                           onclick="favoriEkle(event, this)">
+                                                            <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -117,14 +123,27 @@
                                             <div class="add-actions">
                                                 <ul class="add-actions-link">
                                                     <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
-                                                    <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                                    <li>
+                                                        @{
+                                                            var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
+                                                            bool favorideMi = favoriModel != null
+                                                                              && favoriModel.Favorilerim != null
+                                                                              && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+                                                        }
+
+                                                        <a class="links-details"
+                                                           href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
+                                                           onclick="favoriEkle(event, this)">
+                                                            <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- single-product-wrap end -->
                                 </div>
-                            }
+                                                            }
 
                         </div>
                     </div>
@@ -225,6 +244,29 @@
         <!--sidebar-categores-box end  -->
     </div>
 </div>
+
+<script>
+    function favoriEkle(e, element) {
+        e.preventDefault();
+
+        var targetUrl = $(element).attr('href');
+
+        $.ajax({
+            url: targetUrl,
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    // İşlem tamamlandıktan sonra sayfayı yenile
+                    location.reload();
+                }
+            },
+            error: function () {
+                alert('İşlem sırasında bir hata oluştu.');
+            }
+        });
+    }
+</script>
+
 
 <style>
     /* 1. Kartı dikey flex yapıp tam boya zorluyoruz */

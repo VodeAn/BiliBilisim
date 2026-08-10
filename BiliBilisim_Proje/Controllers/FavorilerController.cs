@@ -36,9 +36,35 @@ namespace BiliBilisim_Proje.Controllers
         public ActionResult favorilere_ekle(int? id)
         {
             if (id == null) return HttpNotFound();
+
             var eklenecek = dbo.urunler.FirstOrDefault(x => x.urun_id == id);
-            favorileri_getir().favori_ekle(eklenecek);
-            return RedirectToAction("favorileri_goster","favoriler");
+            if (eklenecek == null) return HttpNotFound();
+
+            var favoriler = favorileri_getir();
+            var varMi = favoriler.Favorilerim.Any(x => x.urun_id == id);
+
+            bool isAdded;
+            string mesaj;
+
+            if (varMi)
+            {
+                favoriler.favori_sil(eklenecek); 
+                isAdded = false;
+                mesaj = "Favorilerden çıkarıldı";
+            }
+            else
+            {
+                favoriler.favori_ekle(eklenecek);
+                isAdded = true;
+                mesaj = "Favorilere eklendi";
+            }
+
+            return Json(new
+            {
+                success = true,
+                isAdded = isAdded,
+                message = mesaj
+            }, JsonRequestBehavior.AllowGet);
         }
 
     }
