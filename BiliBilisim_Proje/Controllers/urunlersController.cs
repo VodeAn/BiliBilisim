@@ -32,26 +32,26 @@ namespace BiliBilisim_Proje.Controllers
             IPagedList<urunler> urunlerimiz = null;
             if (filtre == null)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).ToList().ToPagedList(sayfa_no, 12);
+                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).ToList().ToPagedList(sayfa_no,6);
             }
             else if (filtre == 1)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderBy(x => x.urun_adi).ToList().ToPagedList(sayfa_no, 12);
+                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderBy(x => x.urun_adi).ToList().ToPagedList(sayfa_no, 6);
                 Session["filtre"] = 1;
             }
             else if (filtre == 2)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderByDescending(x => x.urun_adi).ToList().ToPagedList(sayfa_no, 12);
+                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderByDescending(x => x.urun_adi).ToList().ToPagedList(sayfa_no, 6);
                 Session["filtre"] = 2;
             }
             else if (filtre == 3)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderBy(x => x.fiyati).ToList().ToPagedList(sayfa_no, 12);
+                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderBy(x => x.fiyati).ToList().ToPagedList(sayfa_no, 6);
                 Session["filtre"] = 3;
             }
             else
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderByDescending(x => x.fiyati).ToList().ToPagedList(sayfa_no, 12);
+                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderByDescending(x => x.fiyati).ToList().ToPagedList(sayfa_no, 6);
                 Session["filtre"] = 4;
             }
             return View(urunlerimiz);
