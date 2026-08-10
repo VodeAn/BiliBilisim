@@ -1,21 +1,36 @@
-﻿using System;
+﻿using BiliBilisim_Proje.Models;
+using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using BiliBilisim_Proje.Models;
 
 namespace BiliBilisim_Proje.Controllers
 {
     public class HomeController : Controller
     {
         bili_Entities dbo = new bili_Entities();
-        public ActionResult Index()
+        public ActionResult Index(int? sayfa, int? id, int? filtre)
         {
+            List<SelectListItem> filitre = new List<SelectListItem>(){
+                new SelectListItem{Text="A --> Z",Value="1"},
+                new SelectListItem{Text="Z --> A",Value="2"},
+                new SelectListItem{Text="Fiyata göre artan",Value="3"},
+                new SelectListItem{Text="Fiyata göre azalan",Value="4"}
+            };
 
-            return View();
+            ViewBag.filtre = filitre;
+            int sayfa_no = sayfa ?? 1;
+
+            IPagedList<urunler> urunlerimiz = null;
+            if (filtre == null)
+            {
+                urunlerimiz = dbo.urunler.Where(x => id == null || x.kate_no == id).ToList().ToPagedList(sayfa_no, 27);
+            }
+            return View(urunlerimiz);
         }
 
         public ActionResult About()
