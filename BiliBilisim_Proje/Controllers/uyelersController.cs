@@ -91,25 +91,39 @@ namespace BiliBilisim_Proje.Controllers
             }
             if (ModelState.IsValid)
             {
-                
-                db.Entry(uyeler).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                if (uyeler.vip == true)
+                try
                 {
-                    
-                    await BayilikMailGonderAsync(uyeler.email, uyeler.ad_soyad, uyeler.adres);
-                    
+                    var guncellenecek_uye = await db.uyeler.FindAsync(uyeler.uye_id);
 
+                    if (guncellenecek_uye != null)
+                    {
+                        
+                        bool yenivip = (guncellenecek_uye.vip == false && uyeler.vip == true);
+                        guncellenecek_uye.ad_soyad = uyeler.ad_soyad;
+                        guncellenecek_uye.dog_tar = uyeler.dog_tar;
+                        guncellenecek_uye.adres = uyeler.adres;
+                        guncellenecek_uye.vip = uyeler.vip;
+                        await db.SaveChangesAsync();
+                        if (yenivip)
+                        {
+                            await BayilikMailGonderAsync(guncellenecek_uye.email, guncellenecek_uye.ad_soyad, guncellenecek_uye.adres);
+                        }
+
+                        Session["uye"] = guncellenecek_uye;
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
-                uyeler.vip = false;
-                Session["uye"] = uyeler;
-                return RedirectToAction("Index", "Home");
-                
-                
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Hata oluştu: " + ex.Message);
+                }
             }
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
             return View(uyeler);
         }
+            
+            
+        
 
         // GET: uyelers/Delete/5
         public async Task<ActionResult> Delete(int? id)
