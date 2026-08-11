@@ -118,8 +118,8 @@ namespace BiliBilisim_Proje.Controllers
             catch(Exception error)
             {
                 string msj = error.GetBaseException().Message;
-                if (msj.Contains("uyeler_email_key")) ModelState.AddModelError("KayitHata", "Bu email zaten mevcut");
-                else if (msj.Contains("uyeler_kuladi_key")) ModelState.AddModelError("KayitHata", "Bu kullanıcı adı zaten mevcut");
+                if (msj.Contains("uyeler_email_key")) ModelState.AddModelError("GuncellemeHata", "Bu email zaten mevcut");
+                else if (msj.Contains("uyeler_kuladi_key")) ModelState.AddModelError("GuncellemeHata", "Bu kullanıcı adı zaten mevcut");
                
             }
             

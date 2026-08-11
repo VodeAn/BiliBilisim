@@ -95,10 +95,15 @@ namespace BiliBilisim_Proje.Controllers
                     {
                         
                         bool yenivip = (guncellenecek_uye.vip == false && uyeler.vip == true);
+                        guncellenecek_uye.sifre = uyeler.sifre;
+                        guncellenecek_uye.cinsiyet = uyeler.cinsiyet;
+                        guncellenecek_uye.plaka = uyeler.plaka;
                         guncellenecek_uye.ad_soyad = uyeler.ad_soyad;
                         guncellenecek_uye.dog_tar = uyeler.dog_tar;
                         guncellenecek_uye.adres = uyeler.adres;
                         guncellenecek_uye.vip = uyeler.vip;
+                        guncellenecek_uye.email = uyeler.email;
+                        db.Entry(guncellenecek_uye).State = EntityState.Modified;
                         await db.SaveChangesAsync();
                         if (yenivip)
                         {
@@ -111,7 +116,10 @@ namespace BiliBilisim_Proje.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Hata oluştu: " + ex.Message);
+                    string msj = ex.GetBaseException().Message;
+                    if (msj.Contains("uyeler_email_key")) ModelState.AddModelError("KayitHata", "Bu email zaten mevcut");
+                    else if (msj.Contains("uyeler_kuladi_key")) ModelState.AddModelError("KayitHata", "Bu kullanıcı adı zaten mevcut");
+                    else ModelState.AddModelError("", "Hata oluştu: " + msj);
                 }
             }
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
