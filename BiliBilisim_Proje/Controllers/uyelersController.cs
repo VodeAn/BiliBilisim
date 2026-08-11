@@ -19,28 +19,17 @@ namespace BiliBilisim_Proje.Controllers
         // GET: uyelers
         public async Task<ActionResult> Index()
         {
+            if (Session["admin"] == null) return RedirectToAction("error", "home");
             var uyeler = db.uyeler.Include(u => u.sehirler);
             return View(await uyeler.ToListAsync());
         }
 
-        // GET: uyelers/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            uyeler uyeler = await db.uyeler.FindAsync(id);
-            if (uyeler == null)
-            {
-                return HttpNotFound();
-            }
-            return View(uyeler);
-        }
+   
 
         // GET: uyelers/Create
         public ActionResult Create()
         {
+            if (Session["admin"] == null) return RedirectToAction("error", "home");
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il");
             return View();
         }
@@ -52,6 +41,7 @@ namespace BiliBilisim_Proje.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka")] uyeler uyeler)
         {
+            
             if (ModelState.IsValid)
             {
                 db.uyeler.Add(uyeler);
@@ -66,15 +56,21 @@ namespace BiliBilisim_Proje.Controllers
         // GET: uyelers/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            if(Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("error", "home");
             }
             uyeler uyeler = await db.uyeler.FindAsync(id);
             if (uyeler == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("error", "home");
             }
+
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
             return View(uyeler);
         }
@@ -130,22 +126,13 @@ namespace BiliBilisim_Proje.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "Home");
             }
             uyeler uyeler = await db.uyeler.FindAsync(id);
             if (uyeler == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Home");
             }
-            return View(uyeler);
-        }
-
-        // POST: uyelers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            uyeler uyeler = await db.uyeler.FindAsync(id);
             db.uyeler.Remove(uyeler);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
