@@ -17,7 +17,7 @@
                         <h2>Android Telefonlar</h2>
                         <h3><span>45.000₺'den </span>Başlayan fiyatlar</h3>
                         <div class="default-btn slide-btn">
-                            <a class="links" href="@Url.Action("index","urunler")">Ürünleri Gör</a>
+                            <a class="links" href="@Url.Action("index","urunlers")">Ürünleri Gör</a>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap">
                                     <div class="product-image">
-                                        <a href="@Url.Action("details", new { id = item.urun_id })">
+                                        <a href="@Url.Action("details","urunlers", new { id = item.urun_id })">
                                             <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
                                         </a>
                                         <span class="sticker">Yeni</span>
@@ -101,7 +101,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                            <h4><a class="product_name" href="@Url.Action("details","urunlers", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
                                             <div class="price-box">
                                                 <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                             </div>
@@ -141,7 +141,7 @@
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap">
                                     <div class="product-image">
-                                        <a href="@Url.Action("details", new { id = item.urun_id })">
+                                        <a href="@Url.Action("details", "urunlers",new { id = item.urun_id })">
                                             <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
                                         </a>
                                         <span class="sticker">Yeni</span>
@@ -159,7 +159,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                            <h4><a class="product_name" href="@Url.Action("details", "urunlers",new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
                                             <div class="price-box">
                                                 <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                             </div>
@@ -200,7 +200,7 @@
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap">
                                     <div class="product-image">
-                                        <a href="@Url.Action("details", new { id = item.urun_id })">
+                                        <a href="@Url.Action("details","urunlers", new { id = item.urun_id })">
                                             <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
                                         </a>
                                         <span class="sticker">Yeni</span>
@@ -218,7 +218,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                            <h4><a class="product_name" href="@Url.Action("details","urunlers", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
                                             <div class="price-box">
                                                 <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                             </div>

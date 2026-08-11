@@ -13,6 +13,7 @@
     @Html.HiddenFor(model => model.uye_id)
 
     <div class="form-group">
+        @Html.ValidationMessage("GuncellemeHata", "", new { @class = "text-danger" })
         @Html.Label("Kullanıcı Adı", "Kullanıcı Adı", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.kuladi, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -87,7 +88,8 @@
             <div class="col-12 mb-20">
                 <div class="d-flex align-items-center gap-3">
                     <label class="d-inline-flex align-items-center gap-1 cursor-pointer">
-                        @Html.CheckBoxFor(model => model.vip,new { @onclick = "return false;",@onkeydown = "return false;" })<b>Bayilik İstiyorum</b>
+                        @Html.CheckBoxFor(model => model.vip,new { @onclick = "return false;",@onkeydown = "return false;" })<b>Bayiliğiniz Bulunuyor</b>
+                       
 
                     </label>
                 </div>
