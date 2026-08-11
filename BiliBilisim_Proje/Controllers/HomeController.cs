@@ -128,6 +128,11 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult Logout()
         {
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
             Session.Abandon();
             Session.RemoveAll();
             return RedirectToAction("Index", "Home");

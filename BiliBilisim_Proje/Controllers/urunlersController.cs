@@ -62,12 +62,12 @@ namespace BiliBilisim_Proje.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("error", "home");
             }
             urunler urunler = await db.urunler.FindAsync(id);
             if (urunler == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("error", "home");
             }
             return View(urunler);
         }

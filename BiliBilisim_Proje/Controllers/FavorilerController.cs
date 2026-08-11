@@ -22,23 +22,37 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult favorileri_goster()
         {
-           
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
             return View(favorileri_getir());
         }
         public ActionResult favorilerden_kaldir(int? id)
         {
-            if (id == null) return HttpNotFound();
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
+            if (id == null) return RedirectToAction("error", "home");
             var silinecek = dbo.urunler.Find(id);
-            if (silinecek == null) return HttpNotFound();
+            if (silinecek == null) return RedirectToAction("error", "home");
             favorileri_getir().favori_sil(silinecek);
             return RedirectToAction("favorileri_goster", "favoriler");
         }
         public ActionResult favorilere_ekle(int? id)
         {
-            if (id == null) return HttpNotFound();
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
+            if (id == null) return RedirectToAction("error", "home");
 
             var eklenecek = dbo.urunler.FirstOrDefault(x => x.urun_id == id);
-            if (eklenecek == null) return HttpNotFound();
+            if (eklenecek == null) return RedirectToAction("error", "home");
 
             var favoriler = favorileri_getir();
             var varMi = favoriler.Favorilerim.Any(x => x.urun_id == id);

@@ -22,13 +22,23 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult sepeti_goster(string msj)
         {
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
             ViewBag.msj = msj;
             return View(sepeti_getir());
         }
         public ActionResult sepete_ekle(int? id,int? adet)
         {
-            if (id == null) return HttpNotFound();
-            if (adet < 0) return HttpNotFound();
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
+            if (id == null) return RedirectToAction("error", "home");
+            if (adet < 0) return RedirectToAction("error", "home");
             var _adet = adet ?? 0;
             var sepete_eklenecek = db.urunler.FirstOrDefault(x => x.urun_id == id);
             sepeti_getir().sepet_ekle(sepete_eklenecek, _adet);
@@ -36,14 +46,23 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult sepetten_sil(int? id)
         {
-            if (id == null) return HttpNotFound();
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
+            if (id == null) return RedirectToAction("error", "home");
             var silinecek = db.urunler.Find(id);
             sepeti_getir().sepetten_sil(silinecek);
             return RedirectToAction("sepeti_goster");
         }
         public ActionResult sepeti_temizle()
         {
-            
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
             sepeti_getir().sepetten_temizle();
             return RedirectToAction("sepeti_goster");
         }
