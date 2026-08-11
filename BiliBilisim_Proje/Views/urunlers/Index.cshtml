@@ -36,9 +36,13 @@
                 <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
                     <div class="product-area shop-product-area">
                         <div class="row">
+                            @{var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;}
                             @{ var liste = Model.Take(3);}
                             @foreach (var item in liste)
                             {
+                                bool favorideMi = favoriModel != null
+                  && favoriModel.Favorilerim != null
+                  && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
                                 <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
                                     <!-- single-product-wrap start -->
                                     <div class="single-product-wrap">
@@ -76,13 +80,6 @@
                                                         <ul class="add-actions-link">
                                                             <li class="add-cart active"><a href="@Url.Action("sepete_ekle","sepet",new {id = item.urun_id })">Sepete Ekle</a></li>
                                                             <li>
-                                                                @{
-                                                                    var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
-                                                                    bool favorideMi = favoriModel != null
-                                                                                      && favoriModel.Favorilerim != null
-                                                                                      && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
-                                                                }
-
                                                                 <a class="links-details"
                                                                    href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
                                                                    onclick="favoriEkle(event, this)">
@@ -101,6 +98,9 @@
                             @{ liste = Model.Skip(3).Take(3);}
                             @foreach (var item in liste)
                             {
+                                bool favorideMi = favoriModel != null
+                  && favoriModel.Favorilerim != null
+                  && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
                                 <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
                                     <!-- single-product-wrap start -->
                                     <div class="single-product-wrap">
@@ -136,13 +136,6 @@
                                                         <ul class="add-actions-link">
                                                             <li class="add-cart active"><a href="@Url.Action("sepete_ekle", "sepet",new {id = item.urun_id })">Sepete Ekle</a></li>
                                                             <li>
-                                                                @{
-                                                                    var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
-                                                                    bool favorideMi = favoriModel != null
-                                                                                      && favoriModel.Favorilerim != null
-                                                                                      && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
-                                                                }
-
                                                                 <a class="links-details"
                                                                    href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
                                                                    onclick="favoriEkle(event, this)">
