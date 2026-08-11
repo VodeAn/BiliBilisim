@@ -134,12 +134,12 @@ namespace BiliBilisim_Proje.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("error", "home");
             }
             uyeler uyeler = await db.uyeler.FindAsync(id);
             if (uyeler == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("error", "home");
             }
             db.uyeler.Remove(uyeler);
             await db.SaveChangesAsync();
