@@ -132,7 +132,12 @@ namespace BiliBilisim_Proje.Controllers
             Session.RemoveAll();
             return RedirectToAction("Index", "Home");
         }
-     
+        public ActionResult error()
+        {
+            
+            return View();
+        }
+
 
     }
 }
