@@ -188,49 +188,7 @@
                                             </a>
                                         </li>
 
-                                        @*
-                                            <span></span>
-                                            <div class="minicart">
-                                                @{double toplam = 0; }
-
-
-
-                                                <ul class="minicart-product-list">
-                                                    @if (Session["sepet"] != null)
-                                                    {
-                                                        foreach (var item in ((Sepet)Session["sepet"]).Sepetim)
-                                                        {
-                                                            <li>
-
-                                                                <img src="~/Content/fotolar/@item.urun.fotolar" alt="sepet ürünleri" class="minicart-product-image">
-
-                                                                <div class="minicart-product-details">
-                                                                    <h6><a href="@Url.Action("Details","urunlers")">@(item.urun.marka + " " + @item.urun.model)</a></h6>
-                                                                    <span>₺@(item.urun.fiyati * item.adet)</span>
-                                                                </div>
-                                                                <button class="close">
-                                                                    <a href="@Url.Action("sepetten_sil","sepet",new {id=item.urun.urun_id })">
-                                                                        <i class="fa fa-close">
-                                                                        </i>
-                                                                    </a>
-                                                                </button>
-                                                            </li>
-                                                            toplam += (double)(item.urun.fiyati * item.adet);
-                                                        }
-                                                    }
-
-                                                </ul>
-
-                                                <p class="minicart-total">ARA TOPLAM: <span>₺@toplam</span></p>
-                                                <div class="minicart-button">
-                                                    <a href="@Url.Action("sepeti_goster","sepet")" class="li-button li-button-dark li-button-fullwidth li-button-sm">
-                                                        <span>Sepeti Görüntüle</span>
-                                                    </a>
-                                                    <a href="checkout.html" class="li-button li-button-fullwidth li-button-sm">
-                                                        <span>Ödeme Yap</span>
-                                                    </a>
-                                                </div>
-                                            </div>*@
+                                     
 
                                     }
 
@@ -257,49 +215,7 @@
                                             <b><a href="@Url.Action("index","Home")">Ana Sayfa</a></b>
                                         </li>
                                         <li class="megamenu-holder">
-                                            <a href="@Url.Action("index","urunlers")">Mağaza</a>
-                                            <ul class="megamenu hb-megamenu">
-                                                <li>
-                                                    Bilgisayarlar
-                                                    <ul>
-                                                        <li><a href="#">Tüm Bileşenler</a></li>
-                                                        <li><a href="#">Anakartlar</a></li>
-                                                        <li><a href="#">RAM'ler</a></li>
-                                                        <li><a href="#">Ekran Kartları</a></li>
-                                                        <li><a href="#">İşlemciler</a></li>
-                                                        <li><a href="#">Kasalar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    Dizüstü Bilgisayarlar
-                                                    <ul>
-                                                        <li><a href="#">Tüm Dizüstü Bilgisayarlar</a></li>
-                                                        <li><a href="#">Ofis Bilgisayarları</a></li>
-                                                        <li><a href="#">Oyuncu Bilgisayarları</a></li>
-                                                        <li><a href="#">Notebook</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    Telefonlar ve Tabletler
-                                                    <ul>
-                                                        <li><a href="#">Tüm Telefonlar</a></li>
-                                                        <li><a href="#">Tüm Tabletler</a></li>
-                                                        <li><a href="#">Android Telefonlar</a></li>
-                                                        <li><a href="#">iPhone'lar</a></li>
-                                                        <li><a href="#">Android Tabletler</a></li>
-                                                        <li><a href="#">Mac Tabletler</a></li>
-
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    Diğerleri
-                                                    <ul>
-                                                        <li><a href="#">Kameralar</a></li>
-                                                        <li><a href="#">Kulaklık</a></li>
-                                                        <li><a href="#">Akıllı Saat</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
+                                            <b><a href="@Url.Action("index","urunlers")" >Mağaza</a></b>
                                         </li>
 
                                         <li><b><a href="@Url.Action("About","Home")">Hakkımızda</a></b></li>
@@ -346,7 +262,7 @@
                                         <img src="~/Content/images/shipping-icon/1.png" alt="Teslimat İkonu">
                                     </div>
                                     <div class="shipping-text">
-                                        <h2>Vip Üyelere Ücretsiz Teslimat</h2>
+                                        <h2>Ücretsiz Teslimat</h2>
                                         <p>Ve ücretsiz iade. Teslimat tarihleri için ödeme sayfasına bakın.</p>
                                     </div>
                                 </div>
@@ -439,7 +355,7 @@
                                 <div class="footer-block">
                                     <h3 class="footer-block-title">Şirketimiz</h3>
                                     <ul>
-                                        <li><a href="#">Ürünler</a></li>
+                                        <li><a href="@Url.Action("index","urunlers")">Ürünler</a></li>
                                         <li><a href="@Url.Action("About","Home")">Hakkımızda</a></li>
                                         <li><a href="@Url.Action("contact","Home")">Bize Ulaşın</a></li>
                                     </ul>
