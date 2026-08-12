@@ -13,7 +13,7 @@ namespace BiliBilisim_Proje.Controllers
         public Favoriler favorileri_getir()
         {
             Favoriler favoriler = (Favoriler)Session["favoriler"];
-            if (Session["favoriler"] == null)
+            if (Session["favoriler"] == null || !((uyeler)Session["uye"]).vip)
             {
                 favoriler = new Favoriler();
                 Session["favoriler"] = favoriler;
@@ -22,7 +22,7 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult favorileri_goster()
         {
-            if (Session["uye"] == null)
+            if (Session["uye"] == null || !((uyeler)Session["uye"]).vip)
             {
 
                 return RedirectToAction("error", "home");
@@ -31,7 +31,7 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult favorilerden_kaldir(int? id)
         {
-            if (Session["uye"] == null)
+            if (Session["uye"] == null || !((uyeler)Session["uye"]).vip)
             {
 
                 return RedirectToAction("error", "home");
@@ -44,7 +44,7 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult favorilere_ekle(int? id)
         {
-            if (Session["uye"] == null)
+            if (Session["uye"] == null || !((uyeler)Session["uye"]).vip)
             {
 
                 return RedirectToAction("error", "home");
