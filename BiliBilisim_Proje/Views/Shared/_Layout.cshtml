@@ -152,9 +152,13 @@
                         <!-- Begin Header Middle Right Area -->
                         <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                             <!-- Begin Header Middle Searchbox Area -->
-                            <form action="#" class="hm-searchbox">
-                                <input type="text" style="text-decoration:solid; color:black;" value="Ürünlerle ilgili işlem yapmak için bayi üyesi olmanız gerekmektedir." readonly>
-                            </form>
+                            @if (Session["uye"]== null || !((uyeler)Session["uye"]).vip)
+                            {
+                                <form action="#" class="hm-searchbox">
+                                    <input type="text" style="text-decoration:solid; color:black;" value="Ürünlerle ilgili işlem yapmak için bayi üyesi olmanız gerekmektedir." readonly>
+                                </form>
+                            }
+
                             <!-- Header Middle Searchbox Area End Here -->
                             <!-- Begin Header Middle Right Area -->
                             <div class="header-middle-right">
@@ -371,32 +375,22 @@
                                     <h3 class="footer-block-title">Bizi Takip Edin</h3>
                                     <ul class="social-link">
                                         <li class="twitter">
-                                            <a href="https://twitter.com/" data-toggle="tooltip" target="_blank" title="Twitter">
+                                            <a href="https://x.com/BUTGEM1" data-toggle="tooltip" target="_blank" title="Twitter">
                                                 <i class="fa fa-twitter"></i>
                                             </a>
-                                        </li>
-                                        <li class="rss">
-                                            <a href="https://rss.com/" data-toggle="tooltip" target="_blank" title="RSS">
-                                                <i class="fa fa-rss"></i>
-                                            </a>
-                                        </li>
-                                        <li class="google-plus">
-                                            <a href="https://www.plus.google.com/discover" data-toggle="tooltip" target="_blank" title="Google +">
-                                                <i class="fa fa-google-plus"></i>
-                                            </a>
-                                        </li>
+                                        </li>                                
                                         <li class="facebook">
-                                            <a href="https://www.facebook.com/" data-toggle="tooltip" target="_blank" title="Facebook">
+                                            <a href="https://www.facebook.com/butgembtso/?locale=tr_TR" data-toggle="tooltip" target="_blank" title="Facebook">
                                                 <i class="fa fa-facebook"></i>
                                             </a>
                                         </li>
                                         <li class="youtube">
-                                            <a href="https://www.youtube.com/" data-toggle="tooltip" target="_blank" title="Youtube">
+                                            <a href="https://www.youtube.com/channel/UCwQItsOMFI27dI8PGRDtfeQ" data-toggle="tooltip" target="_blank" title="Youtube">
                                                 <i class="fa fa-youtube"></i>
                                             </a>
                                         </li>
                                         <li class="instagram">
-                                            <a href="https://www.instagram.com/" data-toggle="tooltip" target="_blank" title="Instagram">
+                                            <a href="https://www.instagram.com/butgembtso/" data-toggle="tooltip" target="_blank" title="Instagram">
                                                 <i class="fa fa-instagram"></i>
                                             </a>
                                         </li>
