@@ -79,7 +79,7 @@ namespace BiliBilisim_Proje.Controllers
  
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka")] uyeler uyeler,string confirm)
+        public async Task<ActionResult> Edit([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka,vip_basvuru")] uyeler uyeler,string confirm)
         {
             if (uyeler.sifre != confirm)
             {
@@ -94,22 +94,22 @@ namespace BiliBilisim_Proje.Controllers
                     if (guncellenecek_uye != null)
                     {
                         
-                        bool yenivip = (guncellenecek_uye.vip == false && uyeler.vip == true);
+                        bool yenivip = (guncellenecek_uye.vip_basvuru == false && uyeler.vip_basvuru == true);
                         guncellenecek_uye.sifre = uyeler.sifre;
                         guncellenecek_uye.cinsiyet = uyeler.cinsiyet;
                         guncellenecek_uye.plaka = uyeler.plaka;
                         guncellenecek_uye.ad_soyad = uyeler.ad_soyad;
                         guncellenecek_uye.dog_tar = uyeler.dog_tar;
                         guncellenecek_uye.adres = uyeler.adres;
-                        guncellenecek_uye.vip = uyeler.vip;
+                        guncellenecek_uye.vip_basvuru = uyeler.vip_basvuru;
                         guncellenecek_uye.email = uyeler.email;
                         db.Entry(guncellenecek_uye).State = EntityState.Modified;
                         await db.SaveChangesAsync();
+                        TempData["KayitBasarili"] = "Bilgileriniz başarıyla güncellenmiştir.";
                         if (yenivip)
                         {
-                            await BayilikMailGonderAsync(guncellenecek_uye.email, guncellenecek_uye.ad_soyad, guncellenecek_uye.adres);
+                            await BayilikMailGonderAsync(guncellenecek_uye.email, guncellenecek_uye.ad_soyad, guncellenecek_uye.adres,guncellenecek_uye.kuladi,guncellenecek_uye.sehirler.il);
                         }
-
                         Session["uye"] = guncellenecek_uye;
                         return RedirectToAction("Index", "Home");
                     }
@@ -145,14 +145,14 @@ namespace BiliBilisim_Proje.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        private async Task BayilikMailGonderAsync(string kullaniciEmail, string adSoyad, string adres)
+        private async Task BayilikMailGonderAsync(string kullaniciEmail, string adSoyad, string adres,string kuladi,string sehir)
         {
             try
             {
 
-                string gondericiMail = "botmail@gmail.com";
-                string sifre = "botmailsifre";
-                string aliciMail = "yonetim@sirketiniz.com"; // Mailin kime gideceği 
+                string gondericiMail = "bilibilisim92@gmail.com";
+                string sifre = "lfhc gmgf rcub jbnh";
+                string aliciMail = "bilibilisimadmn@outlook.com"; // Mailin kime gideceği 
 
                 // 2. Mail İçeriği
                 MailMessage mail = new MailMessage();
@@ -169,17 +169,19 @@ namespace BiliBilisim_Proje.Controllers
                 <p>Sistem üzerinden bir kullanıcı bayilik talebinde bulunuldu. Detaylar aşağıdadır:</p>
                 <hr/>
                 <p><strong>Ad Soyad:</strong> {adSoyad}</p>
+                <p><strong>Kullanıcı Adı:</strong> {kuladi}</p>
                 <p><strong>Email Adresi:</strong> {kullaniciEmail}</p>
+                <p><strong>İl:</strong> {sehir}</p>
                 <p><strong>Adres:</strong> {adres}</p>
                 <br/>
                 <p><small>Bu mail sistem tarafından otomatik olarak gönderilmiştir.</small></p>
             </div>";
 
-                // 3. SMTP Sunucu Ayarları (Örnek: Gmail)
+                // 3. SMTP Sunucu Ayarları 
                 // Eğer Yandex kullanıyorsanız: smtp.yandex.com.tr (Port: 465 veya 587)
-                // Eğer Outlook/Hotmail ise: smtp.office365.com (Port: 587)
-                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-                smtp.Credentials = new NetworkCredential(gondericiMail, sifre);
+                // Eğer Gmail ise: "smtp.office365.com" (Port: 587)
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587); 
+                smtp.Credentials = new NetworkCredential(gondericiMail, sifre); 
                 smtp.EnableSsl = true;
 
                 // 4. Maili Gönder

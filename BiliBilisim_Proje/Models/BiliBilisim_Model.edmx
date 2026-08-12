@@ -75,6 +75,7 @@
           <Property Name="adres" Type="text" />
           <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="plaka" Type="int" Nullable="false" />
+          <Property Name="vip_basvuru" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_urunler_kategori">
           <End Role="kategori" Type="Self.kategori" Multiplicity="1" />
@@ -249,6 +250,7 @@
           <Property Name="plaka" Type="Int32" Nullable="false" />
           <NavigationProperty Name="sehirler" Relationship="Self.uyeler_plaka_fkey" FromRole="uyeler" ToRole="sehirler" />
           <NavigationProperty Name="siparisler" Relationship="Self.siparisler_uye_id_fkey" FromRole="uyeler" ToRole="siparisler" />
+          <Property Name="vip_basvuru" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_urunler_kategori">
           <End Role="kategori" Type="Self.kategori" Multiplicity="1" />
@@ -410,6 +412,7 @@
           <EntitySetMapping Name="uyeler">
             <EntityTypeMapping TypeName="bilibilisim_projeModel.uyeler">
               <MappingFragment StoreEntitySet="uyeler">
+                <ScalarProperty Name="vip_basvuru" ColumnName="vip_basvuru" />
                 <ScalarProperty Name="uye_id" ColumnName="uye_id" />
                 <ScalarProperty Name="kuladi" ColumnName="kuladi" />
                 <ScalarProperty Name="sifre" ColumnName="sifre" />
@@ -437,7 +440,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

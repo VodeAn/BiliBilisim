@@ -73,8 +73,7 @@ namespace BiliBilisim_Proje.Controllers
                 if ( uye != null)
                 {
                     Session["uye"] = uye;
-                    msj = "Giriş Başarılı. Ana sayfaya yönlendiriliyorsunuz.";
-                    TempData["SuccessMessage"] = msj;
+                    TempData["KayitBasarili"] = "Giriş Başarılı,Ana Sayfaya Yönlendiriliyorsunuz.";
                     return RedirectToAction("Index", "Home", null);
                 }
                 else
@@ -106,6 +105,7 @@ namespace BiliBilisim_Proje.Controllers
                     {
                         dbo.uyeler.Add(uyeler);
                         await dbo.SaveChangesAsync();
+                        TempData["KayitBasarili"] = "Kayıt Başarılı";
                     }
                     else
                     {
