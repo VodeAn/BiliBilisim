@@ -14,7 +14,11 @@
                 <div class="contact-form-content pt-sm-55 pt-xs-55">
                     <h3 class="contact-page-title">Önerilerinizi Yazın</h3>
                     <div class="contact-form">
-                        <form id="contact-form" action="@Url.Action("MailGonder")" method="post">
+                        @*<form id="contact-form" action="@Url.Action("MailGonder","Home")" method="post">*@
+                        @using (Html.BeginForm("MailGonder","Home",FormMethod.Post))
+                        {
+
+
                             <div class="form-group">
                                 <label>Adınız Soyadınız <span class="required">*</span></label>
                                 <input type="text" name="customerName" id="customername" required>
@@ -34,7 +38,7 @@
                             <div class="form-group">
                                 <button type="submit" id="submit" class="li-btn-3">Gönder</button>
                             </div>
-                        </form>
+                        }
                     </div>
                 </div>
             </div>

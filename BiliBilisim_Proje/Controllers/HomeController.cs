@@ -74,7 +74,7 @@ namespace BiliBilisim_Proje.Controllers
         //}
 
         [HttpPost]
-        public ActionResult MailGonder(string customerName, string customerEmail, string contactSubject, string contactMessage)
+        public async Task<ActionResult> MailGonder(string customerName, string customerEmail, string contactSubject, string contactMessage)
         {
             try
             {
@@ -93,21 +93,19 @@ namespace BiliBilisim_Proje.Controllers
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential("bilibilisim92@gmail.com", "lfhc gmgf rcub jbnh");
                 smtp.EnableSsl = true;
-
-                smtp.Send(mail);
-                
-                // Doğrudan JS alert basıp sayfaya yönlendirir
-                return Content("<script>alert('Mesajınız başarıyla gönderildi!'); window.location.href='/Home/Contact';</script>");
+                await smtp.SendMailAsync(mail);
+                TempData["KayitBasarili"] = "Mail gönderildi.";
+                return RedirectToAction("contact","home");
             }
             catch (Exception ex)
             {
-                return Content($"<script>alert('Hata oluştu: {ex.Message}'); window.location.href='/Home/Contact';</script>");
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return RedirectToAction("contact", "home");
             }
         }
 
         public ActionResult Kaydol_Giris(string msj)
         {
-            TempData["SuccessMessage"] = null;
             ViewBag.msj = msj;
             ViewBag.plaka = new SelectList(dbo.sehirler,"plaka","il");
             return View();
