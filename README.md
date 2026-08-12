@@ -15,3 +15,6 @@ Proje MSSQL veritabanında localde çalışmaktadır ve veritabanı scripti proj
 * Diğer Kullanıcı Adı: fadime231
 * Şifre: 987654321
 
+* Admin Mail Adresi: bilibilisimadmn@outlook.com
+* Admin Mail Şifresi: biliadmin-*0
+
