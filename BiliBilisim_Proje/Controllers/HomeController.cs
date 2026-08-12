@@ -7,29 +7,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Mail;
+using System.Net;
 
 namespace BiliBilisim_Proje.Controllers
 {
     public class HomeController : Controller
     {
         bili_Entities dbo = new bili_Entities();
-        public ActionResult Index(int? sayfa, int? id, int? filtre)
+        public ActionResult Index(int? id)
         {
-            List<SelectListItem> filitre = new List<SelectListItem>(){
-                new SelectListItem{Text="A --> Z",Value="1"},
-                new SelectListItem{Text="Z --> A",Value="2"},
-                new SelectListItem{Text="Fiyata göre artan",Value="3"},
-                new SelectListItem{Text="Fiyata göre azalan",Value="4"}
-            };
+            IEnumerable<urunler> urunlerimiz = null;
 
-            ViewBag.filtre = filitre;
-            int sayfa_no = sayfa ?? 1;
-
-            IPagedList<urunler> urunlerimiz = null;
-            if (filtre == null)
-            {
-                urunlerimiz = dbo.urunler.Where(x => id == null || x.kate_no == id).ToList().ToPagedList(sayfa_no, 27);
-            }
+                urunlerimiz = dbo.urunler.Where(x => id == null || x.kate_no == id).ToList();
             return View(urunlerimiz);
         }
 
@@ -41,6 +31,78 @@ namespace BiliBilisim_Proje.Controllers
         public ActionResult Contact()
         {
             return View();
+        }
+        //[HttpPost]
+        //public ActionResult Contact(string customerName, string customerEmail, string contactSubject, string contactMessage)
+        //{
+        //        try
+        //        {
+        //            MailMessage mail = new MailMessage();
+
+        //            // 1. Gönderici Hesabı (Yeni Gmail Adresin)
+        //            mail.From = new MailAddress("bilibilisim92@gmail.com", "BİLİBİLİŞİM İletişim Formu");
+
+        //            // 2. Alıcı Hesabı (Mesajların düşeceği Outlook Adresin)
+        //            mail.To.Add("bilibilisimadmn@outlook.com");
+
+        //            mail.Subject = contactSubject;
+        //            mail.IsBodyHtml = true;
+
+        //            mail.Body = $"<h3>Yeni İletişim Formu Mesajı</h3>" +
+        //                        $"<b>Gönderen:</b> {customerName} <br/>" +
+        //                        $"<b>Email:</b> {customerEmail} <br/><br/>" +
+        //                        $"<b>Mesaj:</b> <br/> {contactMessage}";
+
+        //            // Gmail SMTP Sunucu Ayarları
+        //            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+
+        //            smtp.UseDefaultCredentials = false;
+        //            // Gmail adresin ve 16 haneli Uygulama Şifren
+        //            smtp.Credentials = new NetworkCredential("bilibilisim92@gmail.com", "lfhc gmgf rcub jbnh");
+        //            smtp.EnableSsl = true;
+
+        //            smtp.Send(mail);
+
+        //            ViewBag.msj = "Mesajınız başarıyla gönderildi!";
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //        ViewBag.msj = "Mesaj gönderilirken bir hata oluştu! "+ex.Message;
+        //        }
+
+        //    return View();
+        //}
+
+        [HttpPost]
+        public ActionResult MailGonder(string customerName, string customerEmail, string contactSubject, string contactMessage)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("bilibilisim92@gmail.com", "BİLİBİLİŞİM İletişim Formu");
+                mail.To.Add("bilibilisimadmn@outlook.com");
+                mail.Subject = contactSubject;
+                mail.IsBodyHtml = true;
+
+                mail.Body = $"<h3>Yeni İletişim Formu Mesajı</h3>" +
+                            $"<b>Gönderen:</b> {customerName} <br/>" +
+                            $"<b>Email:</b> {customerEmail} <br/><br/>" +
+                            $"<b>Mesaj:</b> <br/> {contactMessage}";
+
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential("bilibilisim92@gmail.com", "lfhc gmgf rcub jbnh");
+                smtp.EnableSsl = true;
+
+                smtp.Send(mail);
+                
+                // Doğrudan JS alert basıp sayfaya yönlendirir
+                return Content("<script>alert('Mesajınız başarıyla gönderildi!'); window.location.href='/Home/Contact';</script>");
+            }
+            catch (Exception ex)
+            {
+                return Content($"<script>alert('Hata oluştu: {ex.Message}'); window.location.href='/Home/Contact';</script>");
+            }
         }
 
         public ActionResult Kaydol_Giris(string msj)
