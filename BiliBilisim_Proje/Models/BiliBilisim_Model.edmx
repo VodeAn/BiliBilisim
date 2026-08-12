@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="bilibilisim_projeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="bilibilisim_projeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
@@ -52,6 +52,7 @@
           <Property Name="stok" Type="int" Nullable="false" />
           <Property Name="fotolar" Type="nvarchar" MaxLength="255" />
           <Property Name="satis_adet" Type="smallint" Nullable="false" />
+          <Property Name="urun_aciklama" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="ust_kategori">
           <Key>
@@ -164,8 +165,7 @@
             <End Role="uyeler" EntitySet="uyeler" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="bilibilisim_projeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -223,6 +223,7 @@
           <Property Name="satis_adet" Type="Int16" Nullable="false" />
           <NavigationProperty Name="kategori" Relationship="Self.FK_urunler_kategori" FromRole="urunler" ToRole="kategori" />
           <NavigationProperty Name="siparisler" Relationship="Self.siparisler_urun_id_fkey" FromRole="urunler" ToRole="siparisler" />
+          <Property Name="urun_aciklama" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ust_kategori">
           <Key>
@@ -385,6 +386,7 @@
           <EntitySetMapping Name="urunler">
             <EntityTypeMapping TypeName="bilibilisim_projeModel.urunler">
               <MappingFragment StoreEntitySet="urunler">
+                <ScalarProperty Name="urun_aciklama" ColumnName="urun_aciklama" />
                 <ScalarProperty Name="urun_id" ColumnName="urun_id" />
                 <ScalarProperty Name="urun_adi" ColumnName="urun_adi" />
                 <ScalarProperty Name="marka" ColumnName="marka" />

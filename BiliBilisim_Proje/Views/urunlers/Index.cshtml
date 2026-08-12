@@ -47,7 +47,7 @@
                                     <!-- single-product-wrap start -->
                                     <div class="single-product-wrap">
                                         <div class="product-image">
-                                            <a href="@Url.Action("details",new {id=item.urun_id})">
+                                            <a href="@Url.Action("details",new {id=item.urun_id,kateno=item.kategori.u_kate_id})">
                                                 <img src="~/Content/fotolar/@item.fotolar" alt="">
                                             </a>
                                             <span class="sticker">New</span>
@@ -65,7 +65,7 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h4><a class="product_name" href="@Url.Action("details",new {id=item.urun_id})">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                                <h4><a class="product_name" href="@Url.Action("details",new {id=item.urun_id,kateno=item.kategori.u_kate_id})">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
                                                 <div class="price-box">
                                                     <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                                 </div>
@@ -105,7 +105,7 @@
                                     <!-- single-product-wrap start -->
                                     <div class="single-product-wrap">
                                         <div class="product-image">
-                                            <a href="@Url.Action("details", new { id = item.urun_id })">
+                                            <a href="@Url.Action("details", new { id = item.urun_id,kateno=item.kategori.u_kate_id })">
                                                 <img src="~/Content/fotolar/@item.fotolar" alt="">
                                             </a>
                                             <span class="sticker">New</span>
@@ -123,7 +123,7 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
+                                                <h4><a class="product_name" href="@Url.Action("details", new { id = item.urun_id,kateno=item.kategori.u_kate_id })">@Html.DisplayFor(modelItem => item.urun_adi)</a></h4>
                                                 <div class="price-box">
                                                     <span class="new-price">@Html.DisplayFor(modelItem => item.fiyati)₺</span>
                                                 </div>
@@ -252,28 +252,6 @@
         <!--sidebar-categores-box end  -->
     </div>
 </div>
-
-<script>
-    function favoriEkle(e, element) {
-        e.preventDefault();
-
-        var targetUrl = $(element).attr('href');
-
-        $.ajax({
-            url: targetUrl,
-            type: 'GET',
-            success: function (response) {
-                if (response.success) {
-                    // İşlem tamamlandıktan sonra sayfayı yenile
-                    location.reload();
-                }
-            },
-            error: function () {
-                alert('İşlem sırasında bir hata oluştu.');
-            }
-        });
-    }
-</script>
 
 
 <style>
