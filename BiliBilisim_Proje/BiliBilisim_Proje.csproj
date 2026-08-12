@@ -421,6 +421,7 @@
     <Content Include="Views\sepet\sepeti_goster.cshtml" />
     <Content Include="Views\Home\error.cshtml" />
     <Content Include="Views\siparisler\siparis_goster.cshtml" />
+    <Content Include="Views\siparisler\iptal_sayfasi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

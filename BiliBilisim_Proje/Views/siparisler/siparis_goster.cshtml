@@ -8,10 +8,14 @@
 <div class="wishlist-area pt-60 pb-60">
     <div class="container">
         <div class="row">
+            @using (Html.BeginForm())
+            {
+               <h4>Tarih Seçiniz</h4>
+               @Html.DropDownList("tarihler",null,"Seçiniz",new {onchange="this.form.submit()"})
+            }
             <div class="col-12">
                 <div class="table-content table-responsive">
                     <table class="table">
-                        @{double genel_fiyat_total = 0; }
                         @foreach (var key in Model)
                         {
 
@@ -83,9 +87,7 @@
 
                             }
                             <tr><td colspan="6" align="right"> <b style="font-size:16px;">Fiyat Toplamı:₺@fiyat_total</b></td></tr>
-                            genel_fiyat_total += fiyat_total;
                         }
-                        <tr><td colspan="6" align="right"> <b style="font-size:16px;">Genel Fiyat Toplamı:₺@genel_fiyat_total</b> </td></tr>
                     </table>
                 </div>
             </div>

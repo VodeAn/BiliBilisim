@@ -30,6 +30,7 @@ namespace BiliBilisim_Proje.Models
         public string adres { get; set; }
         public string email { get; set; }
         public int plaka { get; set; }
+        public bool vip_basvuru { get; set; }
     
         public virtual sehirler sehirler { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -97,7 +97,7 @@
                                                         <li><a href="@Url.Action("siparis_goster", "siparisler", new {id=((uyeler)Session["uye"]).uye_id} )">Siparişlerim</a></li>
                                                         <li><a href="@Url.Action("sepeti_goster","sepet")">Ödeme</a></li>
                                                     }
-                                                        <li><a href="@Url.Action("Logout", "Home")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
+                                                    <li><a href="@Url.Action("Logout", "Home")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
                                                 }
                                                 @if (Session["uye"] == null)
                                                 {
@@ -534,6 +534,7 @@
             display: none !important;
             content: none !important;
         }
+
         .hb-menu > nav > ul {
             display: flex;
             align-items: center;
@@ -555,6 +556,13 @@
             margin-left: auto; /* Adresi sağa yaslar ve dikeyde ortalar */
         }
     </style>
+    @if (TempData["KayitBasarili"] != null)
+    {
+<script>
+        // Sayfa yüklendiğinde TempData doluysa ekrana alert basar
+        alert('@Html.Raw(TempData["KayitBasarili"])');
+</script>
+    }
 </body>
 
 <!-- index-231:38-->

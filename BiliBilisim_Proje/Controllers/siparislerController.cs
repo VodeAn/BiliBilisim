@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 //using CrystalDecisions.CrystalReports.Engine;
@@ -41,11 +42,32 @@ namespace MVC5_E_Ticaret.Controllers
             return RedirectToAction("sepeti_goster", "sepet", new { msj });
         }
        
-        public ActionResult siparis_goster()
+        public ActionResult siparis_goster(int? tarihler)
         {
             if(Session["uye"] == null || !((uyeler)Session["uye"]).vip) return RedirectToAction("error", "home");
+           List<SelectListItem> selectListItem = new List<SelectListItem>();
+            for(int i = DateTime.Now.Year; i >= 1900; i--)
+            {
+                selectListItem.Add(
+                        new SelectListItem()
+                        {
+                            Value = i.ToString(),
+                            Text = i.ToString()
+
+                        });
+               
+            }
             var uye_id = ((uyeler)Session["uye"]).uye_id;
             var siparis = db.siparisler.Where(x => x.uye_id == uye_id) .GroupBy(x => x.sip_no);
+            if(tarihler != null)
+            {
+                siparis = db.siparisler.Where(x => x.uye_id == uye_id && x.a_tarih.Year == tarihler).GroupBy(x => x.sip_no);
+            }
+            else
+            {
+                siparis = db.siparisler.Where(x => x.uye_id == uye_id).GroupBy(x => x.sip_no);
+            }
+            ViewBag.tarihler = selectListItem;
             return View(siparis);
         }
         public ActionResult urunu_cikar(int id)
@@ -53,14 +75,16 @@ namespace MVC5_E_Ticaret.Controllers
             if (Session["uye"] == null || !((uyeler)Session["uye"]).vip) return RedirectToAction("error", "home");
             db.siparisler.Remove(db.siparisler.Find(id));
             db.SaveChanges();
-            return RedirectToAction("siparis_goster");
+            string msj = "Ürün Başarıyla İade Edildi.Ana Sayfaya Yönlendiriliyorsunuz...";
+            return RedirectToAction("iptal_sayfasi","siparisler",new {msj });
         }
         public ActionResult sip_iptal(int id)
         {
             if (Session["uye"] == null || !((uyeler)Session["uye"]).vip) return RedirectToAction("error", "home");
             db.siparisler.RemoveRange(db.siparisler.Where(x => x.sip_no == id));
             db.SaveChanges();
-            return RedirectToAction("siparis_goster");
+            string msj = "Sipariş Başarıyla İptal Edildi.Ana Sayfaya Yönlendiriliyorsunuz.";
+            return RedirectToAction("iptal sayfasi", "siparisler", new { msj });
         }
         public ActionResult admin_siparis_raporu(int? uyeid,DateTime? tarih1,DateTime? tarih2)
         {
@@ -228,7 +252,12 @@ namespace MVC5_E_Ticaret.Controllers
                  return File(stream, "application/xls", "siparis_report.xls");
              }
          }*/
-
+       public ActionResult iptal_sayfasi(string msj)
+        {
+            ViewBag.msj = msj;
+            Response.AddHeader("Refresh", "2; url=" + Url.Action("Index", "Home"));
+            return View();
+        }
        
     }
 }
