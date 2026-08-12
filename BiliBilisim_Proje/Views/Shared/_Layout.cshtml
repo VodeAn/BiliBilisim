@@ -92,9 +92,12 @@
                                                 @if (Session["uye"] != null)
                                                 {
                                                     <li><a href="@Url.Action("Edit", "Uyelers", new { id = ((uyeler)Session["uye"]).uye_id })">Hesabım</a></li>
-                                                    <li><a href="@Url.Action("siparis_goster", "siparisler", new {id=((uyeler)Session["uye"]).uye_id} )">Siparişlerim</a></li>
-                                                    <li><a href="@Url.Action("sepeti_goster","sepet")">Ödeme</a></li>
-                                                    <li><a href="@Url.Action("Logout", "Home")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
+                                                    if (((uyeler)Session["uye"]).vip)
+                                                    {
+                                                        <li><a href="@Url.Action("siparis_goster", "siparisler", new {id=((uyeler)Session["uye"]).uye_id} )">Siparişlerim</a></li>
+                                                        <li><a href="@Url.Action("sepeti_goster","sepet")">Ödeme</a></li>
+                                                    }
+                                                        <li><a href="@Url.Action("Logout", "Home")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
                                                 }
                                                 @if (Session["uye"] == null)
                                                 {
@@ -157,7 +160,7 @@
                             <div class="header-middle-right">
                                 <ul class="hm-menu">
                                     <!-- Begin Header Middle Wishlist Area -->
-                                    @if (Session["uye"] != null)
+                                    @if (Session["uye"] != null && ((uyeler)Session["uye"]).vip)
                                     {
                                         <li class="hm-wishlist">
                                             <a href="@Url.Action("favorileri_goster", "Favoriler")" >
@@ -171,7 +174,7 @@
                                     }
                                     <!-- Header Middle Wishlist Area End Here -->
                                     <!-- Begin Header Mini Cart Area -->
-                                    @if (Session["uye"] != null)
+                                    @if (Session["uye"] != null && ((uyeler)Session["uye"]).vip)
                                     {
                                         <li class="hm-minicart">
                                             <a href="@Url.Action("sepeti_goster", "sepet")" class="hm-minicart-trigger" onclick="window.location.href=this.href; return false;">
@@ -263,7 +266,7 @@
                                     </div>
                                     <div class="shipping-text">
                                         <h2>Ücretsiz Teslimat</h2>
-                                        <p>Ve ücretsiz iade. Teslimat tarihleri için ödeme sayfasına bakın.</p>
+                                        <p>Bayilere Özel ücretsiz teslimat ve ücretsiz iade. Teslimat tarihleri için ödeme sayfasına bakın.</p>
                                     </div>
                                 </div>
                             </div>
@@ -416,13 +419,13 @@
                                 <ul>
                                     <li><a href="@Url.Action("index","home")">Çevrim İçi Alışveriş</a></li>
                                     <li><a href="@Url.Action("index","urunlers")">Ürünler</a></li>
-                                    @if (Session["uye"] != null)
+                                    @if (Session["uye"] != null && ((uyeler)Session["uye"]).vip)
                                     {
                                         <li><a href="@Url.Action("siparis_goster", "siparisler", new {id=((uyeler)Session["uye"]).uye_id} )">Siparişlerim</a></li>
                                     }
 
-                                    <li><a href="@Url.Action("contact","home")">Müşteri Hizmetleri</a></li>
-                                    <li><a href="@Url.Action("about","home")">Destek</a></li>
+                                    <li><a href="@Url.Action("contact","home")">Bize Ulaşın</a></li>
+                                    <li><a href="@Url.Action("about","home")">Hakkımızda</a></li>
                                 </ul>
                             </div>
                             <!-- Footer Links Area End Here -->
