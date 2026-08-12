@@ -160,7 +160,7 @@
                                     @if (Session["uye"] != null)
                                     {
                                         <li class="hm-wishlist">
-                                            <a href="@Url.Action("favorileri_goster", "Favoriler")" >
+                                            <a href="@Url.Action("favorileri_goster", "Favoriler")">
                                                 @if (Session["favoriler"] == null)
                                                 {<span class="cart-item-count wishlist-item-count">0</span>}
                                                 else
@@ -188,7 +188,7 @@
                                             </a>
                                         </li>
 
-                                     
+
 
                                     }
 
@@ -215,7 +215,7 @@
                                             <b><a href="@Url.Action("index","Home")">Ana Sayfa</a></b>
                                         </li>
                                         <li class="megamenu-holder">
-                                            <b><a href="@Url.Action("index","urunlers")" >Mağaza</a></b>
+                                            <b><a href="@Url.Action("index","urunlers")">Mağaza</a></b>
                                         </li>
 
                                         <li><b><a href="@Url.Action("About","Home")">Hakkımızda</a></b></li>
@@ -449,6 +449,27 @@
     </div>
     <!-- Body Wrapper End Here -->
     <!-- jQuery-V1.12.4 -->
+    <script>
+        function favoriEkle(e, element) {
+            e.preventDefault();
+
+            var targetUrl = $(element).attr('href');
+
+            $.ajax({
+                url: targetUrl,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        // İşlem tamamlandıktan sonra sayfayı yenile
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('İşlem sırasında bir hata oluştu.');
+                }
+            });
+        }
+    </script>
     <script src="~/Scripts/js/vendor/jquery-1.12.4.min.js"></script>
     <!-- Popper js -->
     <script src="~/Scripts/js/vendor/popper.min.js"></script>
@@ -509,6 +530,26 @@
         .hm-minicart-trigger::after {
             display: none !important;
             content: none !important;
+        }
+        .hb-menu > nav > ul {
+            display: flex;
+            align-items: center;
+            min-height: 50px; /* Sarı şeridin yüksekliğine göre ayarlayabilirsin */
+        }
+
+            .hb-menu > nav > ul > li {
+                display: flex;
+                align-items: center;
+            }
+
+                .hb-menu > nav > ul > li > a {
+                    line-height: normal !important;
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                }
+
+        .hb-info {
+            margin-left: auto; /* Adresi sağa yaslar ve dikeyde ortalar */
         }
     </style>
 </body>

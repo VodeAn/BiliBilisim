@@ -1,83 +1,241 @@
 ﻿@model BiliBilisim_Proje.Models.urunler
 
 @{
-    ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    // Favori session nesnesini her kartta tekrar çekmek yerine bir kez yukarıda tanımlıyoruz
+    var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
+    bool favorideMi = favoriModel?.Favorilerim != null
+                  && favoriModel.Favorilerim.Any(x => x.urun_id == Model.urun_id);
+}
+<div class="row single-product-area">
+    <div class="col-lg-5 col-md-6">
+        <!-- Product Details Left -->
+        <div class="product-details-left">
+            <div class="product-details-images slider-navigation-1 slick-initialized slick-slider">
+                <div aria-live="polite" class="slick-list draggable">
+                    <div class="slick-track" style="opacity: 1; width: 3760px; transform: translate3d(0px, 0px, 0px);" role="listbox">
+                        <div class="lg-image slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 470px;" tabindex="-1" role="option" aria-describedby="slick-slide00">
+                            <a class="popup-img venobox vbox-item" href="@Url.Content("~/Content/fotolar/" + Model.fotolar)" data-gall="myGallery" tabindex="0">
+                                <img src="@Url.Content("~/Content/fotolar/" + Model.fotolar)" alt="product image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--// Product Details Left -->
+    </div>
 
-<h2>Details</h2>
+    <div class="col-lg-7 col-md-6">
+        <div class="product-details-view-content pt-60">
+            <div class="product-info">
+                <h2>@Model.urun_adi</h2>
+                <span class="product-details-ref"><a href="@Url.Action("index","urunlers")">Urunler</a>/@Model.kategori.kate_adi</span>
+                <div class="rating-box pt-20">
+                    <ul class="rating rating-with-review-item">
+                        <li><i class="fa fa-star-o"></i></li>
+                        <li><i class="fa fa-star-o"></i></li>
+                        <li><i class="fa fa-star-o"></i></li>
+                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                    </ul>
+                </div>
+                <div class="price-box pt-20">
+                    <span class="new-price new-price-2">@Model.fiyati ₺</span>
+                </div>
+                <div class="product-desc">
+                    <p>
+                        <span>
+                            @Model.urun_aciklama
+                        </span>
+                    </p>
+                </div>
+                <!--Sepet kısmı bakılacak-->
+                @{var uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
+                    if (uye != null && uye.vip)
+                    {
+                        <div class="single-add-to-cart">
+                            <form action="#" class="cart-quantity">
+                                <button class="add-to-cart" type="submit">Sepete ekle</button>
+                            </form>
+                        </div>
+                    }
 
-<div>
-    <h4>urunler</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.urun_adi)
-        </dt>
+                }
 
-        <dd>
-            @Html.DisplayFor(model => model.urun_adi)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.marka)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.marka)
-        </dd>
+                <div class="product-additional-info pt-25">
+                    @{uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
+                        if (uye != null && uye.vip)
+                        {
+                            <a class="wishlist-btn" href="@Url.Action("favorilere_ekle", "favoriler", new { id = Model.urun_id })" onclick="favoriEkle(event, this)">
+                                <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>Favorilere Ekle
+                            </a>
+                        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.model)
-        </dt>
+                    }
+                    <div class="product-social-sharing pt-25">
+                        <ul>
+                            <!-- Facebook Paylaşım Linki -->
+                            <li class="facebook">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa fa-facebook"></i>Facebook
+                                </a>
+                            </li>
 
-        <dd>
-            @Html.DisplayFor(model => model.model)
-        </dd>
+                            <!-- Twitter (X) Paylaşım Linki -->
+                            <li class="twitter">
+                                <a href="https://twitter.com/intent/tweet?url=@Url.Encode(Request.Url.AbsoluteUri)&text=@Url.Encode(Model.urun_adi)" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa fa-twitter"></i>Twitter
+                                </a>
+                            </li>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.fiyati)
-        </dt>
+                            <!-- WhatsApp Paylaşım Linki -->
+                            <li class="whatsapp">
+                                <a href="https://api.whatsapp.com/send?text=@Url.Encode(Model.urun_adi + " " + Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa fa-whatsapp"></i>WhatsApp
+                                </a>
+                            </li>
 
-        <dd>
-            @Html.DisplayFor(model => model.fiyati)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.stok)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.stok)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.fotolar)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.fotolar)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.satis_adet)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.satis_adet)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.kategori.kate_adi)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.kategori.kate_adi)
-        </dd>
-
-    </dl>
+                            <!-- LinkedIn Paylaşım Linki -->
+                            <li class="linkedin">
+                                <a href="https://www.linkedin.com/sharing/share-offsite/?url=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa fa-linkedin"></i>LinkedIn
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.urun_id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<section class="product-area li-laptop-product pt-30 pb-50">
+    <div class="container">
+        <div class="row">
+            <!-- Begin Li's Section Area -->
+            <div class="col-lg-12">
+                <div class="li-section-title">
+                    <h2>
+                        <span>Benzer Ürünler</span>
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="product-active owl-carousel">
+                        @{
+                            List<BiliBilisim_Proje.Models.urunler> liste = ViewBag.items;
+                            uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
+                        }
+
+                        @if (liste != null)
+                        {
+                            foreach (var item in liste)
+                            {
+                                 favorideMi = favoriModel?.Favorilerim != null
+                                                 && favoriModel.Favorilerim.Any(x => x.urun_id == item.urun_id);
+
+                                <div class="col-lg-12">
+                                    <!-- single-product-wrap start -->
+                                    <div class="single-product-wrap">
+                                        <div class="product-image">
+                                            <a href="@Url.Action("details", "urunlers", new { id = item.urun_id, kateno = item.kategori?.u_kate_id })">
+                                                <img src="~/Content/fotolar/@item.fotolar" alt="@item.urun_adi">
+                                            </a>
+                                            <span class="sticker">Yeni</span>
+                                        </div>
+                                        <div class="product_desc">
+                                            <div class="product_desc_info">
+                                                <div class="product-review">
+                                                    <h5 class="manufacturer">
+                                                        <!-- kategori_adi alanını kendi veritabanı sütun adınızla değiştirin -->
+                                                        <a href="#">@(item.kategori != null ? item.kategori.kate_adi : "")</a>
+                                                    </h5>
+                                                    <div class="rating-box">
+                                                        <ul class="rating">
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h4><a class="product_name" href="@Url.Action("details", "urunlers", new { id = item.urun_id, kateno = item.kategori?.u_kate_id })">@item.urun_adi</a></h4>
+                                                <div class="price-box">
+                                                    <span class="new-price new-price-2">@item.fiyati ₺</span>
+                                                </div>
+                                            </div>
+
+                                            @if (uye != null && uye.vip)
+                                            {
+                                                <div class="add-actions">
+                                                    <ul class="add-actions-link">
+                                                        <li class="add-cart active"><a href="#">Add to cart</a></li>
+                                                        <li>
+                                                            <a class="links-details" href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })" onclick="favoriEkle(event, this)">
+                                                                <i class="fa @(favorideMi ? "fa-heart" : "fa-heart-o")"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <!-- single-product-wrap end -->
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- Li's Section Area End Here -->
+        </div>
+    </div>
+</section>
+<style>
+    /* Ürün görselini kapsayan dış kutuyu sabitliyoruz */
+    .single-product-wrap .product-image {
+        height: 260px; /* Bu değeri sitenin tasarımına göre (örneğin 220px - 280px arası) değiştirebilirsin */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-color: #fff; /* Şeffaf arka planlı resimler için temiz bir zemin */
+    }
+
+        /* İçindeki görselin (img) kutuya mükemmel sığmasını sağlıyoruz */
+        .single-product-wrap .product-image a {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .single-product-wrap .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Asıl sihir burada! Resmi kırpmadan ve oranını bozmadan kutuya oturtur */
+        }
+    .product-social-sharing ul li.whatsapp a {
+        background-color: #25D366 !important;
+        color: #fff !important;
+    }
+
+        .product-social-sharing ul li.whatsapp a:hover {
+            background-color: #fbd704 !important;
+        }
+
+    /* LinkedIn Buton Renkleri */
+    .product-social-sharing ul li.linkedin a {
+        background-color: #0A66C2 !important;
+        color: #fff !important;
+    }
+
+        .product-social-sharing ul li.linkedin a:hover {
+            background-color: #fbd704 !important;
+        }
+</style>

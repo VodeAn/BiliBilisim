@@ -58,18 +58,20 @@ namespace BiliBilisim_Proje.Controllers
         }
 
         // GET: urunlers/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<ActionResult> Details(int? id,int? kateno)
         {
             if (id == null)
             {
                 return RedirectToAction("error", "home");
             }
-            urunler urunler = await db.urunler.FindAsync(id);
-            if (urunler == null)
+            urunler urunlers = await db.urunler.FindAsync(id);
+            List <urunler> kate_urun = db.urunler.Where(x => kateno == null || x.kategori.u_kate_id == kateno).ToList();
+            if (urunlers == null)
             {
                 return RedirectToAction("error", "home");
             }
-            return View(urunler);
+            ViewBag.items = kate_urun;
+            return View(urunlers);
         }
 
         protected override void Dispose(bool disposing)
