@@ -432,6 +432,8 @@
     <Content Include="Views\Admin\UrunListele.cshtml" />
     <Content Include="Views\Admin\KategoriListele.cshtml" />
     <Content Include="Views\uyelers\sifre_unut.cshtml" />
+    <Content Include="Views\Admin\AdminUyeCreate.cshtml" />
+    <Content Include="Views\Admin\AdminUyeEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
