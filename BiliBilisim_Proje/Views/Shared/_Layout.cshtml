@@ -67,70 +67,67 @@
                         </div>
                         <!-- Header Top Left Area End Here -->
                         <!-- Begin Header Top Right Area -->
-                        <div class="col-lg-9 col-md-8">
-                            <div class="header-top-right">
-                                <ul class="ht-menu">
-                                    <!-- Begin Setting Area -->
-                                    <li>
-                                        @{
-                                            string kul;
-                                            if (Session["uye"] != null)
-                                            {
-                                                kul = "/Content/images/kullanici-admin/kullanici2.png";
-                                            }
+                        <di<div class="col-lg-9 col-md-8">
+    <div class="header-top-right">
+        <ul class="ht-menu">
+            <!-- Begin Setting Area -->
+            <li>
+                @{
+                    // Session'daki üyeyi tek bir değişkene atayıp pratikleştiriyoruz
+                    var aktifUye = Session["uye"] as uyeler;
+                    string kul = (aktifUye != null)
+                        ? "/Content/images/kullanici-admin/kullanici2.png"
+                        : "/Content/images/kullanici-admin/kullanici.png";
+                }
 
-                                            else
-                                            {
-                                                kul = "/Content/images/kullanici-admin/kullanici.png";
-                                            }
-                                        }
+                <div class="ht-setting-trigger"><span><img height="25px" width="20px" src="@kul"></span></div>
+                <div class="setting ht-setting">
+                    <ul class="ht-setting-list">
 
-                                        <div class="ht-setting-trigger"><span><img height="25px" width="20px" src="@kul"></span></div>
-                                        <div class="setting ht-setting">
-                                            <ul class="ht-setting-list">
+                        @if (aktifUye != null)
+                        {
+                            @* GÜNCELLENDİ: ID parametresi linkten tamamen kaldırıldı *@
+                            <li><a href="@Url.Action("Edit", "Uyelers")">Hesabım</a></li>
 
-                                                @if (Session["uye"] != null)
-                                                {
-                                                    <li><a href="@Url.Action("Edit", "Uyelers", new { id = ((uyeler)Session["uye"]).uye_id })">Hesabım</a></li>
-                                                    if (((uyeler)Session["uye"]).vip)
-                                                    {
-                                                        <li><a href="@Url.Action("siparis_goster", "siparisler", new {id=((uyeler)Session["uye"]).uye_id} )">Siparişlerim</a></li>
-                                                        <li><a href="@Url.Action("sepeti_goster","sepet")">Ödeme</a></li>
-                                                    }
-                                                    <li><a href="@Url.Action("Logout", "Home")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
-                                                }
-                                                @if (Session["uye"] == null)
-                                                {
-                                                    <li><a href="@Url.Action("Kaydol_Giris", "home")">Üye Ol/Giriş Yap</a></li>
+                            if (aktifUye.vip)
+                            {
+                                <li><a href="@Url.Action("siparis_goster", "siparisler", new { id = aktifUye.uye_id })">Siparişlerim</a></li>
+                                <li><a href="@Url.Action("sepeti_goster", "sepet")">Ödeme</a></li>
+                            }
+                            <li><a href="@Url.Action("Logout", "Home")" onclick="alert('Başarıyla Çıkış Yapıldı')">Güvenli Çıkış</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Kaydol_Giris", "home")">Üye Ol/Giriş Yap</a></li>
+                        }
 
-                                                }
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <!-- Setting Area End Here -->
-                                    <!-- Begin Currency Area -->
-                                    <li>
-                                        <span class="currency-selector-wrapper">Para Birimi : </span><span>TL ₺</span>
-                                        <div class="ht-currency-trigger"></div>
+                    </ul>
+                </div>
+            </li>
+            <!-- Setting Area End Here -->
+            <!-- Begin Currency Area -->
+            <li>
+                <span class="currency-selector-wrapper">Para Birimi : </span><span>TL ₺</span>
+                <div class="ht-currency-trigger"></div>
+            </li>
+            <!-- Currency Area End Here -->
 
-                                    </li>
-                                    <!-- Currency Area End Here -->
-                                    <li>
-                                        @if (Session["uye"] != null)
-                                        {
-
-                                            if (((uyeler)Session["uye"]).vip)
-                                            {<font> Mağaza Üyesi: @(((uyeler)Session["uye"]).kuladi) </font>}
-                                            else
-                                            {<font> Üye: @(((uyeler)Session["uye"]).kuladi) </font>}
-
-
-                                        }
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+            <li>
+                @if (aktifUye != null)
+                {
+                    if (aktifUye.vip)
+                    {
+                        <font> Mağaza Üyesi: @aktifUye.kuladi </font>
+                    }
+                    else
+                    {
+                        <font> Üye: @aktifUye.kuladi </font>
+                    }
+                }
+            </li>
+        </ul>
+    </div>
+</div>
                         <!-- Header Top Right Area End Here -->
                     </div>
                 </div>
