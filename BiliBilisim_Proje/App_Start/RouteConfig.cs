@@ -43,15 +43,21 @@ namespace BiliBilisim_Proje
                 url: "uye-platformu/hesabim",
                 defaults: new {controller = "Uyelers", action = "Edit"}
             );
-
-
-
-
-
-
-
-
-
+            routes.MapRoute(
+                name: "FavorilerRoutu",
+                url: "favoriler",
+                defaults: new {controller = "Favoriler", action = "favorileri_goster" }
+            );
+            routes.MapRoute(
+                name: "sepetRoutu",
+                url: "sepet",
+                defaults: new {controller = "sepet", action = "sepeti_goster" }
+            );
+            routes.MapRoute(
+                name: "unuttumRoutu",
+                url: "uye-platformu/sifremi-unuttum",
+                defaults: new {controller = "uyelers", action = "sifre_unut" }
+            );
 
             routes.MapRoute(
                 name: "Default",

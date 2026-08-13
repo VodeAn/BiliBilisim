@@ -29,8 +29,8 @@
                                     <tr>
                                         <td class="li-product-remove"><a href="@Url.Action("favorilerden_kaldir", "Favoriler", new { id = item.urun_id })"><i class="fa fa-times"></i></a></td>
                                         <td class="li-product-thumbnail"><img src="~/Content/fotolar/@item.fotolar" style="width:150px;height:150px" alt=""></td>
-                                        <td class="li-product-name"><a href="#">@item.marka </a></td>
-                                        <td class="li-product-name"><a href="#">@item.model </a></td>
+                                        <td class="li-product-name">@item.marka </td>
+                                        <td class="li-product-name"><a href="@Url.Action("details", "urunlers", new {id=item.urun_id})">@item.model </a></td>
 
                                          <td class="li-product-price"><span class="amount">₺@item.fiyati</span></td>
                                         <td class="li-product-stock-status"><span class="in-stock">@item.stok</span></td>

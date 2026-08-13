@@ -2,8 +2,6 @@
 @using BiliBilisim_Proje.Models;
 
 <html class="no-js" lang="tr">
-
-<!-- index-231:32-->
 <head>
     <link href="~/Content/datepicker.css" rel="stylesheet" />
 
@@ -73,7 +71,6 @@
             <!-- Begin Setting Area -->
             <li>
                 @{
-                    // Session'daki üyeyi tek bir değişkene atayıp pratikleştiriyoruz
                     var aktifUye = Session["uye"] as uyeler;
                     string kul = (aktifUye != null)
                         ? "/Content/images/kullanici-admin/kullanici2.png"
@@ -86,7 +83,6 @@
 
                         @if (aktifUye != null)
                         {
-                            @* GÜNCELLENDİ: ID parametresi linkten tamamen kaldırıldı *@
                             <li><a href="@Url.Action("Edit", "Uyelers")">Hesabım</a></li>
 
                             if (aktifUye.vip)
@@ -245,7 +241,8 @@
                 <!--Render Body başlangıcı-->
                 @if (TempData["StokHatasi"] != null)
                 {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert"> @TempData["StokHatasi"]</div>}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert"> @TempData["StokHatasi"]</div>
+                }
                 @RenderBody()
 
             </div>

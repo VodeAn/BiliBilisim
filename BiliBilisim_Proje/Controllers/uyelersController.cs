@@ -19,13 +19,11 @@ namespace BiliBilisim_Proje.Controllers
 
         public async Task<ActionResult> Edit()
         {
-            // 1. Oturum kontrolü
             if (Session["uye"] == null)
             {
                 return RedirectToAction("error", "home");
             }
 
-            // 2. ID'yi dışarıdan gelen parametreden değil, oturumdaki üyeden alıyoruz
             var oturumdakiUye = (uyeler)Session["uye"];
             uyeler uyeler = await db.uyeler.FindAsync(oturumdakiUye.uye_id);
 
@@ -43,7 +41,6 @@ namespace BiliBilisim_Proje.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka,vip_basvuru")] uyeler uyeler, string confirm)
         {
-            // 1. POST işleminde de güvenlik için oturum kontrolü ekliyoruz
             if (Session["uye"] == null)
             {
                 return RedirectToAction("error", "home");
@@ -60,7 +57,6 @@ namespace BiliBilisim_Proje.Controllers
             {
                 try
                 {
-                    // Güvenlik Açığı Önlemi: ID'yi formdan değil, oturumdaki kullanıcının ID'sinden buluyoruz
                     var guncellenecek_uye = await db.uyeler.FindAsync(oturumdakiUye.uye_id);
 
                     if (guncellenecek_uye != null)
@@ -92,7 +88,6 @@ namespace BiliBilisim_Proje.Controllers
                             );
                         }
 
-                        // Session'ı güncellenmiş yeni verilerle tazeleyelim
                         Session["uye"] = guncellenecek_uye;
 
                         return RedirectToAction("Index", "Home");
