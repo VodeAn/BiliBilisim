@@ -642,7 +642,6 @@ namespace BiliBilisim_Proje.Controllers
 
             try
             {
-                // Eğer ürünün bir fotoğrafı varsa sunucudan fiziksel olarak siliyoruz
                 if (!string.IsNullOrEmpty(urun.fotolar))
                 {
                     string tamYol = Server.MapPath("~/Content/fotolar/" + urun.fotolar);

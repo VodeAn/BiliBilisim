@@ -17,7 +17,7 @@
                         <h2>Android Telefonlar</h2>
                         <h3><span>45.000₺'den </span>Başlayan fiyatlar</h3>
                         <div class="default-btn slide-btn">
-                            <a class="links" href="@Url.Action("index","urunlers")">Ürünleri Gör</a>
+                            <a class="links" href="@Url.Action("index", "urunlers", new {altId=13})">Ürünleri Gör</a>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                         <h2>Ofis Bilgisayarları</h2>
                         <h3><span>52.000₺'den </span>Başlayan fiyatlar</h3>
                         <div class="default-btn slide-btn">
-                            <a class="links" href="@Url.Action("index","urunler")">Ürünleri Gör</a>
+                            <a class="links" href="@Url.Action("index","urunler",new {altId=16})">Ürünleri Gör</a>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <h2>Profesyonel Kameralar</h2>
                         <h3><span>16.000₺'den </span>Başlayan fiyatlar</h3>
                         <div class="default-btn slide-btn">
-                            <a class="links" href="@Url.Action("index","urunler")">Ürünleri Gör</a>
+                            <a class="links" href="@Url.Action("index","urunler",new {altId=6})">Ürünleri Gör</a>
                         </div>
                     </div>
                 </div>
@@ -68,11 +68,9 @@
                 <div class="product-area shop-product-area">
                     <div class="row">
                         @{
-                            // Favori session nesnesini her kartta tekrar çekmek yerine bir kez yukarıda tanımlıyoruz
                             var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
                         }
 
-                        @* 1. Blok: 18'den sonraki 3 ürün *@
                         @{ var liste = Model.Skip(18).Take(3); }
                         @foreach (var item in liste)
                         {
@@ -134,8 +132,6 @@
                                 <!-- single-product-wrap end -->
                             </div>
                         }
-
-                        @* 2. Blok: 21'den sonraki 3 ürün *@
                         @{ liste = Model.Skip(21).Take(3); }
                         @foreach (var item in liste)
                         {
@@ -198,7 +194,6 @@
                             </div>
                         }
 
-                        @* 3. Blok: 24'ten sonraki 3 ürün *@
                         @{ liste = Model.Skip(24).Take(3); }
                         @foreach (var item in liste)
                         {

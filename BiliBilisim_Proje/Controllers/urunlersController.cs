@@ -31,6 +31,7 @@ namespace BiliBilisim_Proje.Controllers
             ViewBag.AltKategoriler = db.kategori.ToList();
             ViewBag.ustId = ustId;
             ViewBag.altId = altId;
+            
 
             int sayfa_no = sayfa ?? 1;
 
@@ -62,7 +63,7 @@ namespace BiliBilisim_Proje.Controllers
                 case 4: urunler = urunler.OrderByDescending(x => x.fiyati); break;
                 default: urunler = urunler.OrderBy(x => x.urun_id); break;
             }
-
+            ViewBag.secilenFiltre = filtre;
             IPagedList<urunler> urunlerimiz = urunler.ToPagedList(sayfa_no, 6);
             return View(urunlerimiz);
         }

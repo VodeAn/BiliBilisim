@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
-    // Favori session nesnesini her kartta tekrar çekmek yerine bir kez yukarıda tanımlıyoruz
     var favoriModel = Session["favoriler"] as BiliBilisim_Proje.Models.Favoriler;
     bool favorideMi = favoriModel?.Favorilerim != null
                   && favoriModel.Favorilerim.Any(x => x.urun_id == Model.urun_id);
@@ -52,7 +51,6 @@
                         </span>
                     </p>
                 </div>
-                <!--Sepet kısmı bakılacak-->
                 @{var uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
                     if (uye != null && uye.vip)
                     {
@@ -93,34 +91,30 @@
                     }
 
                 <div class="product-social-sharing pt-25">
-                    <!-- Eklenen Başlık -->
                     <h5 style="font-size: 14px; font-weight: 600; color: #333; margin-bottom: 10px; border-left: 3px solid #ffcc00; padding-left: 8px; text-transform: uppercase;">
                         Ürünü Sosyal Medyada Paylaş
                     </h5>
 
                     <ul>
-                        <!-- Facebook Paylaşım Linki -->
                         <li class="facebook">
                             <a href="https://www.facebook.com/sharer/sharer.php?u=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
                                 <i class="fa fa-facebook"></i>Facebook
                             </a>
                         </li>
 
-                        <!-- Twitter (X) Paylaşım Linki -->
                         <li class="twitter">
                             <a href="https://twitter.com/intent/tweet?url=@Url.Encode(Request.Url.AbsoluteUri)&text=@Url.Encode(Model.urun_adi)" target="_blank" rel="noopener noreferrer">
                                 <i class="fa fa-twitter"></i>Twitter
                             </a>
                         </li>
 
-                        <!-- WhatsApp Paylaşım Linki -->
                         <li class="whatsapp">
                             <a href="https://api.whatsapp.com/send?text=@Url.Encode(Model.urun_adi + " " + Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
                                 <i class="fa fa-whatsapp"></i>WhatsApp
                             </a>
                         </li>
 
-                        <!-- LinkedIn Paylaşım Linki -->
+
                         <li class="linkedin">
                             <a href="https://www.linkedin.com/sharing/share-offsite/?url=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
                                 <i class="fa fa-linkedin"></i>LinkedIn
@@ -170,7 +164,6 @@
                                             <div class="product_desc_info">
                                                 <div class="product-review">
                                                     <h5 class="manufacturer">
-                                                        <!-- kategori_adi alanını kendi veritabanı sütun adınızla değiştirin -->
                                                         <a href="#">@(item.kategori != null ? item.kategori.kate_adi : "")</a>
                                                     </h5>
                                                     <div class="rating-box">
