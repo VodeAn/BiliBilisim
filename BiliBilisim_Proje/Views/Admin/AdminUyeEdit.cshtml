@@ -51,7 +51,7 @@
 
                 <div class="col-md-4 mb-3">
                     @Html.LabelFor(m => m.cinsiyet, "Cinsiyet", new { @class = "form-label fw-bold" })
-                    @Html.DropDownListFor(m => m.cinsiyet, new SelectList(new[] { "Erkek", "Kadın" }, Model.cinsiyet), "Seçiniz", new { @class = "form-select" })
+                    @Html.DropDownListFor(m => m.cinsiyet, null, "Seçiniz", new { @class = "form-select" })
                     @Html.ValidationMessageFor(m => m.cinsiyet, "", new { @class = "text-danger small" })
                 </div>
 

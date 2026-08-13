@@ -11,7 +11,8 @@ namespace BiliBilisim_Proje.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class urunler
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,16 +20,27 @@ namespace BiliBilisim_Proje.Models
         {
             this.siparisler = new HashSet<siparisler>();
         }
-    
+
+        [Required]
         public int urun_id { get; set; }
+        [Required(ErrorMessage = "Ürün Adý Giriþi Zorunludur")]
         public string urun_adi { get; set; }
+        [Required(ErrorMessage = "Marka Adý Giriþi Zorunludur")]
         public string marka { get; set; }
+        [Required(ErrorMessage = "Model Adý Giriþi Zorunludur")]
         public string model { get; set; }
+        [Required(ErrorMessage = "Kategori Seçimi Zorunludur")]
         public int kate_no { get; set; }
+        [Required(ErrorMessage = "Fiyat Giriþi Zorunludur")]
         public decimal fiyati { get; set; }
+        [Required(ErrorMessage = "Stok Giriþi Zorunludur")]
+        [MinLength(0, ErrorMessage = "Stok Adedi En Az 0 Olmalýdýr")]
         public int stok { get; set; }
+        [Required(ErrorMessage = "Fotoðraf Seçimi Zorunludur")]
         public string fotolar { get; set; }
+        [Required(ErrorMessage = "Satýþ Adedi Giriþi Zorunludur")][MinLength(0,ErrorMessage = "Satýþ Adedi En Az 0 Olmalýdýr")]
         public short satis_adet { get; set; }
+        [Required(ErrorMessage = "Ürün Açýklama Giriþi Zorunludur")]
         public string urun_aciklama { get; set; }
     
         public virtual kategori kategori { get; set; }

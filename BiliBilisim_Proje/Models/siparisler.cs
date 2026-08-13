@@ -11,14 +11,21 @@ namespace BiliBilisim_Proje.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class siparisler
     {
+        [Required]
         public int kayit_no { get; set; }
+        [Required]
         public int sip_no { get; set; }
+        [Required(ErrorMessage = "Üye Seçimi Zorunludur")]
         public int uye_id { get; set; }
+        [Required(ErrorMessage = "Adet Giriþi Zorunludur")][MinLength(1,ErrorMessage = "Adet En Az 1 Olmalýdýr")]
         public int adet { get; set; }
+        [Required(ErrorMessage = "Satýn Alým Tarihi Giriþi Zorunludur")]
         public System.DateTime a_tarih { get; set; }
+        [Required(ErrorMessage = "Ürün Seçimi Zorunludur")]
         public int urun_id { get; set; }
     
         public virtual urunler urunler { get; set; }
