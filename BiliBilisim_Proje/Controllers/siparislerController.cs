@@ -21,30 +21,39 @@ namespace MVC5_E_Ticaret.Controllers
             {
                 var sip_nosu = db.siparisler.Max(x => x.sip_no) + 1;
                 var sepet_urun = ((Sepet)Session["sepet"]).Sepetim;
-                foreach (var item in sepet_urun)
+                if (sepet_urun.Count==0)
                 {
-                    siparisler siparisler = new siparisler()
-                    {
-                        urun_id = item.urun.urun_id,
-                        sip_no = sip_nosu,
-                        a_tarih = DateTime.Now,
-                        adet = Convert.ToInt16(item.adet),
-                        uye_id = ((uyeler)Session["uye"]).uye_id
-                    };
-                    db.siparisler.Add(siparisler);
-                    var satinalinan = db.urunler.Find(item.urun.urun_id);
-                    if( satinalinan != null)
-                    {
-                        satinalinan.stok -= item.adet;
-                        satinalinan.satis_adet += Convert.ToInt16(item.adet);
-                        if (satinalinan.stok < 0) satinalinan.stok = 0;
-                    }
-                    
-                    db.SaveChanges();
+                    msj = "Sepetiniz boş lütfen sepete ürün ekleyin!";
                 }
+                else
+                {
+
+              
+                    foreach (var item in sepet_urun)
+                    {
+                        siparisler siparisler = new siparisler()
+                        {
+                            urun_id = item.urun.urun_id,
+                            sip_no = sip_nosu,
+                            a_tarih = DateTime.Now,
+                            adet = Convert.ToInt16(item.adet),
+                            uye_id = ((uyeler)Session["uye"]).uye_id
+                        };
+                        db.siparisler.Add(siparisler);
+                        var satinalinan = db.urunler.Find(item.urun.urun_id);
+                        if (satinalinan != null)
+                        {
+                            satinalinan.stok -= item.adet;
+                            satinalinan.satis_adet += Convert.ToInt16(item.adet);
+                            if (satinalinan.stok < 0) satinalinan.stok = 0;
+                        }
+
+                        db.SaveChanges();
+                    }
 
                 msj = "Sipariş Kaydı Yapıldı.Sipariş No:  " + sip_nosu;
                 sepet_urun.Clear();
+                }
             }
             else return RedirectToAction("error", "home");
             return RedirectToAction("sepeti_goster", "sepet", new { msj });
@@ -75,6 +84,19 @@ namespace MVC5_E_Ticaret.Controllers
             {
                 siparis = db.siparisler.Where(x => x.uye_id == uye_id).GroupBy(x => x.sip_no);
             }
+            if (tarihler == null)
+            {
+                ViewBag.siparisad = "";
+            }
+           else if (siparis.Count() == 0)
+            {
+                ViewBag.siparisad = tarihler.ToString() + " Yılına ait siparişiniz bulunamadı";
+            }
+            else
+            {
+                ViewBag.siparisad = tarihler.ToString() + " Yılına ait " + siparis.Count() + " Adet siparişiniz bulundu";
+            }
+
             ViewBag.tarihler = selectListItem;
             return View(siparis);
         }
