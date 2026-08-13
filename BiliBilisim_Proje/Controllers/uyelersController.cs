@@ -132,12 +132,12 @@ namespace BiliBilisim_Proje.Controllers
             {
 
                 string gondericiMail = "bilibilisim92@gmail.com";
-                string sifre = "lfhc gmgf rcub jbnh";
+                string sifre = "sofx tktb etck jazw";
                 string aliciMail = "bilibilisimadmn@outlook.com"; // Mailin kime gideceği 
 
                 // 2. Mail İçeriği
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(gondericiMail, "Bilişim Proje Sistemi");
+                mail.From = new MailAddress(gondericiMail, "BiliBilişim Bayilik Başvurusu");
                 mail.To.Add(aliciMail);
 
                 

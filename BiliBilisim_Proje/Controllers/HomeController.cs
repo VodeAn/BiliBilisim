@@ -51,7 +51,7 @@ namespace BiliBilisim_Proje.Controllers
 
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("bilibilisim92@gmail.com", "lfhc gmgf rcub jbnh");
+                smtp.Credentials = new NetworkCredential("bilibilisim92@gmail.com", "sofx tktb etck jazw");
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(mail);
                 TempData["KayitBasarili"] = "Mail gönderildi.";
