@@ -1,8 +1,125 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_Admin.cshtml";
-    ViewBag.Title = "Yönetim Paneli - Özet"; 
+    ViewBag.Title = "Yönetim Paneli - Özet";
 }
 
-<h2>Ana Sayfa</h2>
+<div class="content-area py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="p-4 bg-primary text-white rounded shadow-sm d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="fw-bold mb-1"><i class="fas fa-tachometer-alt me-2"></i> Yönetim Paneline Hoş Geldiniz</h3>
+                    <p class="mb-0 text-white-50">Sistemin genel yönetimini sol menüden veya aşağıdaki kısayollardan hızlıca gerçekleştirebilirsiniz.</p>
+                </div>
+                <div>
+                    <span class="badge bg-light text-primary fs-6 px-3 py-2">Sistem Aktif</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    @if (TempData["KayitBasarili"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2"></i> @TempData["KayitBasarili"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-md-3 col-sm-6">
+            <div class="card border-0 shadow-sm h-100 border-start border-primary border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 bg-primary text-white p-3 rounded shadow-sm">
+                            <i class="fas fa-boxes fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Ürün İşlemleri</h6>
+                            <h4 class="fw-bold mb-0">Ürünler</h4>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">Yeni ürün ekleyin, mevcut ürünleri listeleyin, düzenleyin veya silin.</p>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("UrunListele", "Admin")" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-list me-1"></i> Ürünleri Listele
+                        </a>
+                        <a href="@Url.Action("AdminUrunCreate", "Admin")" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i> Yeni Ürün Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card border-0 shadow-sm h-100 border-start border-success border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 bg-success text-white p-3 rounded shadow-sm">
+                            <i class="fas fa-folder-open fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Kategoriler</h6>
+                            <h4 class="fw-bold mb-0">Yönetim</h4>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">Kategori listesini görüntüleyin veya sisteme yeni kategori tanımlayın.</p>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("KategoriListele", "Admin")" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-list me-1"></i> Kategorileri Listele
+                        </a>
+                        <a href="@Url.Action("AdminKateCreate", "Admin")" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus me-1"></i> Yeni Kategori Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card border-0 shadow-sm h-100 border-start border-warning border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 bg-warning text-dark p-3 rounded shadow-sm">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Üye İşlemleri</h6>
+                            <h4 class="fw-bold mb-0">Kayıtlar</h4>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">Sisteme kayıtlı üyeleri denetleyin, düzenleyin veya yeni üye ekleyin.</p>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("UyeListele", "Admin")" class="btn btn-outline-warning text-dark btn-sm">
+                            <i class="fas fa-list me-1"></i> Üyeleri Listele
+                        </a>
+                        <a href="@Url.Action("AdminUyeCreate", "Admin")" class="btn btn-warning btn-sm text-dark">
+                            <i class="fas fa-plus me-1"></i> Yeni Üye Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card border-0 shadow-sm h-100 border-start border-danger border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0 bg-danger text-white p-3 rounded shadow-sm">
+                            <i class="fas fa-shopping-cart fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-0">Siparişler</h6>
+                            <h4 class="fw-bold mb-0">Takip</h4>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">Müşterilerden gelen siparişleri görüntüleyin ve durumlarını yönetin.</p>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("SiparisListele", "Admin")" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-list me-1"></i> Siparişleri Listele
+                        </a>
+                        <div style="height: 31px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

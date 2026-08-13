@@ -34,11 +34,10 @@ namespace BiliBilisim_Proje.Models
         [Required(ErrorMessage = "Fiyat Giriþi Zorunludur")]
         public decimal fiyati { get; set; }
         [Required(ErrorMessage = "Stok Giriþi Zorunludur")]
-        [MinLength(0, ErrorMessage = "Stok Adedi En Az 0 Olmalýdýr")]
+        [Range(0, 99999999, ErrorMessage = "Stok Adedi En Az 0 Olmalýdýr")]
         public int stok { get; set; }
-        [Required(ErrorMessage = "Fotoðraf Seçimi Zorunludur")]
         public string fotolar { get; set; }
-        [Required(ErrorMessage = "Satýþ Adedi Giriþi Zorunludur")][MinLength(0,ErrorMessage = "Satýþ Adedi En Az 0 Olmalýdýr")]
+        [Required(ErrorMessage = "Satýþ Adedi Giriþi Zorunludur")][Range(0,99999999,ErrorMessage = "Satýþ Adedi En Az 0 Olmalýdýr")]
         public short satis_adet { get; set; }
         [Required(ErrorMessage = "Ürün Açýklama Giriþi Zorunludur")]
         public string urun_aciklama { get; set; }

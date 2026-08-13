@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -56,26 +57,36 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult AdminUyeCreate()
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            List<SelectListItem> selectListItems = new List<SelectListItem>();
-            selectListItems.Add(
-                    new SelectListItem()
-                    {
-                        Text = "Erkek",
-                        Value = false.ToString()
-                    });
-            selectListItems.Add(
-                    new SelectListItem()
-                    {
-                        Text = "Kadın",
-                        Value = true.ToString()
-                    });
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                List<SelectListItem> selectListItems = new List<SelectListItem>();
+                selectListItems.Add(
+                        new SelectListItem()
+                        {
+                            Text = "Erkek",
+                            Value = false.ToString()
+                        });
+                selectListItems.Add(
+                        new SelectListItem()
+                        {
+                            Text = "Kadın",
+                            Value = true.ToString()
+                        });
 
-            ViewBag.cinsiyet = selectListItems;
+                ViewBag.cinsiyet = selectListItems;
 
-                
-            ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il");
-            return View();
+
+                ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il");
+                return View();
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return RedirectToAction("Index", "Admin");
+            }
+
+          
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -140,38 +151,47 @@ namespace BiliBilisim_Proje.Controllers
 
         public async Task<ActionResult> AdminUyeEdit(int? id)
         {
-            if (Session["admin"] == null)
+            try
             {
+                if (Session["admin"] == null)
+                {
 
-                return HttpNotFound();
+                    return HttpNotFound();
+                }
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                uyeler uyeler = await dbo.uyeler.FindAsync(id);
+                if (uyeler == null)
+                {
+                    return HttpNotFound();
+                }
+                List<SelectListItem> selectListItems = new List<SelectListItem>();
+                selectListItems.Add(
+                        new SelectListItem()
+                        {
+                            Text = "Erkek",
+                            Value = false.ToString()
+                        });
+                selectListItems.Add(
+                        new SelectListItem()
+                        {
+                            Text = "Kadın",
+                            Value = true.ToString()
+                        });
+
+                ViewBag.cinsiyet = selectListItems;
+
+                ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il", uyeler.plaka);
+                return View(uyeler);
             }
-            if (id == null)
+            catch (Exception)
             {
-                return HttpNotFound();
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return RedirectToAction("Index", "Admin");
             }
-            uyeler uyeler = await dbo.uyeler.FindAsync(id);
-            if (uyeler == null)
-            {
-                return HttpNotFound();
-            }
-            List<SelectListItem> selectListItems = new List<SelectListItem>();
-            selectListItems.Add(
-                    new SelectListItem()
-                    {
-                        Text = "Erkek",
-                        Value = false.ToString()
-                    });
-            selectListItems.Add(
-                    new SelectListItem()
-                    {
-                        Text = "Kadın",
-                        Value = true.ToString()
-                    });
-
-            ViewBag.cinsiyet = selectListItems;
-
-            ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il", uyeler.plaka);
-            return View(uyeler);
+           
         }
         [HttpPost]
         public async Task<ActionResult> AdminUyeEdit(uyeler uyeler)
@@ -239,22 +259,33 @@ namespace BiliBilisim_Proje.Controllers
 
         public async Task<ActionResult> AdminUyeDelete(int? id)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            if (id == null)
+            try
             {
-                return HttpNotFound();
+                if (Session["admin"] == null) return HttpNotFound();
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                uyeler uyeler = await dbo.uyeler.FindAsync(id);
+                if (uyeler == null)
+                {
+                    return HttpNotFound();
+                }
+                dbo.uyeler.Remove(uyeler);
+                await dbo.SaveChangesAsync();
+                TempData["KayitBasarili"] = "Üye Başarıyla Silindi.";
+                return RedirectToAction("UyeListele", "Admin");
             }
-            uyeler uyeler = await dbo.uyeler.FindAsync(id);
-            if (uyeler == null)
+            catch (Exception error)
             {
-                return HttpNotFound();
+                string msj = error.GetBaseException().Message;
+                if (msj.Contains("siparisler_uye_id_fkey")) TempData["KayitBasarili"] = "Siparişi Olan Üye Silinemez.";
+                else TempData["KayitBasarili"] = "Bilinmeyen bir hata oluştu";
+                return RedirectToAction("AdminUyeEdit", "Admin", new { id });
             }
-            dbo.uyeler.Remove(uyeler);
-            await dbo.SaveChangesAsync();
-            TempData["KayitBasarili"] = "Üye Başarıyla Silindi.";
-            return RedirectToAction("UyeListele","Admin");
+
         }
-      
+            
 
         //-----------------------------------------------Kategori Bölümü---------------------------------------------------------------------
         public ActionResult KategoriListele(int? sayfa)
@@ -266,9 +297,18 @@ namespace BiliBilisim_Proje.Controllers
         }
         public ActionResult AdminKateCreate()
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            ViewBag.UstKategoriListesi = new SelectList(dbo.ust_kategori, "u_kate_id", "u_kate_adi");
-            return View();
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                ViewBag.UstKategoriListesi = new SelectList(dbo.ust_kategori, "u_kate_id", "u_kate_adi");
+                return View();
+            }
+             catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return RedirectToAction("KategoriListele", "Admin");
+            }
+          
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -290,29 +330,38 @@ namespace BiliBilisim_Proje.Controllers
             {
                 string msj = error.GetBaseException().Message;
                 if (msj.Contains("IX_kategori")) ModelState.AddModelError("kate_adi", "Bu kategori zaten mevcut");
-                else TempData["KayitBasarili"] = "Bilinmeyen Bİr Hata Oluştu";
+                else TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
                 return View(kategori);
             }
          
         }
         public async Task<ActionResult> AdminKateEdit(int? id)
         {
-            if (Session["admin"] == null)
+            try
             {
+                if (Session["admin"] == null)
+                {
 
-                return HttpNotFound();
+                    return HttpNotFound();
+                }
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                kategori kategori = await dbo.kategori.FindAsync(id);
+                if (kategori == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.UstKategoriListesi = new SelectList(dbo.ust_kategori, "u_kate_id", "u_kate_adi");
+                return View(kategori);
             }
-            if (id == null)
+            catch(Exception)
             {
-                return HttpNotFound();
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return RedirectToAction("Index","Admin");
             }
-            kategori kategori = await dbo.kategori.FindAsync(id);
-            if (kategori == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.UstKategoriListesi = new SelectList(dbo.ust_kategori, "u_kate_id", "u_kate_adi");
-            return View(kategori);
+            
         }
         [HttpPost]
         public async Task<ActionResult> AdminKateEdit(kategori kategori)
@@ -334,7 +383,7 @@ namespace BiliBilisim_Proje.Controllers
             {
                 string msj = error.GetBaseException().Message;
                 if (msj.Contains("IX_kategori")) ModelState.AddModelError("kate_adi", "Bu kategori zaten mevcut");
-                else TempData["KayitBasarili"] = "Bilinmeyen Bİr Hata Oluştu";
+                else ModelState.AddModelError("kate_adi", "Bilinmeyen bir hata oluştu");
                 return View(kategori);
             }
            
@@ -343,20 +392,31 @@ namespace BiliBilisim_Proje.Controllers
         }
         public async Task<ActionResult> AdminKateDelete(int? id)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            if (id == null)
+            try
             {
-                return HttpNotFound();
+                if (Session["admin"] == null) return HttpNotFound();
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                kategori kategori = await dbo.kategori.FindAsync(id);
+                if (kategori == null)
+                {
+                    return HttpNotFound();
+                }
+                dbo.kategori.Remove(kategori);
+                await dbo.SaveChangesAsync();
+                TempData["KayitBasarili"] = "Kategori Başarıyla Silindi.";
+                return RedirectToAction("KategoriListele", "Admin");
             }
-            kategori kategori = await dbo.kategori.FindAsync(id);
-            if (kategori == null)
+            catch(Exception error)
             {
-                return HttpNotFound();
+                string msj = error.GetBaseException().Message;
+                if (msj.Contains("FK_urunler_kategori")) TempData["KayitBasarili"] = "Bu kategoriye ait ürünler mevcut.Kategori silinemedi."; 
+                else ModelState.AddModelError("kate_adi", "Bilinmeyen bir hata oluştu");
+                return RedirectToAction("AdminKateEdit","Admin", new { id });
             }
-            dbo.kategori.Remove(kategori);
-            await dbo.SaveChangesAsync();
-            TempData["KayitBasarili"] = "Kategori Başarıyla Silindi.";
-            return RedirectToAction("KategoriListele", "Admin");
+          
         }
         //----------------------------------------------Siparişler Bölümü--------------------------------------------------------------------
         public ActionResult SiparisListele(int? sayfa)
@@ -366,13 +426,243 @@ namespace BiliBilisim_Proje.Controllers
             var siparisler = dbo.siparisler.GroupBy(x => x.uyeler.kuladi).OrderBy(x => x.Key);
             return View(siparisler.ToPagedList(sayfa_no, 1));
         }
+       
+        public async Task<ActionResult> AdminSipEdit(int? id)
+        {
+            if (Session["admin"] == null)
+            {
+
+                return HttpNotFound();
+            }
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            siparisler siparisler = await dbo.siparisler.FindAsync(id);
+            if (siparisler == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.uye_id = new SelectList(dbo.uyeler, "uye_id", "ad_soyad");
+            ViewBag.urun_id = new SelectList(dbo.urunler, "urun_id", "urun_adi");
+            return View(siparisler);
+        }
+        [HttpPost]
+        public async Task<ActionResult> AdminSipEdit(siparisler siparisler)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (siparisler == null) return HttpNotFound();
+                    dbo.Entry(siparisler).State = EntityState.Modified;
+                    await dbo.SaveChangesAsync();
+                    TempData["KayitBasarili"] = "Sipariş Başarıyla Güncellendi.";
+                    return RedirectToAction("KategoriListele", "Admin");
+                }
+                ViewBag.uye_id = new SelectList(dbo.uyeler, "uye_id", "ad_soyad");
+                ViewBag.urun_id = new SelectList(dbo.urunler, "urun_id", "urun_adi");
+                return View(siparisler);
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return View(siparisler);
+            }
+           
+
+
+        }
+        public async Task<ActionResult> AdminSipDelete(int? id)
+        {
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                siparisler siparisler = await dbo.siparisler.FindAsync(id);
+                if (siparisler == null)
+                {
+                    return HttpNotFound();
+                }
+                dbo.siparisler.Remove(siparisler);
+                await dbo.SaveChangesAsync();
+                TempData["KayitBasarili"] = "Sipariş Başarıyla Silindi.";
+                return RedirectToAction("KategoriListele", "Admin");
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return RedirectToAction("AdminSipEdit", "Admin", new { id });
+            }
+
+        }
         //----------------------------------------------Ürünler Bölümü-----------------------------------------------------------------------
         public ActionResult UrunListele(int? sayfa)
         {
             if (Session["admin"] == null) return HttpNotFound();
             int sayfa_no = sayfa ?? 1;
-            var urunler = dbo.urunler.GroupBy(x => x.kategori.kate_adi).OrderBy(x => x.Key).ToPagedList(sayfa_no, 1);
+            var urunler = dbo.urunler
+                             .Include(x => x.kategori)
+                             .ToList()
+                             .GroupBy(x => x.kategori != null ? x.kategori.kate_adi : "Kategorisiz")
+                             .OrderBy(x => x.Key)
+                             .ToPagedList(sayfa_no, 1);
+
             return View(urunler);
         }
+        public ActionResult AdminUrunCreate()
+        {
+            try
+            {
+                if (Session["admin"] == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.KategoriListesi = new SelectList(dbo.kategori, "kate_no", "kate_adi");
+                return View(new urunler());
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return RedirectToAction("UrunListele", "Admin");
+            }
+            
+        }
+        [HttpPost]
+        public async Task<ActionResult> AdminUrunCreate(urunler urunler, HttpPostedFileBase dosya_adi)
+        {
+            if (Session["admin"] == null) return HttpNotFound();
+            if (dosya_adi != null && dosya_adi.ContentLength > 0)
+            {
+                string uzanti = Path.GetExtension(dosya_adi.FileName).ToLower();
+                if (uzanti != ".png" && uzanti != ".jpeg" && uzanti != ".jpg")
+                {
+                    ModelState.AddModelError("fotolar", "Sadece .png, .jpg veya .jpeg formatında dosya yükleyebilirsiniz.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("fotolar", "Lütfen bir ürün görseli seçiniz.");
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    int yeni_id = dbo.urunler.Any() ? dbo.urunler.Max(x => x.urun_id) + 1 : 1;
+                    string resim_adi = yeni_id + "_" + Path.GetFileName(dosya_adi.FileName);
+                    string klasorYolu = Server.MapPath("~/Content/fotolar/");
+
+                    if (!Directory.Exists(klasorYolu)) Directory.CreateDirectory(klasorYolu);
+
+                    dosya_adi.SaveAs(Path.Combine(klasorYolu, resim_adi));
+                    urunler.fotolar = resim_adi;
+
+                    dbo.urunler.Add(urunler);
+                    await dbo.SaveChangesAsync();
+
+                    TempData["KayitBasarili"] = "Ürün Başarıyla Kaydedildi";
+                    return RedirectToAction("Index", "Admin");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Veritabanı kayıt hatası oluştu.");
+                }
+            }
+            ViewBag.KategoriListesi = new SelectList(dbo.kategori.ToList(), "kate_no", "kate_adi", urunler.kate_no);
+            return View(urunler);
+        }
+        public async Task<ActionResult> AdminUrunEdit(int? id)
+        {
+            if (Session["admin"] == null) return HttpNotFound();
+            if (id == null) return HttpNotFound();
+
+            urunler urun = await dbo.urunler.FindAsync(id);
+            if (urun == null) return HttpNotFound();
+
+            ViewBag.KategoriListesi = new SelectList(dbo.kategori.ToList(), "kate_no", "kate_adi", urun.kate_no);
+            return View(urun);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AdminUrunEdit(urunler urunler, HttpPostedFileBase dosya_adi)
+        {
+            if (Session["admin"] == null) return HttpNotFound();
+
+            if (ModelState.IsValid)
+            {
+                if (dosya_adi != null && dosya_adi.ContentLength > 0)
+                {
+                    string uzanti = Path.GetExtension(dosya_adi.FileName).ToLower();
+                    if (uzanti == ".png" || uzanti == ".jpeg" || uzanti == ".jpg")
+                    {
+                        string resim_adi = urunler.urun_id + Path.GetFileName(dosya_adi.FileName);
+                        string klasorYolu = Server.MapPath("~/Content/fotolar/");
+
+                        if (!Directory.Exists(klasorYolu)) Directory.CreateDirectory(klasorYolu);
+
+                        dosya_adi.SaveAs(Path.Combine(klasorYolu, resim_adi));
+                        urunler.fotolar = resim_adi;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("fotolar", "Sadece .png, .jpg veya .jpeg formatında dosya yükleyebilirsiniz.");
+                        ViewBag.KategoriListesi = new SelectList(dbo.kategori.ToList(), "kate_no", "kate_adi", urunler.kate_no);
+                        return View(urunler);
+                    }
+                }
+                else
+                {
+                    var eskiUrun = await dbo.urunler.AsNoTracking().FirstOrDefaultAsync(x => x.urun_id == urunler.urun_id);
+                    if (eskiUrun != null)
+                    {
+                        urunler.fotolar = eskiUrun.fotolar;
+                    }
+                }
+
+                dbo.Entry(urunler).State = EntityState.Modified;
+                await dbo.SaveChangesAsync();
+
+                TempData["KayitBasarili"] = "Ürün Başarıyla Güncellendi.";
+                return RedirectToAction("UrunListele", "Admin");
+            }
+
+            ViewBag.KategoriListesi = new SelectList(dbo.kategori.ToList(), "kate_no", "kate_adi", urunler.kate_no);
+            return View(urunler);
+        }
+        public async Task<ActionResult> AdminUrunDelete(int? id)
+        {
+            if (Session["admin"] == null) return HttpNotFound();
+            if (id == null) return HttpNotFound();
+
+            urunler urun = await dbo.urunler.FindAsync(id);
+            if (urun == null) return HttpNotFound();
+
+            try
+            {
+                // Eğer ürünün bir fotoğrafı varsa sunucudan fiziksel olarak siliyoruz
+                if (!string.IsNullOrEmpty(urun.fotolar))
+                {
+                    string tamYol = Server.MapPath("~/Content/fotolar/" + urun.fotolar);
+                    if (System.IO.File.Exists(tamYol))
+                    {
+                        System.IO.File.Delete(tamYol);
+                    }
+                }
+
+                dbo.urunler.Remove(urun);
+                await dbo.SaveChangesAsync();
+                TempData["KayitBasarili"] = "Ürün ve görseli başarıyla silindi.";
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Ürün silinirken bir hata oluştu (İlişkisel kayıt olabilir).";
+            }
+
+            return RedirectToAction("UrunListele", "Admin");
+        }
     }
+   
 }
