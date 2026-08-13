@@ -246,6 +246,9 @@
         <section class="product-area li-laptop-product Special-product pt-0 pb-45">
             <div class="container">
                 <!--Render Body başlangıcı-->
+                @if (TempData["StokHatasi"] != null)
+                {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"> @TempData["StokHatasi"]</div>}
                 @RenderBody()
 
             </div>
@@ -553,7 +556,7 @@
     @if (TempData["KayitBasarili"] != null)
     {
 <script>
-        // Sayfa yüklendiğinde TempData doluysa ekrana alert basar
+        
         alert('@Html.Raw(TempData["KayitBasarili"])');
 </script>
     }

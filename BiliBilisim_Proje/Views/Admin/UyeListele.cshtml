@@ -1,0 +1,148 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<BiliBilisim_Proje.Models.uyeler>
+
+@{
+    ViewBag.Title = "Üye Listesi";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@Styles.Render("~/Content/css")
+<style>
+    /* PagedList Bootstrap 5 Uyumluluk CSS'i */
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        border-radius: 0.25rem;
+    }
+
+        .pagination li a,
+        .pagination li span {
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            color: #0d6efd;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            text-decoration: none;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+        }
+
+        .pagination li.active span {
+            z-index: 3;
+            color: #fff;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        .pagination li.disabled span {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
+        }
+
+        .pagination li:hover a {
+            z-index: 2;
+            color: #0a58ca;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .pagination li:first-child a,
+        .pagination li:first-child span {
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .pagination li:last-child a,
+        .pagination li:last-child span {
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+        }
+</style>
+<div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+    <h4 class="m-0"><i class="fas fa-users text-primary me-2"></i>Üye Yönetimi</h4>
+    <a href="@Url.Action("UyeEkle")" class="btn btn-success btn-sm">
+        <i class="fas fa-plus"></i> Yeni Üye Ekle
+    </a>
+</div>
+
+<div class="table-responsive shadow-sm">
+    <table class="table table-bordered table-hover align-middle bg-white">
+        <thead class="table-light">
+            <tr>
+                <th>Kullanıcı Adı</th>
+                <th>Şifre</th>
+                <th>Ad Soyad</th>
+                <th>Doğum Tarihi</th>
+                <th class="text-center">Cinsiyet</th>
+                <th>İl</th>
+                <th>Adres</th>
+                <th>Email</th>
+                <th class="text-center">Bayi Durumu</th>
+                <th class="text-center">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.kuladi</strong></td>
+                    <td><span class="text-muted">@item.sifre</span></td>
+                    <td>@item.ad_soyad</td>
+                    <td>@item.dog_tar.ToShortDateString()</td>
+                    <td class="text-center">
+                        @if (item.cinsiyet)
+                        {
+                            <span class="badge bg-danger"><i class="fas fa-venus"></i> Kadın</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary"><i class="fas fa-mars"></i> Erkek</span>
+                        }
+                    </td>
+                    <td>@item.sehirler.il</td>
+                    <td><small>@item.adres</small></td>
+                    <td>@item.email</td>
+                    <td class="text-center">
+                        @if (item.vip_basvuru && !item.vip)
+                        {
+                            <span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> Bekliyor</span>
+                        }
+                        else if (item.vip)
+                        {
+                            <span class="badge bg-success"><i class="fas fa-check-circle"></i> Onaylandı</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Yapılmadı</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <a href="@Url.Action("AdminUyeEdit", new { id = item.uye_id })" class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="@Url.Action("AdminUyeDelete", new { id = item.uye_id })" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Sayfalama (Pagination) -->
+<div class="mt-4 d-flex justify-content-center">
+    @Html.PagedListPager(Model, sayfa => Url.Action("UyeListele", new { sayfa }), new PagedListRenderOptions
+    {
+        Display = PagedListDisplayMode.IfNeeded,
+        UlElementClasses = new[] { "pagination", "pagination-sm", "mb-0" },
+        LiElementClasses = new[] { "page-item" },
+    })
+</div>

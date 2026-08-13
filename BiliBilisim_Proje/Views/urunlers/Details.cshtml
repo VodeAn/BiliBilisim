@@ -56,14 +56,28 @@
                 @{var uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
                     if (uye != null && uye.vip)
                     {
-                        <div class="single-add-to-cart">
-                            <form action="#" class="cart-quantity">
-                                <button class="add-to-cart" type="submit">Sepete ekle</button>
-                            </form>
-                        </div>
+                       
+
+                                <div class="single-add-to-cart">
+                                    @if (Model.stok > 0)
+                                    {
+                                    <form action="@Url.Action("sepete_ekle", "sepet")" class="cart-quantity">
+                                        <button class="add-to-cart" type="submit">Sepete ekle</button>
+                                    </form>
+                                    }
+                                    else
+                                    {
+
+                                        <b style="color:#fed700";>Stok Tükendi</b>
+                                    }
+                                </div>
+
+
+
+
                     }
 
-                }
+                    }
 
 
 

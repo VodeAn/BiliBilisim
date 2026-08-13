@@ -32,6 +32,14 @@ namespace MVC5_E_Ticaret.Controllers
                         uye_id = ((uyeler)Session["uye"]).uye_id
                     };
                     db.siparisler.Add(siparisler);
+                    var satinalinan = db.urunler.Find(item.urun.urun_id);
+                    if( satinalinan != null)
+                    {
+                        satinalinan.stok -= item.adet;
+                        satinalinan.satis_adet += Convert.ToInt16(item.adet);
+                        if (satinalinan.stok < 0) satinalinan.stok = 0;
+                    }
+                    
                     db.SaveChanges();
                 }
 
@@ -73,7 +81,16 @@ namespace MVC5_E_Ticaret.Controllers
         public ActionResult urunu_cikar(int id)
         {
             if (Session["uye"] == null || !((uyeler)Session["uye"]).vip) return RedirectToAction("error", "home");
-            db.siparisler.Remove(db.siparisler.Find(id));
+            var seciliurun = db.siparisler.Find(id);
+           
+            var iadeurun = db.urunler.Find(seciliurun.urun_id);
+            if (iadeurun != null)
+            {
+                iadeurun.stok += seciliurun.adet;
+                iadeurun.satis_adet -= Convert.ToInt16(seciliurun.adet);
+                if (iadeurun.satis_adet < 0) iadeurun.satis_adet = 0;
+            }
+             db.siparisler.Remove(seciliurun);
             db.SaveChanges();
             string msj = "Ürün Başarıyla İade Edildi.Ana Sayfaya Yönlendiriliyorsunuz...";
             return RedirectToAction("iptal_sayfasi","siparisler",new {msj });
@@ -81,10 +98,25 @@ namespace MVC5_E_Ticaret.Controllers
         public ActionResult sip_iptal(int id)
         {
             if (Session["uye"] == null || !((uyeler)Session["uye"]).vip) return RedirectToAction("error", "home");
-            db.siparisler.RemoveRange(db.siparisler.Where(x => x.sip_no == id));
+            var iptalurun = db.siparisler.Where(x => x.sip_no == id).ToList();
+            foreach (var item in iptalurun)
+            {
+                if(db.urunler.Any(x=>x.urun_id == item.urun_id))
+                {
+                    var urun = db.urunler.Find(item.urun_id);
+                    if (urun != null)
+                    {
+                        urun.stok += item.adet;
+                        urun.satis_adet -= Convert.ToInt16(item.adet);
+                        if (urun.satis_adet < 0) urun.satis_adet = 0;
+                    }
+                        
+                }
+            }
+            db.siparisler.RemoveRange(iptalurun);
             db.SaveChanges();
             string msj = "Sipariş Başarıyla İptal Edildi.Ana Sayfaya Yönlendiriliyorsunuz.";
-            return RedirectToAction("iptal sayfasi", "siparisler", new { msj });
+            return RedirectToAction("iptal_sayfasi", "siparisler", new { msj });
         }
         public ActionResult admin_siparis_raporu(int? uyeid,DateTime? tarih1,DateTime? tarih2)
         {
