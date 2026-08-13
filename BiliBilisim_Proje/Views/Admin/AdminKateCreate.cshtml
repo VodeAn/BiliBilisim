@@ -1,0 +1,49 @@
+﻿@model BiliBilisim_Proje.Models.kategori
+@{
+    ViewBag.Title = "Yeni Kategori Ekle";
+    Layout = "~/Views/Shared/_Admin.cshtml"; 
+}
+
+<div class="card shadow-sm border-0 col-md-8 mx-auto">
+    <div class="card-header bg-white border-bottom pb-2 pt-3">
+        <h5 class="text-primary mb-0"><i class="fas fa-folder-plus me-2"></i>Yeni Kategori Ekle</h5>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("AdminKateCreate", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+            <div class="row">
+                <div class="col-12 mb-3">
+                    @Html.LabelFor(m => m.kate_adi, "Kategori Adı", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(m => m.kate_adi, new { @class = "form-control", placeholder = "Kategori adını giriniz..." })
+                    @Html.ValidationMessageFor(m => m.kate_adi, "", new { @class = "text-danger small" })
+                </div>
+                <div class="col-12 mb-4">
+                    <label class="form-label fw-bold">Üst Kategori</label>
+
+                    <select name="u_kate_id" class="form-select">
+                        <option value="">Üst Kategori Seçiniz</option>
+
+                        @if (ViewBag.UstKategoriListesi != null)
+                        {
+                            foreach (var item in (SelectList)ViewBag.UstKategoriListesi)
+                            {
+                <option value="@item.Value" @(Model != null && Model.u_kate_id.ToString() == item.Value ? "selected" : "")>
+                    @item.Text
+                </option>}
+                                }
+                    </select>
+
+                    @Html.ValidationMessageFor(m => m.u_kate_id, "", new { @class = "text-danger small" })
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a href="@Url.Action("KategoriListele", "Admin")" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> Geri Dön</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Kaydet</button>
+            </div>
+        }
+    </div>
+</div>

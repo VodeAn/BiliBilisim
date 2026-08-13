@@ -11,7 +11,8 @@ namespace BiliBilisim_Proje.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class uyeler
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,17 +20,28 @@ namespace BiliBilisim_Proje.Models
         {
             this.siparisler = new HashSet<siparisler>();
         }
-    
+        
+       [Required]
         public int uye_id { get; set; }
+        [Required(ErrorMessage ="Kullanýcý Adý Giriþi Zorunludur")]
         public string kuladi { get; set; }
+        [Required(ErrorMessage = "Þifre Giriþi Zorunludur")][MinLength(8,ErrorMessage ="Þifre en az 8 karakter olmalýdýr")]
         public string sifre { get; set; }
+        [Required(ErrorMessage = "Ad Soyad Giriþi Zorunludur")]
         public string ad_soyad { get; set; }
+        [Required(ErrorMessage = "Doðum Tarihi Giriþi Zorunludur")]
         public System.DateTime dog_tar { get; set; }
+        [Required(ErrorMessage = "Cinsiyet Belirtmek Zorunludur")]
         public bool cinsiyet { get; set; }
+        [Required(ErrorMessage = "Bayi Üyeliði Seçimi Zorunludur")]
         public bool vip { get; set; }
+        [Required(ErrorMessage = "Adres Giriþi Zorunludur")]
         public string adres { get; set; }
+        [Required(ErrorMessage = "Email Giriþi Zorunludur")][EmailAddress(ErrorMessage ="Yanlýþ Formatta Mail Girdiniz")]
         public string email { get; set; }
+        [Required(ErrorMessage = "Ýl Seçimi Zorunludur")]
         public int plaka { get; set; }
+        [Required(ErrorMessage = "Bayi Baþvuru Seçimi Zorunludur")]
         public bool vip_basvuru { get; set; }
     
         public virtual sehirler sehirler { get; set; }

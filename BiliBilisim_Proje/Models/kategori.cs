@@ -11,7 +11,8 @@ namespace BiliBilisim_Proje.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class kategori
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,9 +20,11 @@ namespace BiliBilisim_Proje.Models
         {
             this.urunler = new HashSet<urunler>();
         }
-    
+        [Required]
         public int kate_no { get; set; }
+        [Required(ErrorMessage = "Kategori Adý Giriþi Zorunludur")]
         public string kate_adi { get; set; }
+        [Required(ErrorMessage = "Üst Kategori Seçimi Zorunludur")]
         public Nullable<int> u_kate_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
