@@ -161,14 +161,21 @@ namespace BiliBilisim_Proje.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> sifre_unut(string kul_veri, string sifre)
+        public async Task<ActionResult> sifre_unut(string kul_veri, string sifre,string sifreon)
         {
-            // FirstOrDefaultAsync kullanarak tek bir üye nesnesi getiriyoruz
             var degis_uye = await db.uyeler.FirstOrDefaultAsync(x => x.kuladi == kul_veri || x.email == kul_veri);
-
-            if (degis_uye != null)
+            if (sifre.Length<8)
             {
-                // Modelindeki şifre alan adın 'sifre' ise (veya 'sifreler'):
+                ViewBag.sifrehata = "Şifre en az 8 karakter olmalı!";
+            }
+            else
+            {
+            if (sifre != sifreon)
+            {
+                        ViewBag.sifreuyus = "Şifreler Birbiri ile uyuşmuyor";
+            }
+            else if (degis_uye != null)
+            {
                 degis_uye.sifre = sifre;
 
                 db.Entry(degis_uye).State = EntityState.Modified;
@@ -180,6 +187,7 @@ namespace BiliBilisim_Proje.Controllers
             {
                 ViewBag.kulhata = "Kullanıcı adı veya e-mail bulunamadı";
             }
+         }
 
             return View();
         }

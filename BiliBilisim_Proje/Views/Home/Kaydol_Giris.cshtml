@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-md-12 col-12 mb-20">
                                 <label>Kullanıcı Adı</label>
-                                <input class="mb-0" name="kuladilar" type="text" placeholder="Kullanıcı Adı">
+                                <input class="mb-0" name="kuladilar" type="text" value="@ViewBag.KullaniciAd" placeholder="Kullanıcı Adı">
                                 @Html.ValidationMessage("kuladilar", "", new { @class = "text-danger" })
                             </div>
                             <div class="col-12 mb-20">
@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
-                                    <input type="checkbox" name="hatirla">
+                                    <input type="checkbox" name="hatirla" id="hatirla" value="true" @(ViewBag.Hatirla == true ? "checked" : "")>
                                     <label for="hatirla">Beni Hatırla</label>
                                 </div>
                             </div>

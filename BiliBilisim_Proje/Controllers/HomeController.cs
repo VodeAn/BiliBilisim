@@ -32,46 +32,6 @@ namespace BiliBilisim_Proje.Controllers
         {
             return View();
         }
-        //[HttpPost]
-        //public ActionResult Contact(string customerName, string customerEmail, string contactSubject, string contactMessage)
-        //{
-        //        try
-        //        {
-        //            MailMessage mail = new MailMessage();
-
-        //            // 1. Gönderici Hesabı (Yeni Gmail Adresin)
-        //            mail.From = new MailAddress("bilibilisim92@gmail.com", "BİLİBİLİŞİM İletişim Formu");
-
-        //            // 2. Alıcı Hesabı (Mesajların düşeceği Outlook Adresin)
-        //            mail.To.Add("bilibilisimadmn@outlook.com");
-
-        //            mail.Subject = contactSubject;
-        //            mail.IsBodyHtml = true;
-
-        //            mail.Body = $"<h3>Yeni İletişim Formu Mesajı</h3>" +
-        //                        $"<b>Gönderen:</b> {customerName} <br/>" +
-        //                        $"<b>Email:</b> {customerEmail} <br/><br/>" +
-        //                        $"<b>Mesaj:</b> <br/> {contactMessage}";
-
-        //            // Gmail SMTP Sunucu Ayarları
-        //            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-
-        //            smtp.UseDefaultCredentials = false;
-        //            // Gmail adresin ve 16 haneli Uygulama Şifren
-        //            smtp.Credentials = new NetworkCredential("bilibilisim92@gmail.com", "lfhc gmgf rcub jbnh");
-        //            smtp.EnableSsl = true;
-
-        //            smtp.Send(mail);
-
-        //            ViewBag.msj = "Mesajınız başarıyla gönderildi!";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //        ViewBag.msj = "Mesaj gönderilirken bir hata oluştu! "+ex.Message;
-        //        }
-
-        //    return View();
-        //}
 
         [HttpPost]
         public async Task<ActionResult> MailGonder(string customerName, string customerEmail, string contactSubject, string contactMessage)
@@ -106,17 +66,23 @@ namespace BiliBilisim_Proje.Controllers
 
         public ActionResult Kaydol_Giris(string msj)
         {
+            HttpCookie hatirlaCookie = Request.Cookies["BeniHatirla"];
+
+            if (hatirlaCookie != null)
+            {
+                ViewBag.KullaniciAd = hatirlaCookie.Values["KulAdi"];
+                ViewBag.Hatirla = true;
+            }
             ViewBag.msj = msj;
             ViewBag.plaka = new SelectList(dbo.sehirler,"plaka","il");
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Giris(string kuladilar,string sifreler)
+        public async Task<ActionResult> Giris(string kuladilar, string sifreler, bool? hatirla)
         {
             if (string.IsNullOrWhiteSpace(kuladilar))
             {
-                
                 ModelState.AddModelError("kuladilar", "Lütfen kullanıcı adınızı giriniz.");
             }
 
@@ -125,29 +91,43 @@ namespace BiliBilisim_Proje.Controllers
                 ModelState.AddModelError("sifreler", "Lütfen şifrenizi giriniz.");
             }
 
-
             if (ModelState.IsValid)
             {
-                string msj = "";
                 var uye = await dbo.uyeler.FirstOrDefaultAsync(x => x.kuladi == kuladilar && x.sifre == sifreler);
-                if ( uye != null)
+                if (uye != null)
                 {
+                    // --- BENİ HATIRLA İŞLEMLERİ ---
+                    HttpCookie cookie = new HttpCookie("BeniHatirla");
+
+                    if (hatirla == true)
+                    {
+                        cookie.Values["KulAdi"] = kuladilar;
+                        cookie.Expires = DateTime.Now.AddDays(30);
+                    }
+                    else
+                    {
+                        cookie.Expires = DateTime.Now.AddDays(-1);
+                    }
+
+                    Response.Cookies.Add(cookie);
+
+
+                    // ------------------------------------------------------
+
                     Session["uye"] = uye;
-                    TempData["KayitBasarili"] = "Giriş Başarılı,Ana Sayfaya Yönlendiriliyorsunuz.";
+                    TempData["KayitBasarili"] = "Giriş Başarılı, Ana Sayfaya Yönlendiriliyorsunuz.";
                     return RedirectToAction("Index", "Home", null);
                 }
                 else
                 {
                     ModelState.AddModelError("GirisHata", "Kullanıcı Adı ya da Şifre Yanlış!");
-
                 }
-
             }
+
             ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il");
             return View("Kaydol_Giris");
-
-
         }
+
         [HttpPost]
         public async Task<ActionResult> Kaydol(uyeler uyeler, string confirm)
         {
