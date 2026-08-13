@@ -74,11 +74,13 @@
                                                 var uye = Session["uye"] as BiliBilisim_Proje.Models.uyeler;
                                                 if (uye != null && uye.vip)
                                                 {
-
-
                                                     <div class="add-actions">
                                                         <ul class="add-actions-link">
-                                                            <li class="add-cart active"><a href="@Url.Action("sepete_ekle","sepet",new {id = item.urun_id })">Sepete Ekle</a></li>
+                                                            @if (item.stok > 0)
+                                                        {
+                                                            <li class="add-cart active"><a href="@Url.Action("sepete_ekle", "sepet", new { id = item.urun_id })">Sepete Ekle</a></li>
+                                                        }
+                                                        else { <b style="color:#fed700" ;>Stok Tükendi</b> }
                                                             <li>
                                                                 <a class="links-details"
                                                                    href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"
@@ -134,7 +136,11 @@
                                                 {
                                                     <div class="add-actions">
                                                         <ul class="add-actions-link">
-                                                            <li class="add-cart active"><a href="@Url.Action("sepete_ekle", "sepet",new {id = item.urun_id })">Sepete Ekle</a></li>
+                                                            @if (item.stok > 0)
+                                                        {
+                                                            <li class="add-cart active"><a href="@Url.Action("sepete_ekle", "sepet", new { id = item.urun_id })">Sepete Ekle</a></li>
+                                                        }
+                                                        else { <b style="color:#fed700" ;>Stok Tükendi</b> }
                                                             <li>
                                                                 <a class="links-details"
                                                                    href="@Url.Action("favorilere_ekle", "favoriler", new { id = item.urun_id })"

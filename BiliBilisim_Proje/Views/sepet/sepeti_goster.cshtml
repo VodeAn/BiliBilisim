@@ -35,7 +35,7 @@
                                         <td class="quantity">
                                             <label>Quantity</label>
                                             <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" data-id="@item.urun.urun_id" value="@item.adet" type="text">
+                                                <input class="cart-plus-minus-box" data-id="@item.urun.urun_id" value="@item.adet" max="@item.urun.stok" type="text" readonly="readonly">
                                                 <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
                                                 <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                             </div>
@@ -62,27 +62,37 @@
         </div>
     </div>
 </div>
-    @section Scripts{
-
-        <script>
+@section Scripts {
+    <script>
         $(document).ready(function () {
 
+            // Fiyat temizleme fonksiyonumuz (₺ ve noktaları ayıklar)
             function parseFiyat(fiyatMetin) {
                 var temiz = fiyatMetin.replace('₺', '').replace(/\./g, '').replace(',', '.').trim();
                 return parseFloat(temiz) || 0;
             }
 
-            // DİKKAT: .off('click') ekleyerek temanın varsayılan +1 kodunu iptal ettik
+            // Artı ve Eksi butonlarına tıklanma olayı
             $('.qtybutton').off('click').on('click', function (e) {
                 e.preventDefault();
 
                 var $button = $(this);
                 var $input = $button.parent().find('.cart-plus-minus-box');
                 var oldValue = parseFloat($input.val()) || 1;
+
+                // HTML'e eklediğimiz max değerini okuyoruz
+                var maxStok = parseFloat($input.attr('max'));
                 var newVal;
 
+                // --- ARTI/EKSİ VE STOK LİMİTİ KONTROLÜ ---
                 if ($button.hasClass('inc')) {
-                    newVal = oldValue + 1;
+                    if (oldValue < maxStok) {
+                        newVal = oldValue + 1;
+                    } else {
+                        // Max stoğa ulaşıldıysa uyarı ver ve işlemi durdur
+                        alert("Bu üründen stokta sadece " + maxStok + " adet var, daha fazla ekleyemezsiniz.");
+                        return;
+                    }
                 } else {
                     if (oldValue > 1) {
                         newVal = oldValue - 1;
@@ -91,43 +101,45 @@
                     }
                 }
 
+                // Yeni değeri kutuya yaz
                 $input.val(newVal);
-
                 var urunId = $input.data("id");
 
-           
-            $.ajax({
-                url: '@Url.Action("AdetGuncelle", "Sepet")', 
-                type: 'POST',
-                data: { id: urunId, adet: newVal }, 
-                success: function (response) {
-                    
-                    console.log("Ürün adedi veritabanında " + newVal + " olarak güncellendi.");
-                },
-                error: function () {
-                    alert("Adet güncellenirken arka planda bir hata oluştu!");
-                }
-            });
+                // --- AJAX İŞLEMİ (Veritabanı ve Session Güncellemesi) ---
+                $.ajax({
+                    url: '@Url.Action("AdetGuncelle", "Sepet")',
+                    type: 'POST',
+                    data: { id: urunId, adet: newVal },
+                    success: function (response) {
+                        if (response.success) {
+                            // Başarılıysa HTML tablosundaki fiyatları anlık güncelle
+                            var $row = $button.closest('tr');
+                            var unitPriceText = $row.find('.li-product-price .amount').text();
+                            var unitPrice = parseFiyat(unitPriceText);
+                            var subTotal = unitPrice * newVal;
 
-                var $row = $button.closest('tr');
+                            $row.find('.product-subtotal .amount').text('₺' + subTotal);
 
-                var unitPriceText = $row.find('.li-product-price .amount').text();
-                var unitPrice = parseFiyat(unitPriceText);
+                            var grandTotal = 0;
+                            $('.product-subtotal .amount').each(function () {
+                                var rowTotalText = $(this).text();
+                                var rowTotal = parseFiyat(rowTotalText);
+                                grandTotal += rowTotal;
+                            });
 
-                var subTotal = unitPrice * newVal;
-
-                $row.find('.product-subtotal .amount').text('₺' + subTotal);
-
-                var grandTotal = 0;
-
-                $('.product-subtotal .amount').each(function () {
-                    var rowTotalText = $(this).text();
-                    var rowTotal = parseFiyat(rowTotalText);
-                    grandTotal += rowTotal;
+                            $('.cart-page-total ul li span').text('₺' + grandTotal);
+                        } else {
+                            // Controller'dan stok yetersiz hatası dönerse
+                            alert(response.message);
+                            $input.val(response.maksStok || oldValue);
+                        }
+                    },
+                    error: function () {
+                        alert("Adet güncellenirken arka planda bir hata oluştu!");
+                        $input.val(oldValue); // Hata anında rakamı eski haline geri al
+                    }
                 });
-
-                $('.cart-page-total ul li span').text('₺' + grandTotal);
             });
         });
-        </script>
+    </script>
 }

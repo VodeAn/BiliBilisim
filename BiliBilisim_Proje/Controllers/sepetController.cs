@@ -33,22 +33,35 @@ namespace BiliBilisim_Proje.Controllers
         [HttpPost]
         public JsonResult AdetGuncelle(int id, int adet)
         {
-            if (Session["sepet"] != null || ((uyeler)Session["uye"]).vip)
+            if (Session["uye"] != null || ((uyeler)Session["uye"]).vip)
             {
-                var sepet = (BiliBilisim_Proje.Models.Sepet)Session["sepet"];
-                var guncellenecekUrun = sepet.Sepetim.FirstOrDefault(x => x.urun.urun_id == id);
+                var urun = db.urunler.Find(id);
 
-                if (guncellenecekUrun != null)
+                if (urun != null)
                 {
-                    guncellenecekUrun.adet = adet;
-                    Session["sepet"] = sepet;
+                    if (adet >= urun.stok)
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = $"Bu üründen en fazla {urun.stok} adet alabilirsiniz.",
+                            maksStok = urun.stok 
+                        });
+                    }
+                    var sepet = sepeti_getir();
+                    var guncellenecekUrun = sepet.Sepetim.FirstOrDefault(x => x.urun.urun_id == id);
 
-                    return Json(new { success = true });
+                    if (guncellenecekUrun != null)
+                    {
+                        guncellenecekUrun.adet = adet;
+                        Session["sepet"] = sepet;
+
+                        return Json(new { success = true });
+                    }
                 }
-                
             }
 
-            return Json(new { success = false });
+            return Json(new { success = false, message = "Oturum veya ürün hatası." });
         }
 
         public ActionResult sepete_ekle(int? id,int? adet)
@@ -62,7 +75,19 @@ namespace BiliBilisim_Proje.Controllers
             if (adet < 0) return RedirectToAction("error", "home");
             var _adet = adet ?? 0;
             var sepete_eklenecek = db.urunler.FirstOrDefault(x => x.urun_id == id);
-            var urunvarmi = sepeti_getir().Sepetim.FirstOrDefault(x => x.urun == sepete_eklenecek);
+            var sepet = sepeti_getir();
+            var urunvarmi = sepeti_getir().Sepetim.FirstOrDefault(x => x.urun.urun_id == id);
+            int sepettekiMevcutAdet = urunvarmi != null ? urunvarmi.adet : 0;
+            int istenenToplamAdet = sepettekiMevcutAdet + _adet;
+            if (istenenToplamAdet >= sepete_eklenecek.stok)
+            {
+                TempData["StokHatasi"] = $"Maalesef stoklarımızda sadece {sepete_eklenecek.stok} adet {sepete_eklenecek.urun_adi} bulunmaktadır.";
+                if(istenenToplamAdet == 0) TempData["StokHatasi"] = $"Maalesef stoklarımızda  {sepete_eklenecek.urun_adi} bulunmamaktadır.";
+
+                if (Request.UrlReferrer != null)
+                    return Redirect(Request.UrlReferrer.ToString());
+                return RedirectToAction("index", "home");
+            }
             if ( urunvarmi != null)
             {
                 urunvarmi.adet++;

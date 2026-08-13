@@ -1,0 +1,68 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<IGrouping<string, BiliBilisim_Proje.Models.siparisler>>
+
+@{
+    ViewBag.Title = "Sipariş Listesi";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+@Styles.Render("~/Content/css")
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="m-0">Sipariş Yönetimi</h4>
+    @Html.ActionLink("Yeni Sipariş Ekle", "Create", null, new { @class = "btn btn-primary btn-sm" })
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Sipariş No</th>
+                <th>Ürün Adı</th>
+                <th>Adet</th>
+                <th>Satın Alım Tarihi</th>
+                <th class="text-center">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grup in Model)
+            {
+                <tr class="table-dark">
+                    <td colspan="5">
+                        <i class="fas fa-user-circle me-2"></i>
+                        <strong>Üye: @grup.Key</strong>
+                        <span class="text-light ms-2">(@grup.FirstOrDefault().uyeler.ad_soyad)</span>
+                    </td>
+                </tr>
+
+                foreach (var item in grup)
+                {
+                    <tr>
+                        <td><strong>#@item.sip_no</strong></td>
+                        <td>@item.urunler.urun_adi</td>
+                        <td><span class="badge bg-secondary">@item.adet Adet</span></td>
+                        <td>
+
+                            @item.a_tarih.ToShortDateString()
+                        </td>
+                        <td class="text-center">
+                            @Html.ActionLink("Düzenle", "AdminSipEdit", new { id = item.kayit_no }, new { @class = "btn btn-warning btn-sm" })
+                            @Html.ActionLink("Sil", "AdminSipDelete", new { id = item.kayit_no }, new { @class = "btn btn-danger btn-sm" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="mt-4 d-flex justify-content-center">
+    @Html.PagedListPager(Model, sayfa => Url.Action("SiparisListele", new { sayfa }), new PagedListRenderOptions
+    {
+        Display = PagedListDisplayMode.IfNeeded,
+        UlElementClasses = new[] { "pagination", "pagination-sm" },
+        LiElementClasses = new[] { "page-item" }
+    })
+</div>

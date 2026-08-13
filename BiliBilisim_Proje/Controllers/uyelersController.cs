@@ -26,17 +26,12 @@ namespace BiliBilisim_Proje.Controllers
 
    
 
-        // GET: uyelers/Create
         public ActionResult Create()
         {
             if (Session["admin"] == null) return RedirectToAction("error", "home");
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il");
             return View();
         }
-
-        // POST: uyelers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka")] uyeler uyeler)
@@ -53,7 +48,6 @@ namespace BiliBilisim_Proje.Controllers
             return View(uyeler);
         }
 
-        // GET: uyelers/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if(Session["uye"] == null)
@@ -74,8 +68,6 @@ namespace BiliBilisim_Proje.Controllers
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
             return View(uyeler);
         }
-
-        // POST: uyelers/Edit/5
  
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - BİLİBİLİŞİM Yönetim</title>
+    @Styles.Render("~/Content/css")
+    <!-- Bootstrap 5 CSS (Sadelik ve mobil uyum için) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        /* Sol Menü Tasarımı */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #212529;
+        }
+
+            .sidebar .brand {
+                color: #fff;
+                font-size: 1.5rem;
+                font-weight: bold;
+                text-align: center;
+                padding: 20px 0;
+                border-bottom: 1px solid #495057;
+                display: block;
+                text-decoration: none;
+            }
+
+            .sidebar a.nav-link {
+                color: #adb5bd;
+                padding: 15px 20px;
+                font-size: 1.1rem;
+                transition: 0.3s;
+            }
+
+                .sidebar a.nav-link:hover {
+                    color: #fff;
+                    background-color: #343a40;
+                }
+
+                .sidebar a.nav-link i {
+                    width: 30px;
+                }
+            /* Aktif Menü Efekti */
+            .sidebar a.active {
+                color: #fff;
+                background-color: #0d6efd;
+                border-radius: 0 25px 25px 0;
+                margin-right: 15px;
+            }
+
+        /* Sağ İçerik Alanı */
+        .main-content {
+            padding: 0;
+        }
+
+        .top-navbar {
+            background: #fff;
+            padding: 15px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-area {
+            padding: 25px;
+        }
+    </style>
+    <!--PagedList-->
+    <style>
+        .pagination {
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: 0.25rem;
+        }
+
+            .pagination li a,
+            .pagination li span {
+                position: relative;
+                display: block;
+                padding: 0.5rem 0.75rem;
+                margin-left: -1px;
+                color: #0d6efd;
+                background-color: #fff;
+                border: 1px solid #dee2e6;
+                text-decoration: none;
+                transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+            }
+
+            .pagination li.active span,
+            .pagination li.active a {
+                z-index: 3;
+                color: #fff;
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+            }
+
+            .pagination li.disabled span,
+            .pagination li.disabled a {
+                color: #6c757d;
+                pointer-events: none;
+                background-color: #fff;
+                border-color: #dee2e6;
+            }
+
+            .pagination li:hover a {
+                z-index: 2;
+                color: #0a58ca;
+                background-color: #e9ecef;
+                border-color: #dee2e6;
+            }
+
+            .pagination li:first-child a,
+            .pagination li:first-child span {
+                border-top-left-radius: 0.25rem;
+                border-bottom-left-radius: 0.25rem;
+            }
+
+            .pagination li:last-child a,
+            .pagination li:last-child span {
+                border-top-right-radius: 0.25rem;
+                border-bottom-right-radius: 0.25rem;
+            }
+    </style>
+</head>
+<body>
+    <div class="row g-0 m-0 w-100">
+        <!-- SOL MENÜ (Sidebar) -->
+        <div class="sidebar col-md-2 d-none d-md-block">
+            <a href="#" class="brand">BİLİBİLİŞİM</a>
+            <nav class="nav flex-column mt-3">
+                <a class="nav-link active" href="@Url.Action("Index","Admin")"><i class="fas fa-tachometer-alt"></i>Özet</a>
+                <a class="nav-link" href="@Url.Action("UyeListele","Admin")"><i class="fas fa-users"></i> Üyeler</a>
+                <a class="nav-link" href="@Url.Action("UrunListele","Admin")"><i class="fas fa-box"></i> Ürünler</a>
+                <a class="nav-link" href="@Url.Action("KategoriListele","Admin")"><i class="fas fa-list"></i> Kategoriler</a>
+                <a class="nav-link" href="@Url.Action("SiparisListele","Admin")"><i class="fas fa-shopping-cart"></i> Siparişler</a>
+            </nav>
+        </div>
+
+        <!-- SAĞ İÇERİK ALANI -->
+        <div class="main-content col-md-10 col-12 overflow-hidden" style="min-width: 0;">
+            <!-- Üst Bar -->
+            <div class="top-navbar w-100 pe-3">
+                <!-- Sayfa başlığını ViewBag'den otomatik alır -->
+                <h4 class="mb-0 text-dark text-truncate" style="max-width: 70%;" @ViewBag.Title</h4>
+                <a href="@Url.Action("AdminLogout","Admin")" class="btn btn-outline-danger btn-sm flex-shrink-0" onclick="alert('Başarıyla Çıkış Yapıldı')"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+            </div>
+
+            <!-- SAYFALARIN YÜKLENECEĞİ ANA ALAN -->
+            <div class="content-area">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Açılır menüler vs. gerekirse diye) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @if (TempData["KayitBasarili"] != null)
+    {
+        <script>
+
+        alert('@Html.Raw(TempData["KayitBasarili"])');
+        </script>
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mevcut sayfanın URL yolunu al (Örn: /Admin/UyeListele)
+            var currentUrl = window.location.pathname;
+
+            // Menüdeki tüm linkleri seç
+            var navLinks = document.querySelectorAll('.sidebar .nav-link');
+            var isActiveSet = false;
+
+            navLinks.forEach(function (link) {
+                // Her ihtimale karşı tüm active sınıflarını temizle
+                link.classList.remove('active');
+
+                // Linkin href değeri mevcut URL ile eşleşiyorsa active yap
+                if (link.getAttribute('href') === currentUrl) {
+                    link.classList.add('active');
+                    isActiveSet = true;
+                }
+            });
+
+            // Eğer URL kök dizinse (Örn: /Admin) ve hiçbir linkle eşleşmediyse varsayılan olarak ilk linki (Özet) aktif yap
+            if (!isActiveSet && (currentUrl === "/Admin" || currentUrl === "/Admin/")) {
+                navLinks[0].classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
