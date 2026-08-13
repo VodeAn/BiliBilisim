@@ -434,6 +434,10 @@
     <Content Include="Views\Admin\AdminUyeCreate.cshtml" />
     <Content Include="Views\Admin\AdminUyeEdit.cshtml" />
     <Content Include="Views\Admin\AdminKateCreate.cshtml" />
+    <Content Include="Views\Admin\AdminKateEdit.cshtml" />
+    <Content Include="Views\Admin\AdminSipEdit.cshtml" />
+    <Content Include="Views\Admin\AdminUrunCreate.cshtml" />
+    <Content Include="Views\Admin\AdminUrunEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,73 @@
+﻿@model BiliBilisim_Proje.Models.siparisler
+@{
+    ViewBag.Title = "Sipariş Düzenle";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<div class="card shadow-sm border-0 col-md-8 mx-auto">
+    <div class="card-header bg-white border-bottom pb-2 pt-3 d-flex justify-content-between align-items-center">
+        <h5 class="text-warning mb-0"><i class="fas fa-edit me-2"></i>Sipariş Düzenle</h5>
+        <span class="badge bg-secondary">Sipariş ID: @Model.sip_no</span>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("AdminSipEdit", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(m => m.kayit_no)
+
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Siparişi Veren Üye</label>
+                    <select name="uye_id" class="form-select" required>
+                        <option value="">Üye Seçiniz</option>
+                        @if (ViewBag.uye_id != null)
+                        {
+                            foreach (var item in (SelectList)ViewBag.uye_id)
+                            {
+                                <option value="@item.Value" >
+                                    @item.Text
+                                </option>
+                            }
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(m => m.uye_id, "", new { @class = "text-danger small" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Sipariş Edilen Ürün</label>
+                    <select name="urun_id" class="form-select" required>
+                        <option value="">Ürün Seçiniz</option>
+                        @if (ViewBag.urun_id != null)
+                        {
+                            foreach (var item in (SelectList)ViewBag.urun_id)
+                            {
+                                <option value="@item.Value" @(Model != null && Model.urun_id != null && Model.urun_id.ToString() == item.Value ? "selected" : "")>
+                                    @item.Text
+                                </option>
+                            }
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(m => m.urun_id, "", new { @class = "text-danger small" })
+                </div>
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.adet, "Adet", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(m => m.adet, new { @class = "form-control", type = "number", min = "1" })
+                    @Html.ValidationMessageFor(m => m.adet, "", new { @class = "text-danger small" })
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="@Url.Action("AdminSipDelete", "Admin", new { id = Model.kayit_no })" class="btn btn-outline-danger" onclick="return confirm('Bu siparişi iptal etmek/silmek istediğinize emin misiniz?');">
+                    <i class="fas fa-trash-alt me-1"></i> Siparişi Sil
+                </a>
+
+                <div>
+                    <a href="@Url.Action("SiparisListele", "Admin")" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> İptal</a>
+                    <button type="submit" class="btn btn-warning text-dark"><i class="fas fa-sync-alt me-1"></i> Güncelle</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

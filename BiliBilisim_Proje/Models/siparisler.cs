@@ -21,7 +21,8 @@ namespace BiliBilisim_Proje.Models
         public int sip_no { get; set; }
         [Required(ErrorMessage = "Üye Seçimi Zorunludur")]
         public int uye_id { get; set; }
-        [Required(ErrorMessage = "Adet Giriþi Zorunludur")][MinLength(1,ErrorMessage = "Adet En Az 1 Olmalýdýr")]
+        [Required(ErrorMessage = "Adet Giriþi Zorunludur")]
+        [Range(1, 99999999, ErrorMessage = "Ürün Adedi En Az 1 Olmalýdýr")]
         public int adet { get; set; }
         [Required(ErrorMessage = "Satýn Alým Tarihi Giriþi Zorunludur")]
         public System.DateTime a_tarih { get; set; }
