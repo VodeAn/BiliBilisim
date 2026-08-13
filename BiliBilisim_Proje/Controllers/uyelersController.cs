@@ -154,6 +154,35 @@ namespace BiliBilisim_Proje.Controllers
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
+        [HttpGet]
+        public ActionResult sifre_unut()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> sifre_unut(string kul_veri, string sifre)
+        {
+            // FirstOrDefaultAsync kullanarak tek bir üye nesnesi getiriyoruz
+            var degis_uye = await db.uyeler.FirstOrDefaultAsync(x => x.kuladi == kul_veri || x.email == kul_veri);
+
+            if (degis_uye != null)
+            {
+                // Modelindeki şifre alan adın 'sifre' ise (veya 'sifreler'):
+                degis_uye.sifre = sifre;
+
+                db.Entry(degis_uye).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+
+                ViewBag.basari = "Şifreniz başarıyla güncellendi!";
+            }
+            else
+            {
+                ViewBag.kulhata = "Kullanıcı adı veya e-mail bulunamadı";
+            }
+
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {

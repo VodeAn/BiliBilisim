@@ -1,0 +1,41 @@
+﻿<div class="page-section mt-60">
+    <div class="container">
+        <!-- justify-content-center ekleyerek kolonu sayfanın ortasına hizaladık -->
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-12 col-lg-6 mb-30">
+                <!-- Login Form -->
+                <form action="@Url.Action("sifre_unut", "uyelers",null)" method="post">
+                    <div class="login-form">
+                        <h4 class="login-title d-flex justify-content-center">Şifre Yenile</h4>
+                        <div class="row">
+                            <div class="col-md-12 col-12 mb-20">
+                                @ViewBag.kulhata
+                                <label>Kullanıcı Adı/E-posta</label>
+                                <input class="mb-0" name="kul_veri" type="text" placeholder="Kullanıcı Adı yada E-mail adresiniz">
+                                @Html.ValidationMessage("kul_veri", "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-12 mb-20">
+                                <label>Yeni Şifre</label>
+                                <input class="mb-0" name="sifre" type="password" placeholder="Yeni Şifrenizi yazınız">
+                                @Html.ValidationMessage("sifre", "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-8">
+                                <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
+                                    <label>@ViewBag.basari</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                @Html.ValidationMessage("GirisHata", "", new { @class = "text-danger d-block mb-3" })
+                            </div>
+
+                            <!-- Sadece buraya text-center eklendi -->
+                            <div class="col-md-12 d-flex justify-content-center">
+                                <button class="register-button mt-0">Şifre Yenile</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
