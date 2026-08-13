@@ -6,6 +6,8 @@ Bu Proje Bursa Sanayi Ve Ticaret Odası Eğitim Vakfı(BUTGEM) Yazılım Uzmanl�
 
 Proje MSSQL veritabanında localde çalışmaktadır ve veritabanı scripti proje dosyaları arasında bulunmaktadır.Bayilik isteyen kullanıcı için admin kısmının onaylayacağı bir mail scripti oluşturulmuştur.Kolaylık sağlanması için ekte admin bilgileri,bayilik/bayilik olmayan kullanıcı bilgileri ve yönetici maili bilgileri verilmiştir:
 
+NOT: Admin paneline girmek için AdminGiris.cshtml dosyasının debug edilmesi gerekmektedir.
+
 * Admin Kullanıcı Adı: Butgem
 * Admin Şifresi: 123456
 
