@@ -655,9 +655,11 @@ namespace BiliBilisim_Proje.Controllers
                 await dbo.SaveChangesAsync();
                 TempData["KayitBasarili"] = "Ürün ve görseli başarıyla silindi.";
             }
-            catch (Exception)
+            catch (Exception error)
             {
-                TempData["KayitBasarili"] = "Ürün silinirken bir hata oluştu (İlişkisel kayıt olabilir).";
+                string msj = error.GetBaseException().Message;
+                if (msj.Contains("siparisler_urun_id_fkey")) TempData["KayitBasarili"] = "Siparişi Olan Ürün Silinemez.";
+                else TempData["KayitBasarili"] = "Ürün silinirken bir hata oluştu.";
             }
 
             return RedirectToAction("UrunListele", "Admin");

@@ -1,7 +1,7 @@
 ﻿@model BiliBilisim_Proje.Models.uyeler
 @{
     ViewBag.Title = "Üye Düzenle";
-    Layout = "~/Views/Shared/_Admin.cshtml"; // Layout yolunu kendi projenize göre güncelleyin
+    Layout = "~/Views/Shared/_Admin.cshtml"; 
 }
 
 <div class="card shadow-sm border-0">
@@ -12,7 +12,7 @@
     <div class="card-body">
         @using (Html.BeginForm("AdminUyeEdit", "Admin", FormMethod.Post))
         {
-            <!-- Güncelleme işlemi için Primary Key gizli olarak taşınmalıdır -->
+
             @Html.HiddenFor(m => m.uye_id)
 
             @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
