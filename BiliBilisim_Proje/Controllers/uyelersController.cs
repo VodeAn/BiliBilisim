@@ -16,38 +16,7 @@ namespace BiliBilisim_Proje.Controllers
     {
         private bili_Entities db = new bili_Entities();
 
-        // GET: uyelers
-        public async Task<ActionResult> Index()
-        {
-            if (Session["admin"] == null) return RedirectToAction("error", "home");
-            var uyeler = db.uyeler.Include(u => u.sehirler);
-            return View(await uyeler.ToListAsync());
-        }
-
-   
-
-        public ActionResult Create()
-        {
-            if (Session["admin"] == null) return RedirectToAction("error", "home");
-            ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il");
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka")] uyeler uyeler)
-        {
-            
-            if (ModelState.IsValid)
-            {
-                db.uyeler.Add(uyeler);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
-            return View(uyeler);
-        }
-
+ 
         public async Task<ActionResult> Edit(int? id)
         {
             if(Session["uye"] == null)
@@ -118,12 +87,13 @@ namespace BiliBilisim_Proje.Controllers
             return View(uyeler);
         }
             
-            
-        
-
-        // GET: uyelers/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            if (Session["uye"] == null)
+            {
+
+                return RedirectToAction("error", "home");
+            }
             if (id == null)
             {
                 return RedirectToAction("error", "home");

@@ -1,0 +1,80 @@
+﻿@model BiliBilisim_Proje.Models.uyeler
+@{
+    ViewBag.Title = "Yeni Üye Ekle";
+    Layout = "~/Views/Shared/_Admin.cshtml"; 
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-bottom pb-2 pt-3">
+        <h5 class="text-primary mb-0"><i class="fas fa-user-plus me-2"></i>Yeni Üye Ekle</h5>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("AdminUyeCreate", "Admin", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- Genel Hata Mesajları -->
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.ad_soyad, "Ad Soyad", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(m => m.ad_soyad, new { @class = "form-control", placeholder = "Ad Soyad giriniz..." })
+                    @Html.ValidationMessageFor(m => m.ad_soyad, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.kuladi, "Kullanıcı Adı", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(m => m.kuladi, new { @class = "form-control", placeholder = "Kullanıcı adı giriniz..." })
+                    @Html.ValidationMessageFor(m => m.kuladi, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.email, "E-Posta Adresi", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(m => m.email, new { @class = "form-control", type = "email", placeholder = "ornek@mail.com" })
+                    @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(m => m.sifre, "Şifre", new { @class = "form-label fw-bold" })
+                    @Html.PasswordFor(m => m.sifre, new { @class = "form-control", placeholder = "Şifre belirleyiniz..." })
+                    @Html.ValidationMessageFor(m => m.sifre, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    @Html.LabelFor(m => m.dog_tar, "Doğum Tarihi", new { @class = "form-label fw-bold" })
+                    @Html.TextBoxFor(m => m.dog_tar, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                    @Html.ValidationMessageFor(m => m.dog_tar, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    @Html.LabelFor(m => m.cinsiyet, "Cinsiyet", new { @class = "form-label fw-bold" })
+                    @Html.DropDownListFor(m => m.cinsiyet, new SelectList(new[] { "Erkek", "Kadın" }), "Seçiniz", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.cinsiyet, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    @Html.LabelFor(m => m.plaka, "Şehir (Plaka)", new { @class = "form-label fw-bold" })
+                    @Html.DropDownList("plaka", null, "Şehir Seçiniz", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(m => m.plaka, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-12 mb-3">
+                    @Html.LabelFor(m => m.adres, "Adres", new { @class = "form-label fw-bold" })
+                    @Html.TextAreaFor(m => m.adres, new { @class = "form-control", rows = "3", placeholder = "Açık adres giriniz..." })
+                    @Html.ValidationMessageFor(m => m.adres, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="col-12 mb-4 form-check ms-2">
+                    @Html.CheckBoxFor(m => m.vip, new { @class = "form-check-input" })
+                    @Html.LabelFor(m => m.vip, "Bu Kullanıcı Bayi Üyesi Mi?", new { @class = "form-check-label fw-bold" })
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a href="@Url.Action("UyeListele", "Admin")" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> Geri Dön</a>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Kaydet</button>
+            </div>
+        }
+    </div>
+</div>
