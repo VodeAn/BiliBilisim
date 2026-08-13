@@ -32,7 +32,7 @@
         <div class="product-details-view-content pt-60">
             <div class="product-info">
                 <h2>@Model.urun_adi</h2>
-                <span class="product-details-ref"><a href="@Url.Action("index","urunlers")">Urunler</a>/@Model.kategori.kate_adi</span>
+                <span class="product-details-ref"><a href="@Url.Action("index","urunlers")">Urunler</a> / <a href="@Url.Action("index", "urunlers", new {altId=Model.kate_no})">@Model.kategori.kate_adi</a></span>
                 <div class="rating-box pt-20">
                     <ul class="rating rating-with-review-item">
                         <li><i class="fa fa-star-o"></i></li>
@@ -91,37 +91,43 @@
                         }
 
                     }
-                    <div class="product-social-sharing pt-25">
-                        <ul>
-                            <!-- Facebook Paylaşım Linki -->
-                            <li class="facebook">
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-facebook"></i>Facebook
-                                </a>
-                            </li>
 
-                            <!-- Twitter (X) Paylaşım Linki -->
-                            <li class="twitter">
-                                <a href="https://twitter.com/intent/tweet?url=@Url.Encode(Request.Url.AbsoluteUri)&text=@Url.Encode(Model.urun_adi)" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-twitter"></i>Twitter
-                                </a>
-                            </li>
+                <div class="product-social-sharing pt-25">
+                    <!-- Eklenen Başlık -->
+                    <h5 style="font-size: 14px; font-weight: 600; color: #333; margin-bottom: 10px; border-left: 3px solid #ffcc00; padding-left: 8px; text-transform: uppercase;">
+                        Ürünü Sosyal Medyada Paylaş
+                    </h5>
 
-                            <!-- WhatsApp Paylaşım Linki -->
-                            <li class="whatsapp">
-                                <a href="https://api.whatsapp.com/send?text=@Url.Encode(Model.urun_adi + " " + Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-whatsapp"></i>WhatsApp
-                                </a>
-                            </li>
+                    <ul>
+                        <!-- Facebook Paylaşım Linki -->
+                        <li class="facebook">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-facebook"></i>Facebook
+                            </a>
+                        </li>
 
-                            <!-- LinkedIn Paylaşım Linki -->
-                            <li class="linkedin">
-                                <a href="https://www.linkedin.com/sharing/share-offsite/?url=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-linkedin"></i>LinkedIn
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        <!-- Twitter (X) Paylaşım Linki -->
+                        <li class="twitter">
+                            <a href="https://twitter.com/intent/tweet?url=@Url.Encode(Request.Url.AbsoluteUri)&text=@Url.Encode(Model.urun_adi)" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-twitter"></i>Twitter
+                            </a>
+                        </li>
+
+                        <!-- WhatsApp Paylaşım Linki -->
+                        <li class="whatsapp">
+                            <a href="https://api.whatsapp.com/send?text=@Url.Encode(Model.urun_adi + " " + Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-whatsapp"></i>WhatsApp
+                            </a>
+                        </li>
+
+                        <!-- LinkedIn Paylaşım Linki -->
+                        <li class="linkedin">
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=@Url.Encode(Request.Url.AbsoluteUri)" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-linkedin"></i>LinkedIn
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 </div>
             </div>
         </div>

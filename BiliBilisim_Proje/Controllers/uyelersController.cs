@@ -16,19 +16,19 @@ namespace BiliBilisim_Proje.Controllers
     {
         private bili_Entities db = new bili_Entities();
 
- 
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if(Session["uye"] == null)
-            {
 
-                return RedirectToAction("error", "home");
-            }
-            if (id == null)
+        public async Task<ActionResult> Edit()
+        {
+            // 1. Oturum kontrolü
+            if (Session["uye"] == null)
             {
                 return RedirectToAction("error", "home");
             }
-            uyeler uyeler = await db.uyeler.FindAsync(id);
+
+            // 2. ID'yi dışarıdan gelen parametreden değil, oturumdaki üyeden alıyoruz
+            var oturumdakiUye = (uyeler)Session["uye"];
+            uyeler uyeler = await db.uyeler.FindAsync(oturumdakiUye.uye_id);
+
             if (uyeler == null)
             {
                 return RedirectToAction("error", "home");
@@ -37,25 +37,36 @@ namespace BiliBilisim_Proje.Controllers
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
             return View(uyeler);
         }
- 
+
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka,vip_basvuru")] uyeler uyeler,string confirm)
+        public async Task<ActionResult> Edit([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka,vip_basvuru")] uyeler uyeler, string confirm)
         {
+            // 1. POST işleminde de güvenlik için oturum kontrolü ekliyoruz
+            if (Session["uye"] == null)
+            {
+                return RedirectToAction("error", "home");
+            }
+
+            var oturumdakiUye = (uyeler)Session["uye"];
+
             if (uyeler.sifre != confirm)
             {
                 ModelState.AddModelError("confirm", "Şifreler birbiriyle uyuşmuyor!");
             }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var guncellenecek_uye = await db.uyeler.FindAsync(uyeler.uye_id);
+                    // Güvenlik Açığı Önlemi: ID'yi formdan değil, oturumdaki kullanıcının ID'sinden buluyoruz
+                    var guncellenecek_uye = await db.uyeler.FindAsync(oturumdakiUye.uye_id);
 
                     if (guncellenecek_uye != null)
                     {
-                        
                         bool yenivip = (guncellenecek_uye.vip_basvuru == false && uyeler.vip_basvuru == true);
+
                         guncellenecek_uye.sifre = uyeler.sifre;
                         guncellenecek_uye.cinsiyet = uyeler.cinsiyet;
                         guncellenecek_uye.plaka = uyeler.plaka;
@@ -64,14 +75,26 @@ namespace BiliBilisim_Proje.Controllers
                         guncellenecek_uye.adres = uyeler.adres;
                         guncellenecek_uye.vip_basvuru = uyeler.vip_basvuru;
                         guncellenecek_uye.email = uyeler.email;
+
                         db.Entry(guncellenecek_uye).State = EntityState.Modified;
                         await db.SaveChangesAsync();
+
                         TempData["KayitBasarili"] = "Bilgileriniz başarıyla güncellenmiştir.";
+
                         if (yenivip)
                         {
-                            await BayilikMailGonderAsync(guncellenecek_uye.email, guncellenecek_uye.ad_soyad, guncellenecek_uye.adres,guncellenecek_uye.kuladi,guncellenecek_uye.sehirler.il);
+                            await BayilikMailGonderAsync(
+                                guncellenecek_uye.email,
+                                guncellenecek_uye.ad_soyad,
+                                guncellenecek_uye.adres,
+                                guncellenecek_uye.kuladi,
+                                guncellenecek_uye.sehirler.il
+                            );
                         }
+
+                        // Session'ı güncellenmiş yeni verilerle tazeleyelim
                         Session["uye"] = guncellenecek_uye;
+
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -83,10 +106,11 @@ namespace BiliBilisim_Proje.Controllers
                     else ModelState.AddModelError("", "Hata oluştu: " + msj);
                 }
             }
+
             ViewBag.plaka = new SelectList(db.sehirler, "plaka", "il", uyeler.plaka);
             return View(uyeler);
         }
-            
+
         public async Task<ActionResult> Delete(int? id)
         {
             if (Session["uye"] == null)

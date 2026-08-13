@@ -17,45 +17,56 @@ namespace BiliBilisim_Proje.Controllers
         private bili_Entities db = new bili_Entities();
 
         // GET: urunlers
-        public ActionResult Index(int? sayfa, int? id, int? filtre)
+        public ActionResult Index(int? sayfa, int? ustId, int? altId, int? filtre)
         {
-            List<SelectListItem> filitre = new List<SelectListItem>(){
-                new SelectListItem{Text="A --> Z",Value="1"},
-                new SelectListItem{Text="Z --> A",Value="2"},
-                new SelectListItem{Text="Fiyata göre artan",Value="3"},
-                new SelectListItem{Text="Fiyata göre azalan",Value="4"}
-            };
+            List<SelectListItem> filtreListesi = new List<SelectListItem>(){
+        new SelectListItem{Text="A --> Z",Value="1"},
+        new SelectListItem{Text="Z --> A",Value="2"},
+        new SelectListItem{Text="Fiyata göre artan",Value="3"},
+        new SelectListItem{Text="Fiyata göre azalan",Value="4"}
+    };
 
-            ViewBag.filtre = filitre;
+            ViewBag.filtre = filtreListesi;
+            ViewBag.AnaKategoriler = db.ust_kategori.ToList();
+            ViewBag.AltKategoriler = db.kategori.ToList();
+            ViewBag.ustId = ustId;
+            ViewBag.altId = altId;
+
             int sayfa_no = sayfa ?? 1;
 
-            IPagedList<urunler> urunlerimiz = null;
-            if (filtre == null)
+            if (filtre == null && Session["filtre"] != null)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).ToList().ToPagedList(sayfa_no,6);
+                filtre = (int)Session["filtre"];
             }
-            else if (filtre == 1)
+            else if (filtre != null)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderBy(x => x.urun_adi).ToList().ToPagedList(sayfa_no, 6);
-                Session["filtre"] = 1;
+                Session["filtre"] = filtre;
             }
-            else if (filtre == 2)
+
+            var urunler = db.urunler.AsQueryable();
+            if (ustId != null)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderByDescending(x => x.urun_adi).ToList().ToPagedList(sayfa_no, 6);
-                Session["filtre"] = 2;
+                var altKategoriIds = db.kategori.Where(x => x.u_kate_id == ustId).Select(x => x.kate_no).ToList();
+                urunler = urunler.Where(x => altKategoriIds.Contains(x.kate_no));
             }
-            else if (filtre == 3)
+            else if (altId != null)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderBy(x => x.fiyati).ToList().ToPagedList(sayfa_no, 6);
-                Session["filtre"] = 3;
+                urunler = urunler.Where(x => x.kate_no == altId);
             }
-            else
+
+            switch (filtre)
             {
-                urunlerimiz = db.urunler.Where(x => id == null || x.kate_no == id).OrderByDescending(x => x.fiyati).ToList().ToPagedList(sayfa_no, 6);
-                Session["filtre"] = 4;
+                case 1: urunler = urunler.OrderBy(x => x.urun_adi); break;
+                case 2: urunler = urunler.OrderByDescending(x => x.urun_adi); break;
+                case 3: urunler = urunler.OrderBy(x => x.fiyati); break;
+                case 4: urunler = urunler.OrderByDescending(x => x.fiyati); break;
+                default: urunler = urunler.OrderBy(x => x.urun_id); break;
             }
+
+            IPagedList<urunler> urunlerimiz = urunler.ToPagedList(sayfa_no, 6);
             return View(urunlerimiz);
         }
+
 
         // GET: urunlers/Details/5
         public async Task<ActionResult> Details(int? id,int? kateno)
@@ -71,6 +82,7 @@ namespace BiliBilisim_Proje.Controllers
                 return RedirectToAction("error", "home");
             }
             ViewBag.items = kate_urun;
+            ViewBag.Kategoriler = db.kategori.ToList();
             return View(urunlers);
         }
 
