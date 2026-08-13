@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using BiliBilisim_Proje.Models;
@@ -52,7 +54,105 @@ namespace BiliBilisim_Proje.Controllers
             IPagedList<uyeler> uyeler = dbo.uyeler.OrderBy(x=>x.ad_soyad).ToPagedList(sayfa_no, 3);
             return View(uyeler);
         }
+        public ActionResult AdminUyeCreate()
+        {
+            if (Session["admin"] == null) return HttpNotFound();
+            ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il");
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AdminUyeCreate([Bind(Include = "uye_id,kuladi,sifre,ad_soyad,dog_tar,cinsiyet,vip,adres,email,plaka")] uyeler uyeler)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    dbo.uyeler.Add(uyeler);
+                    await dbo.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
 
+                ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il", uyeler.plaka);
+                return View(uyeler);
+            }
+            catch (Exception error)
+            {
+                string msj = error.GetBaseException().Message;
+                if (msj.Contains("uyeler_email_key")) TempData["KayitBasarili"] = "Bu email zaten mevcut";
+                else if (msj.Contains("uyeler_kuladi_key")) TempData["KayitBasarili"] = "Bu Kullanıcı Adı Zaten Mevcut";
+                else TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return View();
+            };
+
+        }
+
+        public async Task<ActionResult> AdminUyeEdit(int? id)
+        {
+            if (Session["admin"] == null)
+            {
+
+                return HttpNotFound();
+            }
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            uyeler uyeler = await dbo.uyeler.FindAsync(id);
+            if (uyeler == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.plaka = new SelectList(dbo.sehirler, "plaka", "il", uyeler.plaka);
+            return View(uyeler);
+        }
+        [HttpPost]
+        public async Task<ActionResult> AdminUyeEdit(uyeler uyeler)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (uyeler == null) return HttpNotFound();
+                    dbo.Entry(uyeler).State = EntityState.Modified;
+                    await dbo.SaveChangesAsync();
+                    TempData["KayitBasarili"] = "Üye Başarıyla Güncellendi.";
+
+                }
+                
+                return RedirectToAction("UyeListele", "Admin");
+            }
+            catch(Exception error)
+            {
+                string msj = error.GetBaseException().Message;
+                if (msj.Contains("uyeler_email_key")) TempData["KayitBasarili"] = "Bu email zaten mevcut";
+                else if (msj.Contains("uyeler_kuladi_key")) TempData["KayitBasarili"] = "Bu Kullanıcı Adı Zaten Mevcut";
+                else TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu";
+                return View(uyeler);
+            };
+           
+
+        }
+
+        public async Task<ActionResult> AdminUyeDelete(int? id)
+        {
+            if (Session["admin"] == null) return HttpNotFound();
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+            uyeler uyeler = await dbo.uyeler.FindAsync(id);
+            if (uyeler == null)
+            {
+                return HttpNotFound();
+            }
+            dbo.uyeler.Remove(uyeler);
+            await dbo.SaveChangesAsync();
+            TempData["KayitBasarili"] = "Üye Başarıyla Silindi.";
+            return RedirectToAction("UyeListele","Admin");
+        }
+      
 
         //-----------------------------------------------Kategori Bölümü---------------------------------------------------------------------
         public ActionResult KategoriListele(int? sayfa)
