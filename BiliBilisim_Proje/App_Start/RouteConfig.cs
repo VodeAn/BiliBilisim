@@ -49,9 +49,19 @@ namespace BiliBilisim_Proje
                 defaults: new {controller = "Favoriler", action = "favorileri_goster" }
             );
             routes.MapRoute(
+                name: "FavorilerekleRoutu",
+                url: "favorilere-ekle/{id}",
+                defaults: new {controller = "Favoriler", action = "favorilere_ekle" }
+            );
+            routes.MapRoute(
                 name: "sepetRoutu",
                 url: "sepet",
                 defaults: new {controller = "sepet", action = "sepeti_goster" }
+            );
+            routes.MapRoute(
+                name: "sepetekleRoutu",
+                url: "sepete-ekle/{id}",
+                defaults: new {controller = "sepet", action = "sepete_ekle", id = UrlParameter.Optional }
             );
             routes.MapRoute(
                 name: "unuttumRoutu",
