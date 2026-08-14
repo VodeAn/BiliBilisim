@@ -14,7 +14,7 @@ NOT: Admin paneline girmek için AdminGiris.cshtml dosyasının debug edilmesi g
 * Bayilik Kullanıcı Adı: mahmut
 * Bayilik Kullanıcı Şifre: 12345678
 
-* Diğer Kullanıcı Adı: fadime231
+* Diğer Kullanıcı Adı: fadime123
 * Şifre: 987654321
 
 * Admin Mail Adresi: bilibilisimadmn@outlook.com
