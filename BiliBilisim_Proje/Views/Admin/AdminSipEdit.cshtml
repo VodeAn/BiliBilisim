@@ -15,40 +15,19 @@
             @Html.AntiForgeryToken()
 
             @Html.HiddenFor(m => m.kayit_no)
+            
 
             @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Siparişi Veren Üye</label>
-                    <select name="uye_id" class="form-select" required>
-                        <option value="">Üye Seçiniz</option>
-                        @if (ViewBag.uye_id != null)
-                        {
-                            foreach (var item in (SelectList)ViewBag.uye_id)
-                            {
-                                <option value="@item.Value" >
-                                    @item.Text
-                                </option>
-                            }
-                        }
-                    </select>
+                    @Html.DropDownListFor(m => m.uye_id, (SelectList)ViewBag.UyeListesi, "Üye Seçiniz", new { @class = "form-select", required = "required" })
                     @Html.ValidationMessageFor(m => m.uye_id, "", new { @class = "text-danger small" })
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Sipariş Edilen Ürün</label>
-                    <select name="urun_id" class="form-select" required>
-                        <option value="">Ürün Seçiniz</option>
-                        @if (ViewBag.urun_id != null)
-                        {
-                            foreach (var item in (SelectList)ViewBag.urun_id)
-                            {
-                                <option value="@item.Value" @(Model != null && Model.urun_id != null && Model.urun_id.ToString() == item.Value ? "selected" : "")>
-                                    @item.Text
-                                </option>
-                            }
-                        }
-                    </select>
+                    @Html.DropDownListFor(m => m.urun_id, (SelectList)ViewBag.UrunListesi, "Ürün Seçiniz", new { @class = "form-select", required = "required" })
                     @Html.ValidationMessageFor(m => m.urun_id, "", new { @class = "text-danger small" })
                 </div>
                 <div class="col-md-6 mb-3">
