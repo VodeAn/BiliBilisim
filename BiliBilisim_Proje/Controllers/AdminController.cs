@@ -502,7 +502,7 @@ namespace BiliBilisim_Proje.Controllers
                     dbo.Entry(siparisler).State = EntityState.Modified;
                     await dbo.SaveChangesAsync();
                     TempData["KayitBasarili"] = "Sipariş Başarıyla Güncellendi.";
-                    return RedirectToAction("KategoriListele", "Admin");
+                    return RedirectToAction("SiparisListele", "Admin");
                 }
                 ViewBag.uye_id = new SelectList(dbo.uyeler, "uye_id", "ad_soyad");
                 ViewBag.urun_id = new SelectList(dbo.urunler, "urun_id", "urun_adi");
@@ -534,7 +534,7 @@ namespace BiliBilisim_Proje.Controllers
                 dbo.siparisler.Remove(siparisler);
                 await dbo.SaveChangesAsync();
                 TempData["KayitBasarili"] = "Sipariş Başarıyla Silindi.";
-                return RedirectToAction("KategoriListele", "Admin");
+                return RedirectToAction("SiparisListele", "Admin");
             }
             catch (Exception)
             {
@@ -617,7 +617,7 @@ namespace BiliBilisim_Proje.Controllers
                     await dbo.SaveChangesAsync();
 
                     TempData["KayitBasarili"] = "Ürün Başarıyla Kaydedildi";
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("UrunListele", "Admin");
                 }
                 catch (Exception)
                 {
