@@ -9,6 +9,7 @@ Proje MSSQL veritabanında localde çalışmaktadır ve veritabanı scripti proj
 NOT: Admin paneline girmek için AdminGiris.cshtml dosyasının debug edilmesi gerekmektedir.
 
 NOT2: githubdan indirdiğiniz bu projede bin klasörünü ve dışa bağımlı paketleri dahil edilmemiştir ilk çalıştırmada hata almamak için nuget konsolunda şu kodu çalıştırın:
+
     Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r
 
 * Admin Kullanıcı Adı: Butgem
