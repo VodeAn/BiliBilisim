@@ -81,6 +81,8 @@
                     </div>
                     <label class="form-label fw-bold">Yeni Görsel Seç (İsteğe Bağlı)</label>
                     <input type="file" name="dosya_adi" class="form-control" accept=".png, .jpg, .jpeg" />
+                    @Html.ValidationMessage("fotolar", new { @class = "text-danger small d-block mt-1" })
+
                 </div>
                 <div class="col-12 mb-3">
                     @Html.LabelFor(m => m.urun_aciklama, "Ürün Açıklaması", new { @class = "form-label fw-bold" })

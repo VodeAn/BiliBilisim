@@ -31,7 +31,7 @@
                             foreach (var item in (SelectList)ViewBag.KategoriListesi)
                             {
                                 string seciliMi = "";
-                                if (Model != null && Model.kate_no != null)
+                                if (Model != null )
                                 {
                                     if (Model.kate_no.ToString() == item.Value)
                                     {
@@ -67,7 +67,6 @@
                 <div class="content-area col-12 mb-3">
                     <label class="form-label fw-bold">Ürün Görseli</label>
                     <input type="file" name="dosya_adi" class="form-control" accept=".png, .jpg, .jpeg" />
-                    <small class="text-muted">Sadece .png, .jpg, veya .jpeg formatında dosya yükleyebilirsiniz.</small>
                     @Html.ValidationMessage("fotolar", new { @class = "text-danger small d-block mt-1" })
                 </div>
                 <div class="col-12 mb-3">

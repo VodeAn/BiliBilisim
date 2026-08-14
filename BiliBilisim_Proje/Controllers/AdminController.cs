@@ -480,8 +480,8 @@ namespace BiliBilisim_Proje.Controllers
                 {
                     return HttpNotFound();
                 }
-                ViewBag.uye_id = new SelectList(dbo.uyeler, "uye_id", "ad_soyad");
-                ViewBag.urun_id = new SelectList(dbo.urunler, "urun_id", "urun_adi");
+                ViewBag.UyeListesi = new SelectList(dbo.uyeler, "uye_id", "ad_soyad",siparisler.uye_id);
+                ViewBag.UrunListesi = new SelectList(dbo.urunler, "urun_id", "urun_adi",siparisler.urun_id);
                 return View(siparisler);
             }
             catch (Exception)
