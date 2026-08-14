@@ -22,18 +22,27 @@ namespace BiliBilisim_Proje.Controllers
         [HttpPost]
         public ActionResult AdminGiris(string username,string password)
         {
-            var admin = dbo.admin.FirstOrDefault(x => x.kuladi == username && x.sifre == password);
-            if ( admin != null)
+            try
             {
-                Session["admin"] = admin;
-                TempData["KayitBasarili"] = "Giriş Başarılı.";
-                return RedirectToAction("Index", "Admin");
+                var admin = dbo.admin.FirstOrDefault(x => x.kuladi == username && x.sifre == password);
+                if (admin != null)
+                {
+                    Session["admin"] = admin;
+                    TempData["KayitBasarili"] = "Giriş Başarılı.";
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    ViewBag.Hata = "Kullanıcı Adı Veya Şifre Yanlış";
+                    return View();
+                }
             }
-            else
+            catch (Exception)
             {
-                ViewBag.Hata = "Kullanıcı Adı Veya Şifre Yanlış";
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
                 return View();
             }
+           
         }
         public ActionResult Index()
         {
@@ -50,10 +59,19 @@ namespace BiliBilisim_Proje.Controllers
         //------------------------------------------------Üyeler Bölümü----------------------------------------------------------------------
         public ActionResult UyeListele(int? sayfa)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            int sayfa_no = sayfa ?? 1;
-            IPagedList<uyeler> uyeler = dbo.uyeler.OrderBy(x=>x.ad_soyad).ToPagedList(sayfa_no, 3);
-            return View(uyeler);
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                int sayfa_no = sayfa ?? 1;
+                IPagedList<uyeler> uyeler = dbo.uyeler.OrderBy(x => x.ad_soyad).ToPagedList(sayfa_no, 3);
+                return View(uyeler);
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
+                return RedirectToAction("Index","Admin");
+            }
+            
         }
         public ActionResult AdminUyeCreate()
         {
@@ -290,10 +308,19 @@ namespace BiliBilisim_Proje.Controllers
         //-----------------------------------------------Kategori Bölümü---------------------------------------------------------------------
         public ActionResult KategoriListele(int? sayfa)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            int sayfa_no = sayfa ?? 1;
-            var kategori = dbo.kategori.GroupBy(x => x.ust_kategori.u_kate_adi).OrderBy(x => x.Key);
-            return View(kategori.ToPagedList(sayfa_no, 1));
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                int sayfa_no = sayfa ?? 1;
+                var kategori = dbo.kategori.GroupBy(x => x.ust_kategori.u_kate_adi).OrderBy(x => x.Key);
+                return View(kategori.ToPagedList(sayfa_no, 1));
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
+                return RedirectToAction("Index", "Admin");
+            }
+        
         }
         public ActionResult AdminKateCreate()
         {
@@ -421,31 +448,48 @@ namespace BiliBilisim_Proje.Controllers
         //----------------------------------------------Siparişler Bölümü--------------------------------------------------------------------
         public ActionResult SiparisListele(int? sayfa)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            int sayfa_no = sayfa ?? 1;
-            var siparisler = dbo.siparisler.GroupBy(x => x.uyeler.kuladi).OrderBy(x => x.Key);
-            return View(siparisler.ToPagedList(sayfa_no, 1));
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                int sayfa_no = sayfa ?? 1;
+                var siparisler = dbo.siparisler.GroupBy(x => x.uyeler.kuladi).OrderBy(x => x.Key);
+                return View(siparisler.ToPagedList(sayfa_no, 1));
+            }
+             catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
+                return RedirectToAction("Index", "Admin");
+            }
         }
        
         public async Task<ActionResult> AdminSipEdit(int? id)
         {
-            if (Session["admin"] == null)
+            try
             {
+                if (Session["admin"] == null)
+                {
 
-                return HttpNotFound();
+                    return HttpNotFound();
+                }
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                siparisler siparisler = await dbo.siparisler.FindAsync(id);
+                if (siparisler == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.uye_id = new SelectList(dbo.uyeler, "uye_id", "ad_soyad");
+                ViewBag.urun_id = new SelectList(dbo.urunler, "urun_id", "urun_adi");
+                return View(siparisler);
             }
-            if (id == null)
+            catch (Exception)
             {
-                return HttpNotFound();
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
+                return RedirectToAction("Index", "Admin");
             }
-            siparisler siparisler = await dbo.siparisler.FindAsync(id);
-            if (siparisler == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.uye_id = new SelectList(dbo.uyeler, "uye_id", "ad_soyad");
-            ViewBag.urun_id = new SelectList(dbo.urunler, "urun_id", "urun_adi");
-            return View(siparisler);
+
         }
         [HttpPost]
         public async Task<ActionResult> AdminSipEdit(siparisler siparisler)
@@ -502,16 +546,25 @@ namespace BiliBilisim_Proje.Controllers
         //----------------------------------------------Ürünler Bölümü-----------------------------------------------------------------------
         public ActionResult UrunListele(int? sayfa)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            int sayfa_no = sayfa ?? 1;
-            var urunler = dbo.urunler
-                             .Include(x => x.kategori)
-                             .ToList()
-                             .GroupBy(x => x.kategori != null ? x.kategori.kate_adi : "Kategorisiz")
-                             .OrderBy(x => x.Key)
-                             .ToPagedList(sayfa_no, 1);
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                int sayfa_no = sayfa ?? 1;
+                var urunler = dbo.urunler
+                                 .Include(x => x.kategori)
+                                 .ToList()
+                                 .GroupBy(x => x.kategori != null ? x.kategori.kate_adi : "Kategorisiz")
+                                 .OrderBy(x => x.Key)
+                                 .ToPagedList(sayfa_no, 1);
 
-            return View(urunler);
+                return View(urunler);
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
+                return RedirectToAction("Index", "Admin");
+            }
+           
         }
         public ActionResult AdminUrunCreate()
         {
@@ -576,14 +629,23 @@ namespace BiliBilisim_Proje.Controllers
         }
         public async Task<ActionResult> AdminUrunEdit(int? id)
         {
-            if (Session["admin"] == null) return HttpNotFound();
-            if (id == null) return HttpNotFound();
+            try
+            {
+                if (Session["admin"] == null) return HttpNotFound();
+                if (id == null) return HttpNotFound();
 
-            urunler urun = await dbo.urunler.FindAsync(id);
-            if (urun == null) return HttpNotFound();
+                urunler urun = await dbo.urunler.FindAsync(id);
+                if (urun == null) return HttpNotFound();
 
-            ViewBag.KategoriListesi = new SelectList(dbo.kategori.ToList(), "kate_no", "kate_adi", urun.kate_no);
-            return View(urun);
+                ViewBag.KategoriListesi = new SelectList(dbo.kategori.ToList(), "kate_no", "kate_adi", urun.kate_no);
+                return View(urun);
+            }
+            catch (Exception)
+            {
+                TempData["KayitBasarili"] = "Bilinmeyen Bir Hata Oluştu.";
+                return RedirectToAction("Index", "Admin");
+            }
+           
         }
 
         [HttpPost]
